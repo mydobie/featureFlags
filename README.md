@@ -6,9 +6,9 @@ This allows you to add feature flags to a project. This includes methods to chec
 
 ## Getting Started - Adding this component to your project
 
-Until there there is ability to host this on an artifact repository, there is only one way to add this to your project.
+There are three methods of including this into your project.
 
-### Create and use tgz file
+### Method 1 create and use tgz file
 
 1.  Clone this project.
 1.  Run `npm run buildPackage` to build and tar the component.
@@ -17,11 +17,29 @@ The above steps will create a `.tgz` file in the root of this project. Move this
 
 ```
 dependencies: {
-  "[[this_module_name]]": "file:/"path_to_tgz_file.tgz",
+  "feature_flags": "file:/"path_to_tgz_file.tgz",
 }
 ```
 
 Then run `npm install`.
+
+### Method 2 download tgz file from GitHub
+
+1. Go to the [package page](https://github.com/mydobie/featureFlags/packages?ecosystem=npm) for this project and download the wanted version of the `.tgz` file.
+1. Save the downloaded `.tgz` file into your project.
+1. Add the path to the`.tgz` file to your `package.json` file:
+
+```
+dependencies: {
+  "feature_flags": "file:/"path_to_tgz_file.tgz",
+}
+```
+
+Then run `npm install`.
+
+### Method 3 use GitHubs npm repository
+
+Instead of creating or downloading the `.tgz` file, you can have NPM pull this module as if it were any other module. This process has been documented in the [README_GITHUB](README_GITHUB.md) file.
 
 ---
 
