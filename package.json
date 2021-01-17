@@ -1,5 +1,5 @@
 {
-  "name": "feature_flags",
+  "name": "@mydobie/feature_flags",
   "version": "1.0.0-beta.0",
   "main": "dist/index.js",
   "module": "dist/index.js",
