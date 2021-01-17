@@ -45,6 +45,9 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: '@mydobie'
 
+      - name: Install dependencies
+        run: npm run d
+
       - name: Build package
         run: bash  utils/buildPackage.sh
 
@@ -64,8 +67,11 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install dependencies
+        run: npm run d
+
       - name: Build 
-        run: REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts build
+        run: npm run build:ci
 
       - name: Fix paths in index.html
         run: node utils/resetPathIndex.js
