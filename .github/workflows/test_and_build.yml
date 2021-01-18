@@ -16,17 +16,22 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+
       - name: Install dependencies
-        run:  |
-          npm ci
-          npm rebuild node-sass
+        run: npm run d
+
       - name: Tests
         run: npm run test
+
       - name: Test coverage
         run: npm run checkCoverage
+
       - name: Linting
         run: npm run lint
+
       - name: Security audit
         run: npm run npmAudit
+
       - name: Can module be built
         run: bash  utils/buildPackage.sh
+

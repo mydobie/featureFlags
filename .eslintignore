@@ -1,0 +1,9 @@
+/build/**
+/compiled/**
+/coverage/**
+/node_modules/**
+/dist/**
+package-lock.json
+src/serviceWorker.js
+src/setupTests.js
+npm-cache/
