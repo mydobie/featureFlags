@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { axe } from 'jest-axe';
 
 // import { editFeatureFlag } from '../../Components/featureFlags';
@@ -24,7 +24,7 @@ describe('Local storage wrapper for edit feature flags UI', () => {
   ];
 
   beforeEach(() => {
-    wrapper = mount(<FeatureFlagsUI />);
+    wrapper = shallow(<FeatureFlagsUI />);
     localStorage.setItem('featureFlags', JSON.stringify(featureList));
   });
   afterEach(() => {});
