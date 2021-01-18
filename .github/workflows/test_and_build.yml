@@ -34,3 +34,4 @@ jobs:
 
       - name: Can module be built
         run: bash  utils/buildPackage.sh
+
