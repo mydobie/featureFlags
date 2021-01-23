@@ -34,6 +34,8 @@ import {
   VEGGIES,
 } from './FeatureFlagsConfig';
 
+require('@instructure/canvas-theme');
+
 /* ************************************** */
 const buildNav = (features) => (
   <nav>

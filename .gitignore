@@ -18,3 +18,5 @@ npm-debug.log*
 /package
 .eslintcache
 /dist
+
+.env.development

@@ -3,23 +3,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-let reactstrapAvailable = false;
-let CustomInput = () => <div />;
-let Button = () => <div />;
-let Container = () => <div />;
-let Row = () => <div />;
-let Col = () => <div />;
-
-try {
-  const reactstrap = require('reactstrap');
-  CustomInput = reactstrap.CustomInput;
-  Button = reactstrap.Button;
-  Container = reactstrap.Container;
-  Row = reactstrap.Row;
-  Col = reactstrap.Col;
-  reactstrapAvailable = true;
-  // eslint-disable-next-line no-empty
-} catch (e) {}
+import Checkbox from './uiAtoms/Checkbox';
+import Button from './uiAtoms/Button';
 
 export default class FeatureFlagsUICore extends React.Component {
   constructor(props) {
@@ -40,51 +25,42 @@ export default class FeatureFlagsUICore extends React.Component {
   }
 
   container() {
-    if (reactstrapAvailable === false) {
-      return <div>Reactstrap is needed to render the feature flags UI</div>;
-    }
     const { features, readonly } = this.props;
     return (
-      <Container>
-        <Row>
-          <Col>
-            <h2>Feature Flags</h2>
-            {features &&
-              features.map((feature) => (
-                <div
-                  key={feature.id}
-                  style={{ fontWeight: feature.active ? 'bold' : '' }}
-                  className='customInputItem'
-                >
-                  <CustomInput
-                    type='switch'
-                    id={feature.id}
-                    name='customSwitch'
-                    label={feature.description}
-                    checked={feature.active}
-                    disabled={readonly}
-                    onChange={(e) => {
-                      this.featureClick(feature.id, e.target.checked);
-                    }}
-                  />
-                </div>
-              ))}
-            <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-              {readonly ? null : (
-                <Button
-                  id='resetFeatureFlags'
-                  color='success'
-                  onClick={() => {
-                    this.featureReset();
-                  }}
-                >
-                  Reset Flags
-                </Button>
-              )}
+      <div>
+        <h2>Feature Flags</h2>
+        {features &&
+          features.map((feature) => (
+            <div
+              key={feature.id}
+              style={{ fontWeight: feature.active ? 'bold' : '' }}
+              className='customInputItem'
+            >
+              <Checkbox
+                id={feature.id}
+                label={feature.description}
+                checked={feature.active}
+                disabled={readonly}
+                onChange={(e) => {
+                  this.featureClick(feature.id, e.target.checked);
+                }}
+              />
             </div>
-          </Col>
-        </Row>
-      </Container>
+          ))}
+        <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+          {readonly ? null : (
+            <Button
+              id='resetFeatureFlags'
+              color='success'
+              onClick={() => {
+                this.featureReset();
+              }}
+            >
+              Reset Flags
+            </Button>
+          )}
+        </div>
+      </div>
     );
   }
 
