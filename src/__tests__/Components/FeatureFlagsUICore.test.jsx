@@ -43,7 +43,7 @@ describe('Edit feature flags UI (aka core UI)', () => {
   });
 
   test('Correct number items are show an checked appropriately', () => {
-    const inputs = wrapper.find('CustomInput');
+    const inputs = wrapper.find('CBox');
     expect(inputs).toHaveLength(featureList.length);
 
     let counter = 0;
@@ -57,7 +57,7 @@ describe('Edit feature flags UI (aka core UI)', () => {
 
   test('OnFeatureClick is called on checkbox change', () => {
     wrapper
-      .find('CustomInput')
+      .find('CBox')
       .first()
       .simulate('change', { target: { checked: true } });
     expect(onFeatureChange).toBeCalledTimes(1);
@@ -72,7 +72,7 @@ describe('Edit feature flags UI (aka core UI)', () => {
 
   test('Inputs are enabled when readonly is not set (defaults to false)', () => {
     expect(wrapper.props().readonly).toEqual(undefined); // this is then translated to false
-    const input = wrapper.find('CustomInput').first();
+    const input = wrapper.find('CBox').first();
     expect(input.props().disabled).toEqual(false);
     expect(wrapper.find('#resetFeatureFlags')).toHaveLength(1);
   });
@@ -86,7 +86,7 @@ describe('Edit feature flags UI (aka core UI)', () => {
         readonly
       />
     );
-    const input = wrapper.find('CustomInput').first();
+    const input = wrapper.find('CBox').first();
     expect(input.props().disabled).toEqual(true);
     expect(wrapper.find('#resetFeatureFlags')).toHaveLength(0);
   });
