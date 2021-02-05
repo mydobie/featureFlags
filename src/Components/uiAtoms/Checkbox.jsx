@@ -6,38 +6,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-let CustomElement = <div>The alert component cannot be displayed.</div>;
-let type;
-
-try {
-  // Code to skip to reactstrap
-  if (
-    process.env.REACT_APP_USE_UI &&
-    process.env.REACT_APP_USE_UI !== 'instructure'
-  ) {
-    throw 'Purposely skipping Instructure UI and using reactstrap';
-  }
-
-  // Import Instructure's component
-  require.resolve('@instructure/ui-checkbox');
-  const { Checkbox } = require('@instructure/ui-checkbox');
-
-  CustomElement = Checkbox;
-  type = 'instructure';
-} catch (error) {
-  try {
-    // Import reactstrap's component
-    require.resolve('reactstrap');
-    const { CustomInput } = require('reactstrap');
-    CustomElement = CustomInput; // NOTE: This line is causing propTypes errors in console
-    type = 'reactstrap';
-  } catch (e) {
-    //  console.log('Instructor nor reactstrap UI object available: ', e);
-  }
-}
-
 const CBox = (props) => {
-  const { id, label, checked, disabled, onChange } = props;
+  const { id, label, checked, disabled, onChange, ui } = props;
+
+  let CustomElement = <div>The alert component cannot be displayed.</div>;
+  let type;
+
+  try {
+    // Code to skip to reactstrap
+    if (
+      (process.env.REACT_APP_USE_UI &&
+        process.env.REACT_APP_USE_UI !== 'instructure') ||
+      (ui && ui !== 'instructure')
+    ) {
+      throw 'Purposely skipping Instructure UI and using reactstrap';
+    }
+
+    // Import Instructure's component
+    require.resolve('@instructure/ui-checkbox');
+    const { Checkbox } = require('@instructure/ui-checkbox');
+
+    CustomElement = Checkbox;
+    type = 'instructure';
+  } catch (error) {
+    try {
+      // Import reactstrap's component
+      require.resolve('reactstrap');
+      const { CustomInput } = require('reactstrap');
+      CustomElement = CustomInput; // NOTE: This line is causing propTypes errors in console
+      type = 'reactstrap';
+    } catch (e) {
+      //  console.log('Instructor nor reactstrap UI object available: ', e);
+    }
+  }
 
   const instructure = (
     <CustomElement
@@ -75,6 +76,7 @@ CBox.propTypes = {
   checked: PropTypes.bool,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
+  ui: PropTypes.string,
 };
 CBox.defaultProps = {
   id: 'missingId',
@@ -82,6 +84,7 @@ CBox.defaultProps = {
   checked: false,
   disabled: false,
   onChange: (/* event */) => {},
+  ui: undefined,
 };
 
 export default CBox;

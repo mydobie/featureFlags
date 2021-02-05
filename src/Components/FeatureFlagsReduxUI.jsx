@@ -38,13 +38,14 @@ class FeatureFlagsReduxUI extends React.Component {
   }
 
   render() {
-    const { flags, readonly } = this.props;
+    const { flags, readonly, ui } = this.props;
     return (
       <FeatureFlagsCore
         features={flags}
         onFeatureClick={this.featureChange}
         onFeatureReset={this.resetFeatures}
         readonly={readonly}
+        ui={ui}
       />
     );
   }
@@ -63,10 +64,12 @@ FeatureFlagsReduxUI.propTypes = {
     })
   ).isRequired,
   readonly: PropTypes.bool,
+  ui: PropTypes.string,
 };
 FeatureFlagsReduxUI.defaultProps = {
   onFeatureChange: () => {},
   readonly: false,
+  ui: undefined,
 };
 
 // NOTE: The values from SELECTORS will be part of the pros:

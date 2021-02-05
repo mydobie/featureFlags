@@ -25,7 +25,7 @@ export default class FeatureFlagsUICore extends React.Component {
   }
 
   container() {
-    const { features, readonly } = this.props;
+    const { features, readonly, ui } = this.props;
     return (
       <div>
         <h2>Feature Flags</h2>
@@ -44,6 +44,7 @@ export default class FeatureFlagsUICore extends React.Component {
                 onChange={(e) => {
                   this.featureClick(feature.id, e.target.checked);
                 }}
+                ui={ui}
               />
             </div>
           ))}
@@ -55,6 +56,7 @@ export default class FeatureFlagsUICore extends React.Component {
               onClick={() => {
                 this.featureReset();
               }}
+              ui={ui}
             >
               Reset Flags
             </Button>
@@ -81,10 +83,12 @@ FeatureFlagsUICore.propTypes = {
   onFeatureClick: PropTypes.func,
   onFeatureReset: PropTypes.func,
   readonly: PropTypes.bool,
+  ui: PropTypes.string,
 };
 FeatureFlagsUICore.defaultProps = {
   features: [],
   onFeatureClick: () => {},
   onFeatureReset: () => {},
   readonly: false,
+  ui: undefined,
 };

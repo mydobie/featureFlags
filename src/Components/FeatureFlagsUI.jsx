@@ -32,13 +32,14 @@ export default class FeatureFlagsUI extends React.Component {
   }
 
   render() {
-    const { readonly } = this.props;
+    const { readonly, ui } = this.props;
     return (
       <FeatureFlagsCore
         onFeatureClick={this.featureChange}
         onFeatureReset={this.featureReset}
         features={this.features()}
         readonly={readonly}
+        ui={ui}
       />
     );
   }
@@ -47,5 +48,10 @@ export default class FeatureFlagsUI extends React.Component {
 FeatureFlagsUI.propTypes = {
   onFeatureChange: PropTypes.func,
   readonly: PropTypes.bool,
+  ui: PropTypes.string,
 };
-FeatureFlagsUI.defaultProps = { onFeatureChange: () => {}, readonly: false };
+FeatureFlagsUI.defaultProps = {
+  onFeatureChange: () => {},
+  readonly: false,
+  ui: undefined,
+};

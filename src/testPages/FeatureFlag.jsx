@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Row, Col } from 'reactstrap';
 import { FeatureFlagsUI, isFeatureActive } from '../Components/index';
 import { COLORS, DINOS } from '../FeatureFlagsConfig';
 
@@ -43,10 +44,35 @@ export default class FeatureFlags extends React.Component {
   };
 
   render() {
+    const envOverRide = process.env.REACT_APP_USE_UI;
+
     return (
       <div>
         <h1>Feature flags set in local storage</h1>
-        <FeatureFlagsUI onFeatureChange={this.featureChange} />
+        <Row>
+          <Col>
+            {envOverRide ? null : (
+              <h2>
+                Instructure version:
+                <br />
+              </h2>
+            )}
+            <FeatureFlagsUI onFeatureChange={this.featureChange} />
+          </Col>
+          {envOverRide ? null : (
+            <Col>
+              <h2>
+                Reactstrap version:
+                <br />
+              </h2>
+              <FeatureFlagsUI
+                ui='reactstrap'
+                onFeatureChange={this.featureChange}
+              />
+            </Col>
+          )}
+        </Row>
+
         <hr />
         {isFeatureActive(COLORS) ? FeatureFlags.colorList() : null}
         {isFeatureActive(DINOS) ? FeatureFlags.dinoList() : null}
