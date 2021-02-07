@@ -8,8 +8,10 @@ services:
     build:
       context: ../
       dockerfile: DOCKER_DEV_ENV/Dockerfile-dev-env
-    image: node-dev-env:14.13
+    image: node-dev-env-feature-flags:14.13
     ports:
       - 3000:3000 # port in the browser: port used by app (should stay 3000)
     volumes:
       - ../:/home/app
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
+      - ~/.gitconfig:/root/.gitconfig

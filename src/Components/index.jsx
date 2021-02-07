@@ -15,13 +15,15 @@ import {
 } from './featureFlags';
 
 export const FeatureFlagsUI = (props) => {
-  const { onFeatureChange, readonly } = props;
-  return <FFUI onFeatureChange={onFeatureChange} readonly={readonly} />;
+  const { onFeatureChange, readonly, ui } = props;
+  return <FFUI onFeatureChange={onFeatureChange} readonly={readonly} ui={ui} />;
 };
 
 export const FeatureFlagsReduxUI = (props) => {
-  const { onFeatureChange, readonly } = props;
-  return <FFUIRedux onFeatureChange={onFeatureChange} readonly={readonly} />;
+  const { onFeatureChange, readonly, ui } = props;
+  return (
+    <FFUIRedux onFeatureChange={onFeatureChange} readonly={readonly} ui={ui} />
+  );
 };
 
 export const loadFeatureFlags = (

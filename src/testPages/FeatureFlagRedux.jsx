@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
+import { Row, Col } from 'reactstrap';
 import {
   getFeatures,
   isFeatureActive,
@@ -45,10 +47,32 @@ class FeatureFlagRedux extends React.Component {
 
   render() {
     const { features } = this.props;
+    const envOverRide = process.env.REACT_APP_USE_UI;
+
     return (
       <div>
         <h1>Feature Flags stored in Redux store</h1>
-        <FeatureFlagsReduxUI />
+        <Row>
+          <Col>
+            {envOverRide ? null : (
+              <h2>
+                Instructure version:
+                <br />
+              </h2>
+            )}
+            <FeatureFlagsReduxUI />
+          </Col>
+          {envOverRide ? null : (
+            <Col>
+              <h2>
+                Reactstrap version:
+                <br />
+              </h2>
+              <FeatureFlagsReduxUI ui='reactstrap' />
+            </Col>
+          )}
+        </Row>
+
         <hr />
         {isFeatureActive('FRUITS', features)
           ? FeatureFlagRedux.fruitsList()

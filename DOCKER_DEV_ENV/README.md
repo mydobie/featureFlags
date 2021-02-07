@@ -53,10 +53,25 @@ bash ./DOCKER_DEV_ENV/docker destroy
 ```
 
 ## Auto Refresh
-Unfortunately the browser will not automatically refresh when you make a change to a file.  This meas that you will need to hit the "refresh" button in your browser to see changes.
 
+Unfortunately the browser will not automatically refresh when you make a change to a file. This meas that you will need to hit the "refresh" button in your browser to see changes.
+
+### Docker notes
+
+The Docker scripts makes the following assumptions:
+
+- You have shared your public key with GitHub
+- Your private key is saved in ~/.ssh/id_rsa
+- Your gitconfig files is saved in ~/.gitconfig
+
+In the container, if you are asked to enter your username and password when running git commands, your git is configured to work with https instead of ssh.
+
+To change this:
+
+- Open the .git config file for this project (.git/config)
+- Change the `url` entry to something like this: `url = git@github.umn.edu:myorg/myrepo.git`
 
 ## Helpful Docker commands
 
-  - List all containers => `docker container ls -a`
-  - List all images => `docker image ls`
+- List all containers => `docker container ls -a`
+- List all images => `docker image ls`
