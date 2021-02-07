@@ -50,9 +50,26 @@ In order to use these components, you need to ensure that the following are in y
 - react
 - react-dom
 - prop-types
-- react-redux (if using redux features of this module) **NOTE:** This will cause an harmless `Module not found` warning during build if react-redux isn't included.
-- bootstrap (if using the edit feature flags UI)
-- reactstrap (if using the edit feature flags UI) **NOTE:** This will cause an harmless `Module not found` warning during build if reactstrap isn't included.
+
+### Optional Redux:
+
+- react-redux (IF your application uses redux) **NOTE:** This will cause an harmless `Module not found` warning during build if react-redux isn't included.
+
+### Optional UI
+
+If you are using the feature flags UI, then one of the following sets is required:
+
+#### Reactstrap
+
+- bootstrap
+- reactstrap
+
+#### Instructure Design
+
+- @instructure/ui-checkbox
+- @instructure/ui-buttons
+
+---
 
 ## Feature flags array
 
@@ -207,7 +224,7 @@ import { isFeatureActive } from 'feature-flags';
 
 ### Calling the UI
 
-If you want to use the available UI, it is recommended that it is added at the root of the project (usuallyApp.js) as a route:
+If you want to use the available UI, it is recommended that it is added at the root of the project (usually App.js) as a route:
 
 ```
 import { FeatureFlagsReduxUI } from  'feature-flags';
