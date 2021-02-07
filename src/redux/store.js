@@ -1,11 +1,9 @@
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable import/no-extraneous-dependencies */
 /*
-This file creates the redux store. 
+This file creates the redux store.
 There normally isn't a need to modify this file
 */
 
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
@@ -17,17 +15,12 @@ const persistConfig = {
   storage,
   stateReconciler: autoMergeLevel2,
 };
-
-let exportCreateStore = createStore(
-  rootReducer,
-  // composeWithDevTools(applyMiddleware(thunk))
-  composeWithDevTools()
-);
+let exportReducer = rootReducer;
 
 if (process.env.REACT_APP_USE_LOCAL_STORAGE === 'true') {
-  const persistedReducer = persistReducer(persistConfig, rootReducer);
-  exportCreateStore = () =>
-    // createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunk)));
-    createStore(persistedReducer, composeWithDevTools());
+  exportReducer = persistReducer(persistConfig, rootReducer);
 }
+const exportCreateStore = () =>
+  createStore(exportReducer, composeWithDevTools(applyMiddleware()));
+
 export default exportCreateStore;
