@@ -9,65 +9,79 @@ import PropTypes from 'prop-types';
 const CBox = (props) => {
   const { id, label, checked, disabled, onChange, ui } = props;
 
-  let CustomElement = <div>The alert component cannot be displayed.</div>;
-  let type;
-
   try {
-    // Code to skip to reactstrap
     if (
       (process.env.REACT_APP_USE_UI &&
-        process.env.REACT_APP_USE_UI !== 'instructure') ||
-      (ui && ui !== 'instructure')
+        process.env.REACT_APP_USE_UI !== 'bootstrap') ||
+      (ui && ui !== 'bootstrap')
     ) {
-      throw 'Purposely skipping Instructure UI and using reactstrap';
+      throw 'Purposely skipping React-Bootstrap';
     }
-
-    // Import Instructure's component
-    require.resolve('@instructure/ui-checkbox');
-    const { Checkbox } = require('@instructure/ui-checkbox');
-
-    CustomElement = Checkbox;
-    type = 'instructure';
+    require.resolve('react-bootstrap');
+    const { Form } = require('react-bootstrap');
+    // eslint-disable-next-line no-console
+    console.log('React-Bootstrap');
+    return (
+      <Form.Switch
+        label={label}
+        id={id}
+        disabled={disabled}
+        checked={checked}
+        onChange={(e) => {
+          onChange(e);
+        }}
+      />
+    );
   } catch (error) {
     try {
-      // Import reactstrap's component
-      require.resolve('reactstrap');
-      const { CustomInput } = require('reactstrap');
-      CustomElement = CustomInput; // NOTE: This line is causing propTypes errors in console
-      type = 'reactstrap';
+      if (
+        (process.env.REACT_APP_USE_UI &&
+          process.env.REACT_APP_USE_UI !== 'instructure') ||
+        (ui && ui !== 'instructure')
+      ) {
+        throw 'Purposely skipping Instructure UI';
+      }
+
+      // Import Instructure's component
+      require.resolve('@instructure/ui-checkbox');
+      const { Checkbox } = require('@instructure/ui-checkbox');
+
+      return (
+        <Checkbox
+          label={label}
+          variant='toggle'
+          size='small'
+          disabled={disabled}
+          checked={checked}
+          id={id}
+          onChange={(e) => {
+            onChange(e);
+          }}
+        />
+      );
     } catch (e) {
-      //  console.log('Instructor nor reactstrap UI object available: ', e);
+      try {
+        // Import reactstrap's component
+        require.resolve('reactstrap');
+        const { CustomInput } = require('reactstrap');
+        return (
+          <CustomInput
+            type='switch'
+            label={label}
+            id={id}
+            disabled={disabled}
+            checked={checked}
+            onChange={(err) => {
+              onChange(err);
+            }}
+          />
+        );
+      } catch (efinal) {
+        //  console.log('Instructor nor reactstrap UI object available: ', e);
+        return <div>Cannot display Checkbox component</div>;
+      }
     }
   }
-
-  const instructure = (
-    <CustomElement
-      label={label}
-      value='small'
-      variant='toggle'
-      size='small'
-      disabled={disabled}
-      checked={checked}
-      onChange={(e) => {
-        onChange(e);
-      }}
-    />
-  );
-
-  const reactstrap = (
-    <CustomElement
-      type='switch'
-      id={id}
-      name='customSwitch'
-      label={label}
-      checked={checked}
-      disabled={disabled}
-      onChange={(e) => {
-        onChange(e);
-      }}
-    />
-  );
-  return type === 'instructure' ? instructure : reactstrap;
 };
 
 CBox.propTypes = {

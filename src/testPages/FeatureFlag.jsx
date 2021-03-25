@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Row, Col } from 'reactstrap';
+import { Row, Col } from 'react-bootstrap';
 import { FeatureFlagsUI, isFeatureActive } from '../Components/index';
 import { COLORS, DINOS } from '../FeatureFlagsConfig';
 
@@ -53,7 +53,7 @@ export default class FeatureFlags extends React.Component {
           <Col>
             {envOverRide ? null : (
               <h2>
-                Instructure version:
+                React-Bootstrap:
                 <br />
               </h2>
             )}
@@ -62,7 +62,19 @@ export default class FeatureFlags extends React.Component {
           {envOverRide ? null : (
             <Col>
               <h2>
-                Reactstrap version:
+                Instructure:
+                <br />
+              </h2>
+              <FeatureFlagsUI
+                ui='instructure'
+                onFeatureChange={this.featureChange}
+              />
+            </Col>
+          )}
+          {envOverRide ? null : (
+            <Col>
+              <h2>
+                Reactstrap:
                 <br />
               </h2>
               <FeatureFlagsUI

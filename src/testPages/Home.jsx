@@ -2,7 +2,7 @@
 // modified or removed from a real project
 
 import React from 'react';
-import { Container, Row, Col, Jumbotron } from 'reactstrap';
+import { Container, Row, Col, Jumbotron } from 'react-bootstrap';
 import FeatureFlagsUI from '../Components/FeatureFlagsUI';
 import FeatureFlagsReduxUI from '../Components/FeatureFlagsReduxUI';
 

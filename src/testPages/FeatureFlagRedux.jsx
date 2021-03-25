@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { Row, Col } from 'reactstrap';
+import { Row, Col } from 'react-bootstrap';
 import {
   getFeatures,
   isFeatureActive,
@@ -56,7 +56,7 @@ class FeatureFlagRedux extends React.Component {
           <Col>
             {envOverRide ? null : (
               <h2>
-                Instructure version:
+                React-Bootstrap:
                 <br />
               </h2>
             )}
@@ -65,7 +65,16 @@ class FeatureFlagRedux extends React.Component {
           {envOverRide ? null : (
             <Col>
               <h2>
-                Reactstrap version:
+                Instructure:
+                <br />
+              </h2>
+              <FeatureFlagsReduxUI ui='instructure' />
+            </Col>
+          )}
+          {envOverRide ? null : (
+            <Col>
+              <h2>
+                Reactstrap:
                 <br />
               </h2>
               <FeatureFlagsReduxUI ui='reactstrap' />
