@@ -59,15 +59,20 @@ In order to use these components, you need to ensure that the following are in y
 
 If you are using the feature flags UI, then one of the following sets is required:
 
-#### Reactstrap
+#### React-Bootstrap (preferred)
 
 - bootstrap
-- reactstrap
+- react-bootstrap
 
 #### Instructure Design
 
 - @instructure/ui-checkbox
 - @instructure/ui-buttons
+
+#### Reactstrap
+
+- bootstrap
+- reactstrap
 
 ---
 
