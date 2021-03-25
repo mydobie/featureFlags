@@ -3,7 +3,7 @@
 // Note this file should be used in most applications
 // Normally there isn't a need to modify it
 import React from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 const Version = (/* props */) => (
   <Container>

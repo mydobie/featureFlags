@@ -1,7 +1,7 @@
 // Page rendered when url doesn't match route in App.jsx
 
 import React from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 const FourOhFour = (/* props */) => (
   <Container>

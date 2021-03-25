@@ -9,63 +9,76 @@ import PropTypes from 'prop-types';
 const CButton = (props) => {
   const { id, children, color, onClick, ui } = props;
 
-  let CustomElement = <div>The alert component cannot be displayed.</div>;
-  let type;
-
   try {
-    // Code to skip to reactstrap
     if (
       (process.env.REACT_APP_USE_UI &&
-        process.env.REACT_APP_USE_UI !== 'instructure') ||
-      (ui && ui !== 'instructure')
+        process.env.REACT_APP_USE_UI !== 'bootstrap') ||
+      (ui && ui !== 'bootstrap')
     ) {
-      throw 'Purposely skipping Instructure UI and using reactstrap';
+      throw 'Purposely skipping React-Bootstrap';
     }
-
-    // Import Instructure's component
-    require.resolve('@instructure/ui-buttons');
-    const { Button } = require('@instructure/ui-buttons');
-
-    CustomElement = Button;
-    type = 'instructure';
+    require.resolve('react-bootstrap');
+    const { Button } = require('react-bootstrap');
+    return (
+      <Button
+        id={id}
+        variant={color}
+        onClick={(e) => {
+          onClick(e);
+        }}
+      >
+        {`${children}`}
+      </Button>
+    );
   } catch (error) {
     try {
-      // Import reactstrap's component
-      require.resolve('reactstrap');
-      const { Button } = require('reactstrap');
-      CustomElement = Button; // NOTE: This line is causing propTypes errors in console
-      type = 'reactstrap';
+      // Code to skip Instructure
+      if (
+        (process.env.REACT_APP_USE_UI &&
+          process.env.REACT_APP_USE_UI !== 'instructure') ||
+        (ui && ui !== 'instructure')
+      ) {
+        throw 'Purposely skipping Instructure UI';
+      }
+
+      // Import Instructure's component
+      require.resolve('@instructure/ui-buttons');
+      const { Button } = require('@instructure/ui-buttons');
+
+      return (
+        <Button
+          id={id}
+          margin='small'
+          color={color}
+          onClick={(e) => {
+            onClick(e);
+          }}
+        >
+          {`${children}`}
+        </Button>
+      );
     } catch (e) {
-      //  console.log('Instructor nor reactstrap UI object available: ', e);
+      try {
+        require.resolve('reactstrap');
+        const { Button } = require('reactstrap');
+        return (
+          <Button
+            id={id}
+            margin='small'
+            color={color}
+            onClick={(err) => {
+              onClick(err);
+            }}
+          >
+            {`${children}`}
+          </Button>
+        );
+      } catch (efinal) {
+        //  console.log('Instructor nor reactstrap UI object available: ', e);
+        return <div>Cannot display Button component</div>;
+      }
     }
   }
-
-  const instructure = (
-    <CustomElement
-      id={id}
-      margin='small'
-      color={color}
-      onClick={(e) => {
-        onClick(e);
-      }}
-    >
-      {`${children}`}
-    </CustomElement>
-  );
-
-  const reactstrap = (
-    <CustomElement
-      id={id}
-      margin='small'
-      color={color}
-      onClick={(e) => {
-        onClick(e);
-      }}
-    >
-      {`${children}`}
-    </CustomElement>
-  );
-  return type === 'instructure' ? instructure : reactstrap;
 };
 
 CButton.propTypes = {
