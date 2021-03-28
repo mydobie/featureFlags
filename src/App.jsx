@@ -13,7 +13,7 @@ import {
 } from 'react-router-dom';
 
 import { connect } from 'react-redux';
-import { Nav, NavItem, Container, Row, Col } from 'reactstrap';
+import { Nav, Container, Row, Col } from 'react-bootstrap';
 import Home from './testPages/Home';
 import Version from './testPages/Version';
 import FourOhFour from './testPages/FourOhFour';
@@ -40,52 +40,52 @@ require('@instructure/canvas-theme');
 const buildNav = (features) => (
   <nav>
     <Nav>
-      <NavItem>
+      <Nav.Item>
         <NavLink activeClassName='active' className='nav-link' to='/'>
           Home
         </NavLink>
-      </NavItem>
+      </Nav.Item>
 
-      <NavItem>
+      <Nav.Item>
         <NavLink activeClassName='active' className='nav-link' to='/local'>
           Local Storage Based Feature Flags
         </NavLink>
-      </NavItem>
+      </Nav.Item>
 
       {isFeatureActive(DINOS) ? (
-        <NavItem>
+        <Nav.Item>
           <span className='nav-link'>LINK TO DINOS</span>
-        </NavItem>
+        </Nav.Item>
       ) : null}
 
       {isFeatureActive(COLORS) ? (
-        <NavItem>
+        <Nav.Item>
           <span className='nav-link'>LINK TO COLORS</span>
-        </NavItem>
+        </Nav.Item>
       ) : null}
 
-      <NavItem>
+      <Nav.Item>
         <NavLink activeClassName='active' className='nav-link' to='/redux'>
           Redux Based Feature Flags
         </NavLink>
-      </NavItem>
+      </Nav.Item>
       {isFeatureActive(FRUITS, features) ? (
-        <NavItem>
+        <Nav.Item>
           <span className='nav-link'>LINK TO FRUITS</span>
-        </NavItem>
+        </Nav.Item>
       ) : null}
 
       {isFeatureActive(VEGGIES, features) ? (
-        <NavItem>
+        <Nav.Item>
           <span className='nav-link'>LINK TO VEGGIES</span>
-        </NavItem>
+        </Nav.Item>
       ) : null}
 
-      <NavItem>
+      <Nav.Item>
         <NavLink activeClassName='active' className='nav-link' to='/version'>
           Version
         </NavLink>
-      </NavItem>
+      </Nav.Item>
     </Nav>
   </nav>
 );
