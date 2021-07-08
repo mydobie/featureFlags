@@ -1,277 +1,35 @@
-# Feature Flags
+# simple-react-app
 
-## Description
+This file contains boilerplate text for the start of a README.
 
-This allows you to add feature flags to a project. This includes methods to check to see if a feature should be enabled along with a UI to edit feature visibility. This module can support both local storage and redux based projects.
-
-## Getting Started - Adding this component to your project
-
-There are three methods of including this into your project.
-
-### Method 1 create and use tgz file
-
-1.  Clone this project.
-1.  Run `npm run buildPackage` to build and tar the component.
-
-The above steps will create a `.tgz` file in the root of this project. Move this `.tgz` file into your project. Add the path to the`.tgz` file to your `package.json` file:
-
-```
-dependencies: {
-  "feature_flags": "file:/"path_to_tgz_file.tgz",
-}
-```
-
-Then run `npm install`.
-
-### Method 2 download tgz file from GitHub
-
-1. Go to the [package page](https://github.com/mydobie/featureFlags/packages?ecosystem=npm) for this project and download the wanted version of the `.tgz` file.
-1. Save the downloaded `.tgz` file into your project.
-1. Add the path to the`.tgz` file to your `package.json` file:
-
-```
-dependencies: {
-  "feature_flags": "file:/"path_to_tgz_file.tgz",
-}
-```
-
-Then run `npm install`.
-
-### Method 3 use GitHubs npm repository
-
-Instead of creating or downloading the `.tgz` file, you can have NPM pull this module as if it were any other module. This process has been documented in the [README_GITHUB](README_GITHUB.md) file.
+Directions on how create a new app using the files in this project are located in GETTING_STARTED/README.md file.
 
 ---
 
-## Requirements
+## Description:
 
-In order to use these components, you need to ensure that the following are in your package.json file and installed.
-
-- react
-- react-dom
-- prop-types
-
-### Optional Redux:
-
-- react-redux (IF your application uses redux) **NOTE:** This will cause an harmless `Module not found` warning during build if react-redux isn't included.
-
-### Optional UI
-
-If you are using the feature flags UI, then one of the following sets is required:
-
-#### React-Bootstrap (preferred)
-
-- bootstrap
-- react-bootstrap
-
-#### Instructure Design
-
-- @instructure/ui-checkbox
-- @instructure/ui-buttons
-
-#### Reactstrap
-
-- bootstrap
-- reactstrap
-
----
-
-## Feature flags array
-
-The first step is to load the feature flag data. The feature flags should be in the format of:
-
-```
-[
-  {
-    id: 'FlagID',  // ID used to identify flags
-    active: false, // Is this feature active and available to end users
-    description: 'Fruit list', // Description of the feature
-  },
-  ...
-]
-```
-
----
-
----
-
-## Use in a non-Redux app
-
-If redux isn't available, the state of each feature flag will be stored in local storage under the `featureFlags` key.
-
-### Populating local storage
-
-At the root of your project (usually App.js), you need to load features using the `loadFeatureFlags` method.
-
-Secondly you need function that will re-render the application (without a reload) to be called when a feature flag changes.
-
-```
-import {loadFeatureFlags} from 'feature-flags';
-
-// featureFlagArray ... see "Feature flags array" section above
-
-class App extends React.Component{
-  componentDidMount() {
-    loadFeatureFlags(featureFlagArray, false, this.reRenderApp());
-  }
-  reRenderApp() {
-    this.forceUpdate();
-  }
-
-... component code
-}
-
-```
-
-### Determining if a feature should be made available
-
-There is a `isFeatureActive` function available. Pass in the feature id and the function will return true if the feature should be made available and false if not. If the feature flag is unknown, the `isFeatureActive` will return undefined.
-
-Example:
-
-```
-import { isFeatureActive } from 'feature-flags';
-
-...
-
-{isFeatureActive('COLORS') ? <MyColorFeatureComponent /> : null}
-
-```
-
-### Calling the UI
-
-If you want to use the available UI, it is recommended that it is added at the root of the project (usuallyApp.js) as a route:
-
-```
-import { FeatureFlagsUI } from  'feature-flags';
-
-... router code
-<Route path='/local'>
-  <FeatureFlagsUI onFeatureChange={this.reRenderApp} readonly={true/false} />
-</Route>
-
-```
-
-NOTE: OnFeatureChange returns an updated list of featureFlags. The readonly flag sets the UI should be readonly or not.
-
----
-
----
-
-## Use in a Redux app
-
-If redux is available, the state of each feature flag will be stored in the redux store.
-
-### Adding the feature flag reducer
-
-The reducer for the feature flags is included as `reducerFeatureFlags` and should be included in your combined reducer.
-
-```
-import { combineReducers } from 'redux';
-import { reducerFeatureFlags } from 'feature-flags';
-
-export default combineReducers({ reducerFeatureFlags });
-
-```
-
-### Populating redux store
-
-At the root of your project (usually App.js), you need to load features using the `loadFeatureFlags` action.
-
-```
-import {loadFeatureFlags} from 'feature-flags';
-
-// featureFlagArray ... see "Feature flags array" section above
-
-class App extends React.Component{
-  componentDidMount() {
-    loadFeatureFlags(featureFlagArray);
-  }
-
-... component code
-
-const mapStateToProps = (state) => ({});
-
-const mapDispatchToProps = (dispatch) => ({
-  loadFeatureToRedux: (features) => dispatch(loadFeatureFlags(features, true)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
-}
-
-```
-
-### Getting a list of features from store
-
-You can get the array of feature flags from the redux store by using the `getFeatures` selector.
-
-```
-const mapStateToProps = (state) => ({
-  features: getFeatures(state),
-});
-
-```
-
-### Determining if a feature should be made available
-
-There is a `isFeatureActive` function available. Pass in the feature id along with the feature flag array (see above section) and the function will return true if the feature should be made available and false if not. If the feature flag is unknown, the `isFeatureActive` will return undefined.
-
-Example:
-
-```
-import { isFeatureActive } from 'feature-flags';
-
-...
-
-{isFeatureActive('COLORS', features) ? <MyColorFeatureComponent /> : null}
-
-```
-
-### Calling the UI
-
-If you want to use the available UI, it is recommended that it is added at the root of the project (usually App.js) as a route:
-
-```
-import { FeatureFlagsReduxUI } from  'feature-flags';
-
-... router code
-<Route path='/redux'>
-  <FeatureFlagsReduxUI readonly={true/false} />
-</Route>
-
-```
-
-NOTE: The readonly flag sets if the UI should be readonly or not.
-
----
-
----
-
----
-
-# Developing
-
-The following sections describe how perform development on this component(s).
+CHANGE ME => Brief description of what this application does.
 
 ## Get me started:
 
-If you are just getting started, perform the following tasks to ensure your environment is ready for development.
+At the root of the project run the following commands in a terminal to verify you can perform all the development tasks:
 
-1.  Verify node is installed => `node -v`. Ensure that it is the version listed in the `engines` section in the `package.json` file
+1.  Verify node is installed => `node -v`. Ensure that it is version listed in the `engines` section of the `package.json` file.
 1.  Install dependencies => `npm run d`
-1.  Check for lint errors => `npm run lint`
-1.  Tun the tests => `npm run test`
-1.  Find security advisories => `npm run npmAudit`
-1.  Build production-ready package => `npm run buildPackage`
-1.  Start dev server to preview the components => `npm run start` then go to [http://localhost:3000](http://localhost:3000)
+1.  Verify you can check for lint errors => `npm run lint`
+1.  Verify you can run the tests => `npm run test`
+1.  Verify you can check for security advisories => `npm run npmAudit`
+1.  Start dev server using mocked data => `npm run start:mock` then go to [http://localhost:3000](http://localhost:3000)
+1.  Verify you can build production files => `npm run build`
+1.  Verify you can make tar for deployment => `npm run createTar`
 
 ## Node
 
 The only requirement is that development system has Node.js installed. You can verify you have node installed by running `node -v` in a terminal.
 
-NOTE: The development tools requires Node 12 or higher.
+NOTE: The development tools require a node version listed in the `engines` section of the `package.json` file.
 
-If have an old version of node running, first verify if you have NVM installed by running `nvm --version` in a terminal. If you do have NVM running, then see the [NVM website](https://github.com/nvm-sh/nvm) on how to install and use a new version of Node.
+If have an different version of node running, first verify if you have NVM installed by running `nvm --version` in a terminal. If you do have NVM running, then see the [NVM website](https://github.com/nvm-sh/nvm) on how to install and use a new version of Node.
 
 If you don't have Node nor NVM installed, see the [NodeJS website](https://nodejs.org/en/) on how to install Node.
 
@@ -291,17 +49,19 @@ This application uses [Husky](https://github.com/typicode/husky) to automaticall
 
 ## Start the development server
 
-To start the development server, run `npm run start` in a terminal at the root of the project. This will start the application in development node and open the application in a browser. Note the application will not build if there are any linting errors.
+To start the development server with mocked data, run `npm run start:mock` in a terminal at the root of the project. If you want to run the application making real API calls, run `npm run start`.
+
+This will start the application in development mode and open the application in a browser. Note the application will not build if there are any linting errors.
 
 The application wil be available at [http://localhost:3000](http://localhost:3000) in a browser.
 
 If you need to change the port the application is running on, then change the `PORT` value in the `.env` file. This `PORT` value is only used for the development server and will not impact a production or production-like (like staging) environment.
 
-#### SASS warning
+#### Known warnings
 
-If, while starting up the development server, you may get a `Node Sass could not find a binding for your current environment` error. This is caused that the SASS compiler wasn't downloaded for your node version and OS. Just run `npm run d` to ensure that the correct version of the compiler is downloaded.
+While starting up the development server, some known warnings or errors may be displayed. Please see the `Build/Known warnings` section below.
 
-## Tests
+### Run tests
 
 To run the tests, run `npm run test` in a terminal the root of the project. This will run all of the tests in the `src/__tests__` directory.
 
@@ -309,9 +69,15 @@ After running tests, you can check the coverage reports by opening `coverage/ind
 
 If you prefer, you can have the testing run in "watch" mode by running `npm run test:watch` in a terminal at the root of the project. The tests will be rerun as you make edits. Note coverage reports will not be updated while in watch mode.
 
-Test are run in [Jest](https://jestjs.io/docs/en/expect), use [Enzyme](https://enzymejs.github.io/enzyme/) to inspect Components, and [jest-axe](https://github.com/nickcolley/jest-axe) to check for accessibility.
+Test are run in [Jest](https://jestjs.io/docs/en/expect), use [Enzyme](https://enzymejs.github.io/enzyme/) to inspect components, and [jest-axe](https://github.com/nickcolley/jest-axe) to check for accessibility.
 
-## Linting
+#### Snapshot tests
+
+This application may use snapshot tests. If there is any change to the HTML, there may be a need to update the snapshot files. This can be done by running `npm run test:update` in a terminal window.
+
+NOTE: Generally snapshots are not recommended, but are a good start when more detailed tests aren't possible or feasible.
+
+### Linting
 
 You can check the linting status of your files by running `npm run lint` in a terminal at the root of the project.
 
@@ -323,20 +89,34 @@ More information on fixing linting errors is available at: [esLint](https://esli
 
 This application uses [Husky](https://github.com/typicode/husky) and [lint-staged](https://github.com/okonet/lint-staged) to automatically install Git Hooks that will check for linting errors on files at commit time. All linting errors must be fixed before changes can be committed to git.
 
-## Security Audit
+### Build
 
-You can check for any high or critical known security vulnerabilities in the dependencies by typing `npm run npmAudit`. All known security vulnerabilities will be displayed, but the previous command will fail only if at least one of the issues are ranked "high" or higher.
+Normally a tar file with the build (production-ready) files needs to be created so it can be loaded to an artifact repository like Artifactory. To build and create a tar file of the built files run `npm run createTar`
 
-## Structure of the project
+If you want to create the build (production-ready) without creating a tar file, run `npm run build` in a terminal at the root fo the project. This will create production-ready files in a `build` directory.
 
-The project is structured like this:
+#### Known warnings
 
-- `public/` => The public contains the shell html pages. There normally isn't a need to add or modify anything in this directory and it is only used for previewing the components while in development.
-- `src/`
-  - `__tests__/` => Jest test scripts. Add your test scripts here.
-  - `Components/` => Contains the component files. Place your new component files here.
-    - `index.jsx` => List of component(s) or functions to be made available. This file needs to be edited, see file for directions.
-  - `App.jsx` => References to components you want to preview while in development. This file needs to be edited, see file for directions.
-  - `index.jsx` => Loads App.jsx into the html page. There normally isn't a need to modify this file.
-  - `setupTests.jsx` => Add any scripts you wish to run before tests are started to this file.
-- `utils/` => Contains helper node functions that are only used as part of the development or build phases.
+If you get a `Node Sass could not find a binding for your current environment` error, it means that the SASS compiler wasn't downloaded for your node version and OS. Run `npm run d` to ensure that the correct version of the compiler is downloaded.
+
+If the application has feature flags enabled, a harmless `Module not found: Can't resolve ... ` warnings will be shown and they can be ignored. These warnings will not prevent the build from happening nor will it impact the application. It is currently a known issue with the feature flags module.
+
+---
+
+#### Deploying
+
+The process to deploy an artifact (aka tar file) to a server is not handled by this application, Jenkinsfile, nor GitHub action file.
+
+Some other process will need to pull the artifact from Artifactory, and untar the files. This could be Ansible, Chef, or even done manually.
+
+---
+
+### Create React App
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+### Local modules
+
+This application uses a couple of modules that are not available via an NPM registry yet.
+
+- [feature_flags](https://github.com/mydobie/featureFlags)

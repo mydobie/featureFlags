@@ -20,3 +20,5 @@ npm-debug.log*
 /dist
 
 .env.development
+
+TODO.md

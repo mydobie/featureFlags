@@ -13,9 +13,10 @@ WORKDIR /home/app
 RUN mkdir -p /root/.ssh 
 ADD DOCKER_DEV_ENV/sshConfig /root/.ssh/config
 
-# Install Vim
+
 RUN apt-get update
 RUN apt-get install vim -y
+
 
 # Ports
 ENV PORT 3000

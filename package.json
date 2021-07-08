@@ -1,40 +1,32 @@
 {
-  "name": "@mydobie/feature_flags",
-  "version": "1.2.0",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
-  "repository": "https://github.com/mydobie/featureFlags",
-  "babel": {
-    "presets": [
-      "react",
-      "env",
-      "stage-2"
-    ]
-  },
+  "name": "simple-react-app",
+  "description": "",
+  "version": "0.6.0",
+  "private": true,
   "engines": {
-    "node": "^12 || ^14"
+    "node": "12 || 14"
   },
   "dependencies": {
-    "bootstrap": "4.0.0 - 5.0.0",
+    "axios": "^0.21.1",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "feature_flags": "file:modules/feature_flags-1.2.0.tgz",
     "prop-types": "^15.7.2",
-    "react": "16.0.0 - 17.999.999",
-    "react-dom": "16.0.0 - 17.999.999"
+    "react": "^17.0.2",
+    "react-bootstrap": "^1.5.2",
+    "react-dom": "^17.0.2",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
-    "react-redux": "^7.2.3",
-    "reactstrap": "^8.9.0",
-    "@instructure/canvas-theme": "^7.5.0",
-    "@instructure/ui-checkbox": "^7.5.0",
-    "@instructure/ui-buttons": "^7.5.0",
-    "@babel/preset-react": "^7.12.13",
+    "bootstrap": "^5.0.2",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
+    "@types/jest": "^26.0.22",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "@types/react-router-dom": "^5.1.7",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
+    "axios-mock-adapter": "^1.19.0",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.6.1",
     "eslint-config-airbnb": "^18.2.1",
@@ -42,32 +34,26 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-watch": "^7.0.0",
-    "husky": "^5.2.0",
-    "jest-axe": "4.1.0",
+    "husky": "^6.0.0",
+    "jest-axe": "^4.1.0",
     "lint-staged": "^10.5.4",
     "node-sass": "^5.0.0",
+    "onchange": "^7.1.0",
     "prettier": "2.2.1",
-    "react-bootstrap": "^1.5.2",
-    "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
-    "redux": "^4.0.5",
-    "redux-devtools-extension": "^2.13.9",
-    "redux-mock-store": "^1.5.4",
-    "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0",
+    "sass": "^1.32.8",
     "stylelint": "^13.12.0",
     "stylelint-config-prettier": "^8.0.2",
-    "uglify-js": "^3.13.2"
+    "typescript": "^4.2.3"
   },
   "scripts": {
     "d": "npm i && npm rebuild node-sass",
     "installDependencies": "npm run d",
     "start": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts start",
+    "start:mock": "REACT_APP_USE_MOCKS=true npm run start",
     "----------------------------------------------------------1": "",
-    "build": "npm run d && npm run test && npm run npmAudit && npm run build:ci",
-    "build:ci": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts build",
-    "test": "react-scripts test --coverage --watchAll=false --passWithNoTests",
+    "build": "npm run d && npm run test && npm run npmAudit && REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts build",
+    "test": "react-scripts test --coverage --watchAll=false",
     "test:watch": "react-scripts test ",
     "test:update": "npm run test -- -u",
     "----------------------------------------------------------2": "",
@@ -75,32 +61,33 @@
     "lint:fix": "npm run prettier:fix:all && npm run lint:js:fix &&  npm run lint:scss:fix:all",
     "lint:watch": "onchange 'src/**/*.*' -- npm run lint:fix",
     "----------------------------------------------------------3": "",
-    "lint:js": "esw --ext .jsx,.js --color ",
+    "lint:js": "esw --ext .jsx,.js,.tsx --color ",
     "lint:js:fix": "npm run lint:js -- --fix",
     "prettier": "prettier  --ignore-path ./.eslintignore --check",
     "prettier:all": "npm run prettier '**/*.+(js|jsx|html|css|scss|json)'",
     "prettier:fix": "prettier  --ignore-path ./.eslintignore --write",
-    "prettier:fix:all": "npm run prettier:fix '**/*.+(js|jsx|html|css|scss|json)'",
+    "prettier:fix:all": "npm run prettier:fix '**/*.+(js|jsx|tsx|html|css|scss|json)'",
     "lint:scss": "stylelint --ignore-path ./.eslintignore ",
     "lint:scss:all": "npm run lint:scss './**/*.+(css|scss)'",
     "lint:scss:fix:all": "npm run lint:scss -- --fix './**/*.+(css|scss)'",
     "----------------------------------------------------------4": "",
-    "clean": "rm -rf node_modules && rm package-lock.json && npm run d",
-    "uglify": "uglifyjs ",
+    "clean": "rm -rf node_modules && rm -f package-lock.json && npm run d",
     "checkCoverage": "node ./utils/testCoverage.js",
-    "npmAudit": "npm audit --audit-level=high --registry=https://registry.npmjs.org",
-    "buildPackage": "npm run d && npm run npmAudit && npm run test && bash  utils/buildPackage.sh"
-  },
-  "prettier": {
-    "singleQuote": true,
-    "jsxSingleQuote": true,
-    "printWidth": 80
+    "createTar": "node ./utils/createArchive.js",
+    "npmAudit": "npm audit -audit-level high"
   },
   "eslintConfig": {
+    "settings": {
+      "import/resolver": {
+        "typescript": {}
+      }
+    },
     "extends": [
       "airbnb",
       "airbnb/hooks",
-      "prettier"
+      "prettier",
+      "react-app",
+      "react-app/jest"
     ],
     "globals": {
       "styles": true
@@ -118,6 +105,7 @@
       "eslint-plugin-react"
     ],
     "rules": {
+      "react/static-property-placement": "off",
       "prettier/prettier": "error",
       "no-var": "error",
       "curly": "error",
@@ -128,15 +116,40 @@
         "error",
         "as-needed"
       ],
-      "import/no-extraneous-dependencies": "off"
+      "react/jsx-filename-extension": [
+        2,
+        {
+          "extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx"
+          ]
+        }
+      ],
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "js": "never",
+          "jsx": "never",
+          "ts": "never",
+          "tsx": "never"
+        }
+      ]
     }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "jsxSingleQuote": true,
+    "printWidth": 80
   },
   "stylelint": {
     "extends": "stylelint-config-prettier"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && npm run npmAudit"
     }
   },
   "jest": {
@@ -144,11 +157,8 @@
       "src/**/*.{js,jsx,ts,tsx}",
       "!<rootDir>/node_modules/",
       "!<rootDir>/src/index.jsx",
-      "!<rootDir>/src/setupTests.js",
-      "!<rootDir>/src/App.jsx",
-      "!<rootDir>/src/redux/**",
-      "!<rootDir>/src/testPages/**",
-      "!<rootDir>/src/FeatureFlagsConfig.js"
+      "!<rootDir>/src/serviceWorker.js",
+      "!<rootDir>/src/setupTests.js"
     ],
     "coverageReporters": [
       "html",

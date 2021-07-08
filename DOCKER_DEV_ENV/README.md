@@ -54,7 +54,7 @@ bash ./DOCKER_DEV_ENV/docker destroy
 
 ## Auto Refresh
 
-Unfortunately the browser will not automatically refresh when you make a change to a file. This meas that you will need to hit the "refresh" button in your browser to see changes.
+Unfortunately the browser will not automatically refresh when you make a change to a file. This means that you will need to hit the "refresh" button in your browser to see changes.
 
 ### Docker notes
 
@@ -64,7 +64,7 @@ The Docker scripts makes the following assumptions:
 - Your private key is saved in ~/.ssh/id_rsa
 - Your gitconfig files is saved in ~/.gitconfig
 
-In the container, if you are asked to enter your username and password when running git commands, your git is configured to work with https instead of ssh.
+In the container, you are asked to enter your username and password when running git commands, your git is configured to work with https instead of ssh.
 
 To change this:
 
