@@ -1,5 +1,5 @@
 module.exports = {
-  'src/**/*.{js,jsx}': [
+  'src/**/*.{js,jsx, ts, tsx}': [
     (jsFiles) => jsFiles.map((jsFile) => `npm run lint:js ${jsFile}`), // check files
   ],
   'src/**/*.{scss,css}': [
