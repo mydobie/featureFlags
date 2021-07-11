@@ -3,8 +3,14 @@ import React from 'react';
 /* eslint-disable no-console */
 export const FEATURE_FLAGS = 'featureFlags'; // key used in local storage
 // export const FEATURE_FLAGS_ADD = 'featureFlagsAdd';
-// export const FEATURE_FLAG_EDIT = 'featureFlagsEdit';
-// export const FEATURE_FLAGS_RESET = 'featureFlagsReset';
+export const FEATURE_FLAG_EDIT = 'featureFlagsEdit';
+export const FEATURE_FLAGS_RESET = 'featureFlagsReset';
+export const FEATURE_FLAGS_ADD = 'FEATURE_FLAGS_ADD';
+
+export type actionType = {
+  type: string;
+  payload: { type: string; payload: any };
+};
 
 export type FlagType = {
   id: string;
@@ -37,13 +43,25 @@ export const loadFeatureFlags = (
     } else {
       features[featureIndex].active = flag.active;
     }
-    features.forEach((feature) => {
-      addFeatureFlag(feature.id, feature.active, feature.description);
-    });
   });
+  if (useRedux) {
+    return { type: FEATURE_FLAGS_ADD, payload: features };
+  }
+
+  features.forEach((feature) => {
+    addFeatureFlag(feature.id, feature.active, feature.description, useRedux);
+  });
+  return features;
 };
+
 /* ******************************************** */
-export const resetFeatureFlags = () => {
+export const resetFeatureFlags = (useRedux: boolean = false) => {
+  if (useRedux) {
+    return {
+      type: FEATURE_FLAGS_RESET,
+      payload: {},
+    };
+  }
   const features = getFeatureFlags();
   const newFeatures = features.map((feature) => ({
     ...feature,
@@ -61,12 +79,17 @@ export const getFeatureFlags = (): FlagType[] => {
   return features;
 };
 
+// @ts-ignore
+export const getFeatureFlagsRedux = (state): FlagType[] =>
+  state.FeatureFlags.features;
+
 /* ******************************************** */
 
 const addFeatureFlag = (
   id: string,
   active: boolean,
-  description: string = ''
+  description: string = '',
+  useRedux: boolean = false
 ) => {
   const features: FlagType[] = JSON.parse(
     localStorage.getItem(FEATURE_FLAGS) ?? '[]'
@@ -87,26 +110,34 @@ const addFeatureFlag = (
 export const editFeatureFlag = (
   id: string,
   active: boolean,
-  description: string = ''
-): void => {
+  useRedux: boolean = false
+) => {
+  if (useRedux) {
+    return { type: FEATURE_FLAG_EDIT, payload: { id, active } };
+  }
+
   const features: FlagType[] = JSON.parse(
     localStorage.getItem(FEATURE_FLAGS) ?? '[]'
   );
 
   const featureIndex = features.findIndex((flag) => flag.id === id);
 
-  if (featureIndex !== -1) {
-    features[featureIndex].active = active;
-  } else {
-    addFeatureFlag(id, active, description);
-  }
-  localStorage.setItem(FEATURE_FLAGS, JSON.stringify(features));
+  features[featureIndex].active = active;
+
+  return localStorage.setItem(FEATURE_FLAGS, JSON.stringify(features));
 };
 /* ****************************************** */
 
-export const isFeatureActive = (flag: string) =>
-  getFeatureFlags().find((feature) => feature.id === flag)?.active;
-
+// @ts-ignore
+export const isFeatureActive = (flag: string, state = undefined) => {
+  if (state !== undefined) {
+    // @ts-ignore
+    return state.FeatureFlags.features.find(
+      (feature: FlagType) => feature.id === flag
+    )?.active;
+  }
+  return getFeatureFlags().find((feature) => feature.id === flag)?.active;
+};
 /* ****************************************** */
 export const useLocalStorage = (initialValue: any) => {
   // State to store our value

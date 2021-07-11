@@ -16,7 +16,6 @@ const CoreUI = ({
 }: // readonly = false,
 CoreUIType) => (
   <>
-    <h2>Feature flags</h2>
     <ul>
       {features.map((feature) => (
         <li key={feature.id}>

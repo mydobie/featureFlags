@@ -30,6 +30,7 @@ const FeatureFlagsUI = () => {
           window.location.reload();
         }}
         className='btn btn-primary'
+        style={{ marginLeft: '10px' }}
       >
         Refresh page to force changes
       </button>

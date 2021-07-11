@@ -11,7 +11,7 @@ export const featureFlagsRedux = [
   },
   {
     id: VEGGIES,
-    active: false,
+    active: true,
     description: 'Vegetable list',
   },
 ];
