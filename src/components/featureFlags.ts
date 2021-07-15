@@ -1,16 +1,11 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
+// import persistReducer from 'redux-persist/lib/persistReducer';
+import { RootState } from '../redux/store';
+// import { useAppSelector } from '../redux/hooks';
 
 /* eslint-disable no-console */
 export const FEATURE_FLAGS = 'featureFlags'; // key used in local storage
-// export const FEATURE_FLAGS_ADD = 'featureFlagsAdd';
-export const FEATURE_FLAG_EDIT = 'featureFlagsEdit';
-export const FEATURE_FLAGS_RESET = 'featureFlagsReset';
-export const FEATURE_FLAGS_ADD = 'FEATURE_FLAGS_ADD';
-
-export type actionType = {
-  type: string;
-  payload: { type: string; payload: any };
-};
 
 export type FlagType = {
   id: string;
@@ -19,14 +14,10 @@ export type FlagType = {
   original?: boolean;
 };
 
-/** Loads feature flag settings from config file  */
-export const loadFeatureFlags = (
-  featureArray: FlagType[] = [],
-  useRedux: boolean = false,
-  envVariable: string = 'REACT_APP_FEATURE_FLAGS'
-) => {
-  const features = [...featureArray];
-  const fromProcessEnv: string = process.env[envVariable] ?? '[]';
+export const getWithEnvOverrides = (featuresArray: FlagType[] = []) => {
+  const features = [...featuresArray];
+
+  const fromProcessEnv: string = process.env.REACT_APP_FEATURE_FLAGS ?? '[]';
   const envFlagOverRides: FlagType[] = JSON.parse(fromProcessEnv);
 
   envFlagOverRides.forEach((flag) => {
@@ -44,24 +35,28 @@ export const loadFeatureFlags = (
       features[featureIndex].active = flag.active;
     }
   });
-  if (useRedux) {
-    return { type: FEATURE_FLAGS_ADD, payload: features };
+  return features;
+};
+
+/** Loads feature flag settings from config file  */
+export const loadFeatureFlags = (
+  featureArray: FlagType[] = [],
+  persistLocalStorage: boolean = false
+) => {
+  if (persistLocalStorage === false) {
+    localStorage.setItem(FEATURE_FLAGS, JSON.stringify([]));
   }
 
+  const features = getWithEnvOverrides(featureArray);
+
   features.forEach((feature) => {
-    addFeatureFlag(feature.id, feature.active, feature.description, useRedux);
+    addFeatureFlag(feature.id, feature.active, feature.description);
   });
   return features;
 };
 
 /* ******************************************** */
 export const resetFeatureFlags = (useRedux: boolean = false) => {
-  if (useRedux) {
-    return {
-      type: FEATURE_FLAGS_RESET,
-      payload: {},
-    };
-  }
   const features = getFeatureFlags();
   const newFeatures = features.map((feature) => ({
     ...feature,
@@ -79,8 +74,7 @@ export const getFeatureFlags = (): FlagType[] => {
   return features;
 };
 
-// @ts-ignore
-export const getFeatureFlagsRedux = (state): FlagType[] =>
+export const getFeatureFlagsRedux = (state: RootState): FlagType[] =>
   state.FeatureFlags.features;
 
 /* ******************************************** */
@@ -88,8 +82,7 @@ export const getFeatureFlagsRedux = (state): FlagType[] =>
 const addFeatureFlag = (
   id: string,
   active: boolean,
-  description: string = '',
-  useRedux: boolean = false
+  description: string = ''
 ) => {
   const features: FlagType[] = JSON.parse(
     localStorage.getItem(FEATURE_FLAGS) ?? '[]'
@@ -112,10 +105,6 @@ export const editFeatureFlag = (
   active: boolean,
   useRedux: boolean = false
 ) => {
-  if (useRedux) {
-    return { type: FEATURE_FLAG_EDIT, payload: { id, active } };
-  }
-
   const features: FlagType[] = JSON.parse(
     localStorage.getItem(FEATURE_FLAGS) ?? '[]'
   );
@@ -128,18 +117,24 @@ export const editFeatureFlag = (
 };
 /* ****************************************** */
 
-// @ts-ignore
-export const isFeatureActive = (flag: string, state = undefined) => {
-  if (state !== undefined) {
-    // @ts-ignore
-    return state.FeatureFlags.features.find(
-      (feature: FlagType) => feature.id === flag
-    )?.active;
+export const isFeatureActive = (flag: string, reduxState: any = undefined) => {
+  if (reduxState !== undefined) {
+    console.log(typeof reduxState);
+    console.log(reduxState);
+
+    if (reduxState.FeatureFlags) {
+      return reduxState.FeatureFlags.features.find(
+        (feature: FlagType) => feature.id === flag
+      )?.active;
+    }
+    return reduxState.find((feature: FlagType) => feature.id === flag)?.active;
   }
+
   return getFeatureFlags().find((feature) => feature.id === flag)?.active;
 };
+
 /* ****************************************** */
-export const useLocalStorage = (initialValue: any) => {
+export const useLocalStorage = (initialValue: any = undefined) => {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
 

@@ -1,26 +1,22 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
-import { connect } from 'react-redux';
+import { useAppSelector } from '../redux/hooks';
 import FeatureFlagsReduxUI from '../components/FeatureFlagsReduxUI';
 import { isFeatureActive } from '../components/featureFlags';
 import { VEGGIES, FRUITS } from '../FeatureFlagsConfig';
 
-// @ts-ignore
-// eslint-disable-next-line react/prop-types
-const ReduxPage = ({ isActive }) => (
-  <div className='container'>
-    <h1>Feature flags - redux</h1>
-    <FeatureFlagsReduxUI />
-    <hr />
-    {isActive(VEGGIES) ? <div>VEGGIES!!!</div> : null}
-    {isActive(FRUITS) ? <div>FRUITS!!!</div> : null}
-  </div>
-);
+const ReduxPage = () => {
+  const isVeggies = useAppSelector((state) => isFeatureActive(VEGGIES, state));
+  const isFruits = useAppSelector((state) => isFeatureActive(FRUITS, state));
+  return (
+    <div className='container'>
+      <h1>Feature flags - redux</h1>
+      <FeatureFlagsReduxUI />
+      <hr />
+      {isVeggies ? <div>VEGGIES!!!</div> : null}
+      {isFruits ? <div>FRUITS!!!</div> : null}
+    </div>
+  );
+};
 
-// @ts-ignore
-const mapStateToProps = (state) => ({
-  isActive: (id: string) => isFeatureActive(id, state),
-});
-
-const mapDispatchToProps = (/* dispatch */) => ({});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ReduxPage);
+export default ReduxPage;

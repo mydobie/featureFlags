@@ -1,10 +1,6 @@
-import { combineReducers } from 'redux';
+/* eslint-disable import/no-extraneous-dependencies */
+import { combineReducers } from '@reduxjs/toolkit';
 
 import FeatureFlags from '../../components/featureFlagsReducers';
-
-export type actionType = {
-  type: string;
-  payload: any;
-};
 
 export default combineReducers({ FeatureFlags });

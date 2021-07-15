@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 // Contains routing for entire application
 
 import React from 'react';

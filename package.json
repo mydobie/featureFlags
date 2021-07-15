@@ -11,6 +11,7 @@
     "react-dom": "17.0.0 - 17.999.999"
   },
   "devDependencies": {
+    "@reduxjs/toolkit": "^1.6.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-redux": "^7.2.4",
@@ -63,7 +64,7 @@
     "test:update": "npm run test -- -u",
     "----------------------------------------------------------2": "",
     "lint": "npm run lint:js && npm run prettier:all && npm run lint:scss:all",
-    "lint:fix": "npm run prettier:fix:all && npm run lint:js:fix &&  npm run lint:scss:fix:all",
+    "lint:fix": "npm run prettier:fix:all && npm run lint:js:fix ",
     "lint:watch": "onchange 'src/**/*.*' -- npm run lint:fix",
     "----------------------------------------------------------3": "",
     "lint:js": "esw --ext .jsx,.js,.tsx --color ",

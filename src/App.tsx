@@ -1,25 +1,28 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
+/* eslint-disable import/no-extraneous-dependencies */
 // Contains routing and any application wide items like headers, footers and navigation
-import React from 'react';
+import React, { useReducer } from 'react';
 import { HashRouter as Router } from 'react-router-dom'; // Use `HashRouter as Router` when you can't control the URL ... like GitHub pages
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
+import { useAppDispatch } from './redux/hooks';
 import AppNavBar from './AppNavBar';
 import AppRoutes from './AppRoutes';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { loadFeatureFlags } from './components/featureFlags';
+import { addFeatures } from './components/featureFlagsReducers';
 import {
   featureFlagsLocalStorage,
   featureFlagsRedux,
 } from './FeatureFlagsConfig';
 
-// @ts-ignore
-const App = ({ loadFeatureToRedux }) => {
-  const basename = '';
-  loadFeatureFlags(featureFlagsLocalStorage || []);
-  loadFeatureToRedux(featureFlagsRedux || []);
+loadFeatureFlags(featureFlagsLocalStorage || []);
 
+const App = () => {
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+  const dispatch = useAppDispatch();
+  dispatch(addFeatures(featureFlagsRedux || []));
+  const basename = '';
   return (
     <div>
       <Router basename={basename}>
@@ -28,16 +31,11 @@ const App = ({ loadFeatureToRedux }) => {
           <AppRoutes />
         </main>
       </Router>
+      <button type='button' onClick={forceUpdate}>
+        RELOAD
+      </button>
     </div>
   );
 };
 
-const mapStateToProps = () => ({});
-
-/// @ts-ignore
-const mapDispatchToProps = (dispatch) => ({
-  // @ts-ignore
-  loadFeatureToRedux: (features) => dispatch(loadFeatureFlags(features, true)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

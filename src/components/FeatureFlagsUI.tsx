@@ -1,14 +1,10 @@
 /* eslint-disable no-console */
 import React from 'react';
 import CoreUI from './CoreUI';
-import {
-  getFeatureFlags,
-  useLocalStorage,
-  resetFeatureFlags,
-} from './featureFlags';
+import { useLocalStorage, resetFeatureFlags } from './featureFlags';
 
 const FeatureFlagsUI = () => {
-  const [features, setFeatures] = useLocalStorage(getFeatureFlags());
+  const [features, setFeatures] = useLocalStorage();
 
   return (
     <>

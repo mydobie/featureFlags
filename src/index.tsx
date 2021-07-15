@@ -1,30 +1,28 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { persistStore } from 'redux-persist';
-import { PersistGate } from 'redux-persist/integration/react';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import configureStore from './redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
 import App from './App';
+import { store } from './redux/store';
 
-const store = configureStore();
+const usePersister = process.env.REACT_APP_USE_LOCAL_STORAGE === 'true';
 
-let RenderApp = (
-  <Provider store={store}>
+const persistor = usePersister ? persistStore(store) : undefined;
+
+const PeristorApp = usePersister ? (
+  // @ts-ignore - this is a known issue
+  <PersistGate loading={null} persistor={persistor}>
     <App />
-  </Provider>
+  </PersistGate>
+) : (
+  <App />
 );
 
-if (process.env.REACT_APP_USE_LOCAL_STORAGE === 'true') {
-  // @ts-ignore
-  const persistor = persistStore(store);
-
-  RenderApp = (
-    <Provider store={store}>
-      <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
-        <App />
-      </PersistGate>
-    </Provider>
-  );
-}
-
-ReactDOM.render(RenderApp, document.getElementById('root'));
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>{PeristorApp}</Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
