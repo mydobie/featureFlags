@@ -9,31 +9,43 @@ import { useAppDispatch } from './redux/hooks';
 import AppNavBar from './AppNavBar';
 import AppRoutes from './AppRoutes';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { loadFeatureFlags } from './components/featureFlags';
+import {
+  loadFeatureFlags,
+  featuresWithOverrides,
+} from './components/featureFlags';
 import { addFeatures } from './components/featureFlagsReducers';
 import {
   featureFlagsLocalStorage,
   featureFlagsRedux,
 } from './FeatureFlagsConfig';
 
-loadFeatureFlags(featureFlagsLocalStorage || []);
+loadFeatureFlags(
+  featuresWithOverrides(
+    featureFlagsLocalStorage,
+    JSON.parse(process.env.REACT_APP_FEATURE_FLAGS ?? '[]')
+  ) || [],
+  process.env.REACT_APP_USE_LOCAL_STORAGE === 'true'
+);
 
 const App = () => {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
   const dispatch = useAppDispatch();
-  dispatch(addFeatures(featureFlagsRedux || []));
+  dispatch(
+    addFeatures({
+      features: featureFlagsRedux || [],
+      overrides: JSON.parse(process.env.REACT_APP_FEATURE_FLAGS ?? '[]'),
+      persist: process.env.REACT_APP_USE_LOCAL_STORAGE === 'true',
+    })
+  );
   const basename = '';
   return (
     <div>
       <Router basename={basename}>
         <AppNavBar />
         <main>
-          <AppRoutes />
+          <AppRoutes onFeatureChange={forceUpdate} />
         </main>
       </Router>
-      <button type='button' onClick={forceUpdate}>
-        RELOAD
-      </button>
     </div>
   );
 };

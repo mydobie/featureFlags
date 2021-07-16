@@ -22,6 +22,12 @@ const Home = () => (
             {process.env.REACT_APP_VERSION}
           </li>
           <li>
+            <strong>State persists on refresh: </strong>
+            {process.env.REACT_APP_USE_LOCAL_STORAGE
+              ? process.env.REACT_APP_USE_LOCAL_STORAGE
+              : 'false'}
+          </li>
+          <li>
             <strong>Git Commit: </strong>
             {process.env.REACT_APP_GIT_SHA}
           </li>

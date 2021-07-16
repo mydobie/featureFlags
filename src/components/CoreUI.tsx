@@ -6,15 +6,15 @@ type CoreUIType = {
   features: FlagType[];
   onFeatureClick: (id: string, checked: boolean) => void;
   onFeatureReset: () => void;
-  // readonly?: boolean;
+  persist?: boolean;
 };
 
 const CoreUI = ({
   features = [],
   onFeatureClick = () => {},
   onFeatureReset = () => {},
-}: // readonly = false,
-CoreUIType) => (
+  persist = false,
+}: CoreUIType) => (
   <>
     <ul>
       {features.map((feature) => (
@@ -42,6 +42,12 @@ CoreUIType) => (
         </li>
       ))}
     </ul>
+    {persist ? (
+      <p className='alert alert-secondary' role='alert'>
+        <strong>NOTE:</strong> Feature flag values are persisting on page
+        refresh. This is not recommended for a production environment.
+      </p>
+    ) : null}
     <button
       type='button'
       className='btn btn-success'

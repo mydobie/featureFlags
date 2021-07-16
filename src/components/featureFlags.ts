@@ -1,11 +1,10 @@
+/* eslint-disable no-console */
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
-// import persistReducer from 'redux-persist/lib/persistReducer';
 import { RootState } from '../redux/store';
-// import { useAppSelector } from '../redux/hooks';
 
-/* eslint-disable no-console */
 export const FEATURE_FLAGS = 'featureFlags'; // key used in local storage
+export const FEATURE_FLAGS_PERSIST = 'featuresFlagsPersist';
 
 export type FlagType = {
   id: string;
@@ -14,13 +13,12 @@ export type FlagType = {
   original?: boolean;
 };
 
-export const getWithEnvOverrides = (featuresArray: FlagType[] = []) => {
+export const featuresWithOverrides = (
+  featuresArray: FlagType[] = [],
+  overRidesArray: FlagType[] = []
+) => {
   const features = [...featuresArray];
-
-  const fromProcessEnv: string = process.env.REACT_APP_FEATURE_FLAGS ?? '[]';
-  const envFlagOverRides: FlagType[] = JSON.parse(fromProcessEnv);
-
-  envFlagOverRides.forEach((flag) => {
+  overRidesArray.forEach((flag) => {
     const featureIndex = features.findIndex(
       (feature) => feature.id === flag.id
     );
@@ -40,14 +38,16 @@ export const getWithEnvOverrides = (featuresArray: FlagType[] = []) => {
 
 /** Loads feature flag settings from config file  */
 export const loadFeatureFlags = (
-  featureArray: FlagType[] = [],
+  features: FlagType[] = [],
   persistLocalStorage: boolean = false
 ) => {
   if (persistLocalStorage === false) {
     localStorage.setItem(FEATURE_FLAGS, JSON.stringify([]));
   }
-
-  const features = getWithEnvOverrides(featureArray);
+  localStorage.setItem(
+    FEATURE_FLAGS_PERSIST,
+    persistLocalStorage ? 'true' : 'false'
+  );
 
   features.forEach((feature) => {
     addFeatureFlag(feature.id, feature.active, feature.description);
@@ -76,6 +76,9 @@ export const getFeatureFlags = (): FlagType[] => {
 
 export const getFeatureFlagsRedux = (state: RootState): FlagType[] =>
   state.FeatureFlags.features;
+
+export const getPersistRedux = (state: RootState): boolean =>
+  state.FeatureFlags.persist;
 
 /* ******************************************** */
 
@@ -119,9 +122,6 @@ export const editFeatureFlag = (
 
 export const isFeatureActive = (flag: string, reduxState: any = undefined) => {
   if (reduxState !== undefined) {
-    console.log(typeof reduxState);
-    console.log(reduxState);
-
     if (reduxState.FeatureFlags) {
       return reduxState.FeatureFlags.features.find(
         (feature: FlagType) => feature.id === flag
@@ -134,11 +134,14 @@ export const isFeatureActive = (flag: string, reduxState: any = undefined) => {
 };
 
 /* ****************************************** */
-export const useLocalStorage = (initialValue: any = undefined) => {
+export const useLocalStorage = (
+  type: string,
+  initialValue: any = undefined
+) => {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
 
-  const key = FEATURE_FLAGS;
+  const key = type;
   const [storedValue, setStoredValue] = React.useState(() => {
     try {
       // Get from local storage by key

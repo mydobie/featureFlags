@@ -67,7 +67,7 @@
     "lint:fix": "npm run prettier:fix:all && npm run lint:js:fix ",
     "lint:watch": "onchange 'src/**/*.*' -- npm run lint:fix",
     "----------------------------------------------------------3": "",
-    "lint:js": "esw --ext .jsx,.js,.tsx --color ",
+    "lint:js": "esw --ext .jsx,.js,.tsx,.ts --color ",
     "lint:js:fix": "npm run lint:js -- --fix",
     "prettier": "prettier  --ignore-path ./.eslintignore --check",
     "prettier:all": "npm run prettier '**/*.+(js|jsx|html|css|scss|json)'",
@@ -112,6 +112,12 @@
       "eslint-plugin-react"
     ],
     "rules": {
+      "react/require-default-props": [
+        2,
+        {
+          "ignoreFunctionalComponents": true
+        }
+      ],
       "react/static-property-placement": "off",
       "prettier/prettier": "error",
       "no-var": "error",

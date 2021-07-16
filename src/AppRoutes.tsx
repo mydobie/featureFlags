@@ -16,7 +16,7 @@ interface Props {
   onFeatureChange?: () => void;
 }
 
-const AppRoutes = (props: Props) => (
+const AppRoutes = ({ onFeatureChange = () => {} }: Props) => (
   <div>
     <Switch>
       <Route path={HOME_ROUTE} exact>
@@ -24,7 +24,7 @@ const AppRoutes = (props: Props) => (
       </Route>
 
       <Route path={LOCAL_STORAGE}>
-        <LocalStoragePage />
+        <LocalStoragePage onFeatureChange={onFeatureChange} />
       </Route>
 
       <Route path={REDUX}>

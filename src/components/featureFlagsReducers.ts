@@ -3,30 +3,45 @@
 /* eslint-disable prettier/prettier */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { FlagType, getWithEnvOverrides } from './featureFlags';
+import { FlagType, featuresWithOverrides } from './featureFlags';
 
 interface FeatureFlagState {
   features: FlagType[];
+  persist: boolean;
 }
 
 const initialState: FeatureFlagState = {
   features: [],
+  persist: false,
 };
 
 export const featureFlagSlice = createSlice({
   name: 'featureflag',
   initialState,
   reducers: {
-    addFeatures: (state, action: PayloadAction<FlagType[]>) => {
+    addFeatures: (
+      state,
+      action: PayloadAction<{
+        features: FlagType[];
+        overrides?: FlagType[];
+        persist: boolean;
+      }>
+    ) => {
+      const { features, overrides, persist } = action.payload;
       const newFeatures: FlagType[] = [...state.features];
-      getWithEnvOverrides(action.payload).forEach((feature: FlagType) => {
-        const featureIndex = newFeatures.findIndex((f) => f.id === feature.id);
-        if (featureIndex === -1) {
-          newFeatures.push({ ...feature, original: feature.active });
-        } else {
-          newFeatures[featureIndex].original = feature.active;
+      featuresWithOverrides(features, overrides).forEach(
+        (feature: FlagType) => {
+          const featureIndex = newFeatures.findIndex(
+            (f) => f.id === feature.id
+          );
+          if (featureIndex === -1) {
+            newFeatures.push({ ...feature, original: feature.active });
+          } else {
+            newFeatures[featureIndex].original = feature.active;
+          }
         }
-      });
+      );
+      state.persist = persist;
       state.features = newFeatures;
     },
     editFeature: (state, action: PayloadAction<FlagType>) => {
