@@ -27,30 +27,21 @@
     "@types/react-dom": "^17.0.9",
     "@types/react-router-dom": "^5.1.8",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.0",
-    "axios-mock-adapter": "^1.19.0",
-    "enzyme": "^3.11.0",
-    "enzyme-to-json": "^3.6.1",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-watch": "^7.0.0",
-    "husky": "^7.0.1",
+    "husky": "^7.0.0",
     "jest-axe": "^5.0.1",
     "lint-staged": "^11.0.0",
-    "node-sass": "^6.0.1",
     "onchange": "^7.1.0",
     "prettier": "2.3.2",
     "react-scripts": "^4.0.3",
     "redux-mock-store": "^1.5.4",
-    "sass": "^1.35.2",
     "stylelint": "^13.13.1",
     "stylelint-config-prettier": "^8.0.2",
     "typescript": "^4.3.5"
-  },
-  "resolutions": {
-    "css-what": "5.0.1",
-    "glob-parent": "5.1.2"
   },
   "scripts": {
     "d": "npm i && npm rebuild node-sass",
@@ -63,7 +54,7 @@
     "test:watch": "react-scripts test ",
     "test:update": "npm run test -- -u",
     "----------------------------------------------------------2": "",
-    "lint": "npm run lint:js && npm run prettier:all && npm run lint:scss:all",
+    "lint": "npm run lint:js && npm run prettier:all ",
     "lint:fix": "npm run prettier:fix:all && npm run lint:js:fix ",
     "lint:watch": "onchange 'src/**/*.*' -- npm run lint:fix",
     "----------------------------------------------------------3": "",
@@ -79,9 +70,9 @@
     "----------------------------------------------------------4": "",
     "clean": "rm -rf node_modules && rm -f package-lock.json && npm run d",
     "checkCoverage": "node ./utils/testCoverage.js",
+    "npmAudit": "npm audit -audit-level high",
     "createTar": "node ./utils/createArchive.js",
-    "preinstall": "npx npm-force-resolutions",
-    "npmAudit": "npm audit -audit-level high"
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "settings": {
@@ -159,11 +150,6 @@
   },
   "stylelint": {
     "extends": "stylelint-config-prettier"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && npm run npmAudit"
-    }
   },
   "jest": {
     "collectCoverageFrom": [

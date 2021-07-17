@@ -1,11 +1,6 @@
 module.exports = {
-  'src/**/*.{js,jsx, ts, tsx}': [
-    (jsFiles) => jsFiles.map((jsFile) => `npm run lint:js ${jsFile}`), // check files
-  ],
-  'src/**/*.{scss,css}': [
-    (scssFiles) => scssFiles.map((scssFile) => `npm run lint:scss ${scssFile}`), // check files
-  ],
-  'src/**/*.{html,json,md}': [
-    (htmlFiles) => htmlFiles.map((htmlFile) => `npm run prettier ${htmlFile}`), // check files
-  ],
+  'src/**/*.{ts,tsx}': 'npm run lint:js',
+  'src/**/*.{scss,css}': 'npm run lint:scss',
+  'src/**/*.{html,json}': 'npm run prettier ',
+  '*.md': 'npm run prettier',
 };
