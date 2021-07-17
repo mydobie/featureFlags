@@ -1,4 +1,5 @@
 import React from 'react';
+import { devDependencies } from '../../package.json';
 
 const Home = () => (
   <div className='container'>
@@ -35,43 +36,14 @@ const Home = () => (
             <strong>React Version: </strong>
             {React.version}
           </li>
+          <li>
+            <strong>Bootstrap CSS Version: </strong>
+            {devDependencies.bootstrap}
+          </li>
         </ul>
       </div>
     </div>
   </div>
 );
-
-// interface State {
-//   sampleState: string;
-// }
-
-// class Home extends React.Component<Props, State> {
-//   static defaultProps = { helloMessage: 'Hello world!!!' };
-
-//   constructor(props: Props) {
-//     super(props);
-//     this.state = { sampleState: props.helloMessage };
-//   }
-
-//   render() {
-//     const { helloMessage } = this.props;
-//     const { sampleState } = this.state;
-//     return (
-//       <Container>
-//         <Row>
-//           <Col>
-//             <Jumbotron>
-//               <h1 className='display-3' id='helloId'>
-//                 {helloMessage}
-//               </h1>
-//               <p className='lead'>This is the home page for an application</p>
-//               <p>{sampleState}</p>
-//             </Jumbotron>
-//           </Col>
-//         </Row>
-//       </Container>
-//     );
-//   }
-// }
 
 export default Home;

@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
-import { RootState } from '../redux/store';
 
 export const FEATURE_FLAGS = 'featureFlags'; // key used in local storage
 export const FEATURE_FLAGS_PERSIST = 'featuresFlagsPersist';
@@ -74,10 +73,10 @@ export const getFeatureFlags = (): FlagType[] => {
   return features;
 };
 
-export const getFeatureFlagsRedux = (state: RootState): FlagType[] =>
+export const getFeatureFlagsRedux = (state: any): FlagType[] =>
   state.FeatureFlags.features;
 
-export const getPersistRedux = (state: RootState): boolean =>
+export const getPersistRedux = (state: any): boolean =>
   state.FeatureFlags.persist;
 
 /* ******************************************** */

@@ -51,7 +51,7 @@ export const featureFlagSlice = createSlice({
       );
 
       newFeatures[featureIndex].active = action.payload.active;
-      state.features = newFeatures; // TODO wonder if we can edit directly instead of making a copy
+      state.features = newFeatures;
     },
     resetFeatures: (state) => {
       const features = [...state.features];

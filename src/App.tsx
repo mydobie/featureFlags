@@ -12,8 +12,9 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import {
   loadFeatureFlags,
   featuresWithOverrides,
-} from './components/featureFlags';
-import { addFeatures } from './components/featureFlagsReducers';
+  addFeatures,
+} from './components';
+
 import {
   featureFlagsLocalStorage,
   featureFlagsRedux,

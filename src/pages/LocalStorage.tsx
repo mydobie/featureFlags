@@ -1,6 +1,5 @@
 import React from 'react';
-import FeatureFlagsUI from '../components/FeatureFlagsUI';
-import { isFeatureActive } from '../components/featureFlags';
+import { FeatureFlagsUI, isFeatureActive } from '../components';
 
 import { COLORS, DINOS } from '../FeatureFlagsConfig';
 

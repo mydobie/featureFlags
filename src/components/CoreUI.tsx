@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import { FlagType } from './featureFlags';
 import ExclamationCircle from './ExclamationCircle';
@@ -33,6 +34,14 @@ const CoreUI = ({
               className='form-check-label custom-control-label'
               htmlFor={feature.id}
             >
+              {console.log(
+                'Feature:',
+                feature.id,
+                ' | Active:',
+                feature.active,
+                ' | Origional:',
+                feature.original
+              )}
               {feature.description ?? feature.id}{' '}
               {feature.active !== feature.original ? (
                 <ExclamationCircle />

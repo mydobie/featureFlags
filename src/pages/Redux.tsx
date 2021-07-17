@@ -1,8 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import { useAppSelector } from '../redux/hooks';
-import FeatureFlagsReduxUI from '../components/FeatureFlagsReduxUI';
-import { isFeatureActive } from '../components/featureFlags';
+import { FeatureFlagsReduxUI, isFeatureActive } from '../components';
+
 import { VEGGIES, FRUITS } from '../FeatureFlagsConfig';
 
 const ReduxPage = () => {
