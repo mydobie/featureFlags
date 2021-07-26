@@ -25,10 +25,11 @@ export const featureFlagSlice = createSlice({
         features: FlagType[];
         overrides?: FlagType[];
         persist: boolean;
+        reset?: boolean;
       }>
     ) => {
-      const { features, overrides, persist } = action.payload;
-      const newFeatures: FlagType[] = [...state.features];
+      const { features, overrides, persist, reset } = action.payload;
+      const newFeatures: FlagType[] = reset ? [] : [...state.features];
       featuresWithOverrides(features, overrides).forEach(
         (feature: FlagType) => {
           const featureIndex = newFeatures.findIndex(

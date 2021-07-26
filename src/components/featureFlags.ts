@@ -16,7 +16,8 @@ export const featuresWithOverrides = (
   featuresArray: FlagType[] = [],
   overRidesArray: FlagType[] = []
 ) => {
-  const features = [...featuresArray];
+  const features = Array.from(featuresArray);
+
   overRidesArray.forEach((flag) => {
     const featureIndex = features.findIndex(
       (feature) => feature.id === flag.id
@@ -55,7 +56,7 @@ export const loadFeatureFlags = (
 };
 
 /* ******************************************** */
-export const resetFeatureFlags = (useRedux: boolean = false) => {
+export const getResetFeatureFlags = () => {
   const features = getFeatureFlags();
   const newFeatures = features.map((feature) => ({
     ...feature,
@@ -65,8 +66,8 @@ export const resetFeatureFlags = (useRedux: boolean = false) => {
 };
 
 /* ******************************************** */
-
-export const getFeatureFlags = (): FlagType[] => {
+// Private
+const getFeatureFlags = (): FlagType[] => {
   const features: FlagType[] = JSON.parse(
     localStorage.getItem(FEATURE_FLAGS) ?? '[]'
   );
@@ -81,6 +82,7 @@ export const getPersistRedux = (state: any): boolean =>
 
 /* ******************************************** */
 
+// Private
 const addFeatureFlag = (
   id: string,
   active: boolean,
@@ -102,11 +104,7 @@ const addFeatureFlag = (
 
 /* ******************************************** */
 
-export const editFeatureFlag = (
-  id: string,
-  active: boolean,
-  useRedux: boolean = false
-) => {
+export const editFeatureFlag = (id: string, active: boolean) => {
   const features: FlagType[] = JSON.parse(
     localStorage.getItem(FEATURE_FLAGS) ?? '[]'
   );
@@ -121,12 +119,9 @@ export const editFeatureFlag = (
 
 export const isFeatureActive = (flag: string, reduxState: any = undefined) => {
   if (reduxState !== undefined) {
-    if (reduxState.FeatureFlags) {
-      return reduxState.FeatureFlags.features.find(
-        (feature: FlagType) => feature.id === flag
-      )?.active;
-    }
-    return reduxState.find((feature: FlagType) => feature.id === flag)?.active;
+    return reduxState.FeatureFlags.features.find(
+      (feature: FlagType) => feature.id === flag
+    )?.active;
   }
 
   return getFeatureFlags().find((feature) => feature.id === flag)?.active;

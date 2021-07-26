@@ -17,7 +17,7 @@ const CoreUI = ({
   persist = false,
 }: CoreUIType) => (
   <>
-    <ul>
+    <ul data-testid='coreFeatureFlagsUI'>
       {features.map((feature) => (
         <li key={feature.id}>
           <div className='form-check form-switch custom-control custom-switch'>
@@ -34,14 +34,6 @@ const CoreUI = ({
               className='form-check-label custom-control-label'
               htmlFor={feature.id}
             >
-              {console.log(
-                'Feature:',
-                feature.id,
-                ' | Active:',
-                feature.active,
-                ' | Origional:',
-                feature.original
-              )}
               {feature.description ?? feature.id}{' '}
               {feature.active !== feature.original ? (
                 <ExclamationCircle />
@@ -52,7 +44,11 @@ const CoreUI = ({
       ))}
     </ul>
     {persist ? (
-      <p className='alert alert-secondary' role='alert'>
+      <p
+        className='alert alert-secondary'
+        role='alert'
+        data-testid='persistAlert'
+      >
         <strong>NOTE:</strong> Feature flag values are persisting on page
         refresh. This is not recommended for a production environment.
       </p>
@@ -60,6 +56,7 @@ const CoreUI = ({
     <button
       type='button'
       className='btn btn-success'
+      data-testid='resetButton'
       onClick={() => onFeatureReset()}
     >
       Reset flags to default

@@ -3,13 +3,14 @@ import React from 'react';
 import CoreUI from './CoreUI';
 import {
   useLocalStorage,
-  resetFeatureFlags,
+  getResetFeatureFlags,
   FEATURE_FLAGS,
   FEATURE_FLAGS_PERSIST,
+  FlagType,
 } from './featureFlags';
 
 type FeatureFlagsUIProps = {
-  onFeatureChange?: () => void;
+  onFeatureChange?: (features: FlagType[]) => void;
 };
 
 const FeatureFlagsUI = ({
@@ -23,16 +24,16 @@ const FeatureFlagsUI = ({
       <CoreUI
         persist={persist}
         features={features}
-        onFeatureClick={(id, checked) => {
+        onFeatureClick={async (id, checked) => {
           const newFeatures = [...features].map((feature) =>
             feature.id === id ? { ...feature, active: checked } : feature
           );
           setFeatures(newFeatures);
-          onFeatureChange();
+          onFeatureChange(newFeatures);
         }}
         onFeatureReset={() => {
-          setFeatures(resetFeatureFlags());
-          onFeatureChange();
+          setFeatures(getResetFeatureFlags());
+          onFeatureChange(features);
         }}
       />
     </>

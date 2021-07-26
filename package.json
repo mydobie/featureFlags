@@ -20,12 +20,17 @@
     "react-dom": "17.0.0 - 17.999.999"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "@testing-library/react-hooks": "^7.0.1",
+    "@babel/preset-react": "^7.12.10",
+    "@types/jest-axe": "^3.5.1",
     "@reduxjs/toolkit": "^1.6.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
-    "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "bootstrap": "^5.0.2",
@@ -35,7 +40,6 @@
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.9",
     "@types/react-router-dom": "^5.1.8",
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
@@ -62,7 +66,7 @@
     "buildts": "tsc --project tsconfig-build-files.json",
     "build": "npm run d && npm run test && npm run npmAudit && npm run build:ci",
     "build:ci": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts build",
-    "test": "react-scripts test --coverage --watchAll=false",
+    "test": "react-scripts test --coverage  --passWithNoTests --testPathIgnorePatterns /helpers --watchAll=false ",
     "test:watch": "react-scripts test ",
     "test:update": "npm run test -- -u",
     "----------------------------------------------------------2": "",
@@ -98,9 +102,9 @@
     "extends": [
       "airbnb",
       "airbnb/hooks",
-      "prettier",
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "prettier"
     ],
     "globals": {
       "styles": true
@@ -168,19 +172,12 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!<rootDir>/node_modules/",
-      "!<rootDir>/src/index.jsx",
-      "!<rootDir>/src/serviceWorker.js",
-      "!<rootDir>/src/setupTests.js"
+      "src/components/**/*.{js,jsx,ts,tsx}"
     ],
     "coverageReporters": [
       "html",
       "json-summary",
       "text-summary"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
     ]
   },
   "browserslist": {
