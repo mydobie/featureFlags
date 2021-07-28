@@ -3,7 +3,6 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CoreUI from './CoreUI';
 
-// import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getFeatureFlagsRedux, getPersistRedux } from './featureFlags';
 import { editFeature, resetFeatures } from './featureFlagsReducers';
 
