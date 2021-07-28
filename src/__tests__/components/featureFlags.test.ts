@@ -68,7 +68,7 @@ describe('Core feature flag functions - non REDUX', () => {
   });
 
   test('Features are loaded empty local storage', () => {
-    loadFeatureFlags(featureList, false);
+    loadFeatureFlags({ features: featureList, persist: false });
 
     const expected = featureList.map((flag) => ({
       ...flag,
@@ -92,7 +92,7 @@ describe('Core feature flag functions - non REDUX', () => {
     ]);
     localStorage.setItem(FEATURE_FLAGS, existing);
     expect(localStorage.getItem(FEATURE_FLAGS)).not.toEqual(null);
-    loadFeatureFlags(featureList);
+    loadFeatureFlags({ features: featureList });
 
     const expected = featureList.map((flag) => ({
       ...flag,
@@ -118,7 +118,7 @@ describe('Core feature flag functions - non REDUX', () => {
     localStorage.setItem(FEATURE_FLAGS, existing);
     expect(localStorage.getItem(FEATURE_FLAGS)).not.toEqual(null);
 
-    loadFeatureFlags(featureList, true);
+    loadFeatureFlags({ features: featureList, persist: true });
     const expected = [
       {
         id: 'VEGGIES',
@@ -177,7 +177,7 @@ describe('Core feature flag functions - non REDUX', () => {
   });
 
   test('Edit feature', () => {
-    loadFeatureFlags(featureList);
+    loadFeatureFlags({ features: featureList });
     expect(JSON.parse(localStorage.getItem(FEATURE_FLAGS))).toEqual(
       featureList.map((feature) => ({
         ...feature,
@@ -202,7 +202,7 @@ describe('Core feature flag functions - non REDUX', () => {
   // });
 
   test('Get is active - false', () => {
-    loadFeatureFlags(featureList);
+    loadFeatureFlags({ features: featureList });
     expect(featureList[0].id).toEqual('FRUITS');
     expect(featureList[0].active).toBeFalsy();
 
@@ -210,7 +210,7 @@ describe('Core feature flag functions - non REDUX', () => {
   });
 
   test('Get is active - True', () => {
-    loadFeatureFlags(featureList);
+    loadFeatureFlags({ features: featureList });
     expect(featureList[1].id).toEqual('VEGGIES');
     expect(featureList[1].active).toBeTruthy();
 

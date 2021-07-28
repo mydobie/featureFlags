@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { axe } from 'jest-axe';
 
 import { store } from '../../redux/store';
-import { addFeatures } from '../../components/featureFlagsReducers';
+import { loadFeatureFlagsRedux } from '../../components/featureFlagsReducers';
 
 import FeatureFlagsReduxUI from '../../components/FeatureFlagsReduxUI';
 
@@ -24,7 +24,11 @@ describe('Feature Flags - local storage tests', () => {
       },
     ];
     store.dispatch(
-      addFeatures({ features: featureList, persist: false, reset: true })
+      loadFeatureFlagsRedux({
+        features: featureList,
+        persist: false,
+        reset: true,
+      })
     );
   });
 
@@ -95,7 +99,9 @@ describe('Feature Flags - local storage tests', () => {
   test.todo('Feature are overritten when override array');
 
   test('If persist is not set, warning is  not shown', () => {
-    store.dispatch(addFeatures({ features: featureList, persist: false }));
+    store.dispatch(
+      loadFeatureFlagsRedux({ features: featureList, persist: false })
+    );
     render(
       <Provider store={store}>
         <FeatureFlagsReduxUI />
@@ -105,7 +111,9 @@ describe('Feature Flags - local storage tests', () => {
   });
 
   test('If persist is set, warning is shown', () => {
-    store.dispatch(addFeatures({ features: featureList, persist: true }));
+    store.dispatch(
+      loadFeatureFlagsRedux({ features: featureList, persist: true })
+    );
     render(
       <Provider store={store}>
         <FeatureFlagsReduxUI />

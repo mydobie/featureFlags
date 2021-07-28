@@ -36,20 +36,24 @@ export const featuresWithOverrides = (
   return features;
 };
 
+type loadFeatureFlagsType = {
+  features: FlagType[];
+  persist?: boolean;
+  overrides?: FlagType[];
+};
+
 /** Loads feature flag settings from config file  */
-export const loadFeatureFlags = (
-  features: FlagType[] = [],
-  persistLocalStorage: boolean = false
-) => {
-  if (persistLocalStorage === false) {
+export const loadFeatureFlags = ({
+  features,
+  persist,
+  overrides,
+}: loadFeatureFlagsType) => {
+  if (!persist) {
     localStorage.setItem(FEATURE_FLAGS, JSON.stringify([]));
   }
-  localStorage.setItem(
-    FEATURE_FLAGS_PERSIST,
-    persistLocalStorage ? 'true' : 'false'
-  );
+  localStorage.setItem(FEATURE_FLAGS_PERSIST, persist ? 'true' : 'false');
 
-  features.forEach((feature) => {
+  featuresWithOverrides(features || [], overrides || []).forEach((feature) => {
     addFeatureFlag(feature.id, feature.active, feature.description);
   });
   return features;

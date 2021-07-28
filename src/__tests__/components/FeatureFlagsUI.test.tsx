@@ -20,7 +20,7 @@ describe('Feature Flags - local storage tests', () => {
         description: 'Vegetable list',
       },
     ];
-    loadFeatureFlags(featureList, false);
+    loadFeatureFlags({ features: featureList, persist: false });
   });
 
   test('Expect feature flag list to be accessible', async () => {
@@ -85,13 +85,13 @@ describe('Feature Flags - local storage tests', () => {
   });
 
   test('If persist is not set, warning is not shown', () => {
-    loadFeatureFlags(featureList, false);
+    loadFeatureFlags({ features: featureList, persist: false });
     render(<FeatureFlagsUI />);
     expect(screen.queryByTestId('persistAlert')).not.toBeInTheDocument();
   });
 
   test('If persist is set, warning is shown', () => {
-    loadFeatureFlags(featureList, true);
+    loadFeatureFlags({ features: featureList, persist: true });
     render(<FeatureFlagsUI />);
     expect(screen.queryByTestId('persistAlert')).toBeInTheDocument();
   });

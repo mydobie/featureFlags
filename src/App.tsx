@@ -2,37 +2,31 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/no-extraneous-dependencies */
 // Contains routing and any application wide items like headers, footers and navigation
+
+import { useDispatch } from 'react-redux';
+
 import React, { useReducer } from 'react';
 import { HashRouter as Router } from 'react-router-dom'; // Use `HashRouter as Router` when you can't control the URL ... like GitHub pages
-// import { connect } from 'react-redux';
-import { useAppDispatch } from './redux/hooks';
 import AppNavBar from './AppNavBar';
 import AppRoutes from './AppRoutes';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import {
-  loadFeatureFlags,
-  featuresWithOverrides,
-  addFeatures,
-} from './components';
+import { loadFeatureFlags, loadFeatureFlagsRedux } from './components';
 
 import {
   featureFlagsLocalStorage,
   featureFlagsRedux,
 } from './FeatureFlagsConfig';
 
-loadFeatureFlags(
-  featuresWithOverrides(
-    featureFlagsLocalStorage,
-    JSON.parse(process.env.REACT_APP_FEATURE_FLAGS ?? '[]')
-  ) || [],
-  process.env.REACT_APP_USE_LOCAL_STORAGE === 'true'
-);
+loadFeatureFlags({
+  features: featureFlagsLocalStorage,
+  overrides: JSON.parse(process.env.REACT_APP_FEATURE_FLAGS ?? '[]'),
+  persist: process.env.REACT_APP_USE_LOCAL_STORAGE === 'true',
+});
 
 const App = () => {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
-  const dispatch = useAppDispatch();
-  dispatch(
-    addFeatures({
+  useDispatch()(
+    loadFeatureFlagsRedux({
       features: featureFlagsRedux || [],
       overrides: JSON.parse(process.env.REACT_APP_FEATURE_FLAGS ?? '[]'),
       persist: process.env.REACT_APP_USE_LOCAL_STORAGE === 'true',

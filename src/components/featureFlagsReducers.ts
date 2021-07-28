@@ -19,7 +19,7 @@ export const featureFlagSlice = createSlice({
   name: 'featureflag',
   initialState,
   reducers: {
-    addFeatures: (
+    loadFeatureFlagsRedux: (
       state,
       action: PayloadAction<{
         features: FlagType[];
@@ -66,7 +66,7 @@ export const featureFlagSlice = createSlice({
   },
 });
 
-export const { addFeatures, editFeature, resetFeatures } =
+export const { loadFeatureFlagsRedux, editFeature, resetFeatures } =
   featureFlagSlice.actions;
 
 export default featureFlagSlice.reducer;
