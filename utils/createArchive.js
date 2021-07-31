@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 // This file is used to create a tar file that can be stored in Artifactory
 // It is not used by the React application
 
@@ -19,7 +20,7 @@ console.log('Creating project archive.  This may take a few minutes.');
 exec(
   `npm run build && mkdir -p ${archiveDirectory} && cd build && tar --exclude='./__fixtures__' -cvzf ../${archiveDirectory}${fileName} .`,
   // eslint-disable-next-line no-unused-vars
-  (err, stdout, stderr) => {
+  (err /* , stdout, stderr */) => {
     if (err) {
       // some err occurred
       console.error(`File not created. ERROR:${err}`);

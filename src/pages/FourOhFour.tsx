@@ -1,10 +1,10 @@
 // Page rendered when url doesn't match route in App.jsx
 
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import notFoundImage from '../images/page_not_found.svg';
 
-const FourOhFour = (/* props */) => (
+const FourOhFour = (/* props */): ReactElement => (
   <div className='container'>
     <h1>Page not found</h1>
     <p>The page you requested could not be found.</p>

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React from 'react';
+import React, { ReactElement } from 'react';
 import CoreUI from './CoreUI';
 import {
   useLocalStorage,
@@ -15,7 +15,7 @@ type FeatureFlagsUIProps = {
 
 const FeatureFlagsUI = ({
   onFeatureChange = () => {},
-}: FeatureFlagsUIProps) => {
+}: FeatureFlagsUIProps): ReactElement => {
   const [features, setFeatures] = useLocalStorage(FEATURE_FLAGS);
   const [persist] = useLocalStorage(FEATURE_FLAGS_PERSIST);
 

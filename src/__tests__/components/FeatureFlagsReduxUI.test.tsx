@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable react/react-in-jsx-scope */
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -7,9 +8,10 @@ import { store } from '../../redux/store';
 import { loadFeatureFlagsRedux } from '../../components/featureFlagsReducers';
 
 import FeatureFlagsReduxUI from '../../components/FeatureFlagsReduxUI';
+import { FlagType } from '../../components';
 
 describe('Feature Flags - local storage tests', () => {
-  let featureList = [];
+  let featureList: FlagType[] = [];
   beforeEach(() => {
     featureList = [
       {
@@ -65,10 +67,12 @@ describe('Feature Flags - local storage tests', () => {
     const listItems = container.querySelectorAll('li');
 
     featureList.forEach((flag, index) => {
+      // @ts-ignore
       expect(listItems.item(index).querySelector('input').checked).toEqual(
         flag.active
       );
       expect(
+        // @ts-ignore
         listItems.item(index).querySelector('label').innerHTML.trim()
       ).toEqual(flag.description);
     });

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable import/no-extraneous-dependencies */
 import {
   configureStore,

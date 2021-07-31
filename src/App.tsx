@@ -5,7 +5,7 @@
 
 import { useDispatch } from 'react-redux';
 
-import React, { useReducer } from 'react';
+import React, { ReactElement, useReducer } from 'react';
 import { HashRouter as Router } from 'react-router-dom'; // Use `HashRouter as Router` when you can't control the URL ... like GitHub pages
 import AppNavBar from './AppNavBar';
 import AppRoutes from './AppRoutes';
@@ -23,7 +23,7 @@ loadFeatureFlags({
   persist: process.env.REACT_APP_USE_LOCAL_STORAGE === 'true',
 });
 
-const App = () => {
+const App = (): ReactElement => {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
   useDispatch()(
     loadFeatureFlagsRedux({

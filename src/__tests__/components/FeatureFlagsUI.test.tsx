@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable react/react-in-jsx-scope */
 import { render, screen, fireEvent } from '@testing-library/react';
 import { axe } from 'jest-axe';
-import { loadFeatureFlags } from '../../components/featureFlags';
+import { FlagType, loadFeatureFlags } from '../../components/featureFlags';
 import FeatureFlagsUI from '../../components/FeatureFlagsUI';
 
 describe('Feature Flags - local storage tests', () => {
-  let featureList = [];
+  let featureList: FlagType[] = [];
   beforeEach(() => {
     localStorage.clear();
     featureList = [
@@ -46,17 +47,19 @@ describe('Feature Flags - local storage tests', () => {
     const listItems = container.querySelectorAll('li');
 
     featureList.forEach((flag, index) => {
+      // @ts-ignore
       expect(listItems.item(index).querySelector('input').checked).toEqual(
         flag.active
       );
       expect(
+        // @ts-ignore
         listItems.item(index).querySelector('label').innerHTML.trim()
       ).toEqual(flag.description);
     });
   });
 
   test('Clicking on a feature changes the value', () => {
-    const onFeatureChange = jest.fn((flags) => {});
+    const onFeatureChange = jest.fn(() => {});
     const { container } = render(
       <FeatureFlagsUI onFeatureChange={onFeatureChange} />
     );
@@ -81,6 +84,7 @@ describe('Feature Flags - local storage tests', () => {
     }));
     expected[0].active = !expected[0].active;
     expect(onFeatureChange.mock.calls.length).toBe(1);
+    // @ts-ignore
     expect(onFeatureChange.mock.calls[0][0]).toEqual(expected);
   });
 

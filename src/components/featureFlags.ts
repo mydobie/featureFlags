@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-console */
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
@@ -15,7 +16,7 @@ export type FlagType = {
 export const featuresWithOverrides = (
   featuresArray: FlagType[] = [],
   overRidesArray: FlagType[] = []
-) => {
+): FlagType[] => {
   const features = Array.from(featuresArray);
 
   overRidesArray.forEach((flag) => {
@@ -36,37 +37,10 @@ export const featuresWithOverrides = (
   return features;
 };
 
-type loadFeatureFlagsType = {
+type LoadFeatureFlagsType = {
   features: FlagType[];
   persist?: boolean;
   overrides?: FlagType[];
-};
-
-/** Loads feature flag settings from config file  */
-export const loadFeatureFlags = ({
-  features,
-  persist,
-  overrides,
-}: loadFeatureFlagsType) => {
-  if (!persist) {
-    localStorage.setItem(FEATURE_FLAGS, JSON.stringify([]));
-  }
-  localStorage.setItem(FEATURE_FLAGS_PERSIST, persist ? 'true' : 'false');
-
-  featuresWithOverrides(features || [], overrides || []).forEach((feature) => {
-    addFeatureFlag(feature.id, feature.active, feature.description);
-  });
-  return features;
-};
-
-/* ******************************************** */
-export const getResetFeatureFlags = () => {
-  const features = getFeatureFlags();
-  const newFeatures = features.map((feature) => ({
-    ...feature,
-    active: feature.original,
-  }));
-  return newFeatures;
 };
 
 /* ******************************************** */
@@ -78,20 +52,18 @@ const getFeatureFlags = (): FlagType[] => {
   return features;
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export const getFeatureFlagsRedux = (state: any): FlagType[] =>
   state.FeatureFlags.features;
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export const getPersistRedux = (state: any): boolean =>
   state.FeatureFlags.persist;
 
 /* ******************************************** */
 
 // Private
-const addFeatureFlag = (
-  id: string,
-  active: boolean,
-  description: string = ''
-) => {
+const addFeatureFlag = (id: string, active: boolean, description = '') => {
   const features: FlagType[] = JSON.parse(
     localStorage.getItem(FEATURE_FLAGS) ?? '[]'
   );
@@ -108,7 +80,7 @@ const addFeatureFlag = (
 
 /* ******************************************** */
 
-export const editFeatureFlag = (id: string, active: boolean) => {
+export const editFeatureFlag = (id: string, active: boolean): void => {
   const features: FlagType[] = JSON.parse(
     localStorage.getItem(FEATURE_FLAGS) ?? '[]'
   );
@@ -121,21 +93,30 @@ export const editFeatureFlag = (id: string, active: boolean) => {
 };
 /* ****************************************** */
 
-export const isFeatureActive = (flag: string, reduxState: any = undefined) => {
+export const isFeatureActive = (
+  flag: string,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+  reduxState: any = undefined,
+  reduxKey = 'FeatureFlags'
+): boolean => {
   if (reduxState !== undefined) {
-    return reduxState.FeatureFlags.features.find(
+    return reduxState[reduxKey].features.find(
       (feature: FlagType) => feature.id === flag
     )?.active;
   }
 
-  return getFeatureFlags().find((feature) => feature.id === flag)?.active;
+  return (
+    getFeatureFlags().find((feature) => feature.id === flag)?.active || false
+  );
 };
 
 /* ****************************************** */
 export const useLocalStorage = (
   type: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialValue: any = undefined
-) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): [any, (value: any) => void] => {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
 
@@ -154,6 +135,7 @@ export const useLocalStorage = (
   });
   // Return a wrapped version of useState's setter function that ...
   // ... persists the new value to localStorage.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const setValue = (value: any) => {
     try {
       // Allow value to be a function so we have same API as useState
@@ -172,3 +154,30 @@ export const useLocalStorage = (
 };
 
 /* ******************************* */
+
+/** Loads feature flag settings from config file  */
+export const loadFeatureFlags = ({
+  features,
+  persist,
+  overrides,
+}: LoadFeatureFlagsType): FlagType[] => {
+  if (!persist) {
+    localStorage.setItem(FEATURE_FLAGS, JSON.stringify([]));
+  }
+  localStorage.setItem(FEATURE_FLAGS_PERSIST, persist ? 'true' : 'false');
+
+  featuresWithOverrides(features || [], overrides || []).forEach((feature) => {
+    addFeatureFlag(feature.id, feature.active, feature.description);
+  });
+  return features;
+};
+
+/* ******************************************** */
+export const getResetFeatureFlags = (): FlagType[] => {
+  const features = getFeatureFlags();
+  const newFeatures = features.map((feature) => ({
+    ...feature,
+    active: feature.original || false,
+  }));
+  return newFeatures;
+};

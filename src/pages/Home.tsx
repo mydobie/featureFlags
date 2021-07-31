@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { devDependencies } from '../../package.json';
 
-const Home = () => (
+const Home = (): ReactElement => (
   <div className='container'>
     <div className='row'>
       <div className='col'>

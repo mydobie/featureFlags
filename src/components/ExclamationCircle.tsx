@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 // From Bootstrap icons
 // MIT License
 // https://icons.getbootstrap.com/
-const ExclamationCircle = () => (
+const ExclamationCircle = (): ReactElement => (
   <>
     <svg
       xmlns='http://www.w3.org/2000/svg'

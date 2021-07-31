@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { FlagType } from './featureFlags';
 import ExclamationCircle from './ExclamationCircle';
 
@@ -15,7 +15,7 @@ const CoreUI = ({
   onFeatureClick = () => {},
   onFeatureReset = () => {},
   persist = false,
-}: CoreUIType) => (
+}: CoreUIType): ReactElement => (
   <>
     <ul data-testid='coreFeatureFlagsUI'>
       {features.map((feature) => (

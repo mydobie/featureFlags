@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { renderHook, act } from '@testing-library/react-hooks';
 
 import {
@@ -11,11 +12,12 @@ import {
   useLocalStorage,
   getFeatureFlagsRedux,
   getPersistRedux,
+  FlagType,
 } from '../../components';
 
 // /* ************** LOCALSTORAGE TESTS ******************* */
 describe('Core feature flag functions - non REDUX', () => {
-  let featureList = [];
+  let featureList: FlagType[] = [];
   beforeEach(() => {
     featureList = [
       {
@@ -135,7 +137,9 @@ describe('Core feature flag functions - non REDUX', () => {
       },
     ];
 
-    expect(JSON.parse(localStorage.getItem(FEATURE_FLAGS))).toEqual(expected);
+    expect(JSON.parse(localStorage.getItem(FEATURE_FLAGS) || '{}')).toEqual(
+      expected
+    );
     expect(localStorage.getItem(FEATURE_FLAGS_PERSIST)).toEqual('true');
   });
 
@@ -178,7 +182,7 @@ describe('Core feature flag functions - non REDUX', () => {
 
   test('Edit feature', () => {
     loadFeatureFlags({ features: featureList });
-    expect(JSON.parse(localStorage.getItem(FEATURE_FLAGS))).toEqual(
+    expect(JSON.parse(localStorage.getItem(FEATURE_FLAGS) || '{}')).toEqual(
       featureList.map((feature) => ({
         ...feature,
         original: feature.active,
@@ -188,7 +192,9 @@ describe('Core feature flag functions - non REDUX', () => {
     expect(featureList[0].active).toBeFalsy();
 
     editFeatureFlag('FRUITS', true);
-    const newLocalStorage = JSON.parse(localStorage.getItem(FEATURE_FLAGS));
+    const newLocalStorage = JSON.parse(
+      localStorage.getItem(FEATURE_FLAGS) || '{}'
+    );
     expect(newLocalStorage[0].id).toEqual('FRUITS');
     expect(newLocalStorage[0].active).toBeTruthy();
   });

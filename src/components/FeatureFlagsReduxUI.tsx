@@ -1,12 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CoreUI from './CoreUI';
 
 import { getFeatureFlagsRedux, getPersistRedux } from './featureFlags';
 import { editFeature, resetFeatures } from './featureFlagsReducers';
 
-const FeatureFlagsReduxUI = () => {
+const FeatureFlagsReduxUI = (): ReactElement => {
   const dispatch = useDispatch();
   return (
     <>

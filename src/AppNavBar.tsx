@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { isFeatureActive } from './components';
@@ -7,7 +7,7 @@ import { isFeatureActive } from './components';
 import { HOME_ROUTE, LOCAL_STORAGE, REDUX } from './AppRouteNames';
 import { COLORS, DINOS, FRUITS, VEGGIES } from './FeatureFlagsConfig';
 
-const AppNavBar = () => {
+const AppNavBar = (): ReactElement => {
   const isVeggies = useSelector((state) => isFeatureActive(VEGGIES, state));
   const isFruits = useSelector((state) => isFeatureActive(FRUITS, state));
   return (

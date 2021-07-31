@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-param-reassign */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable prettier/prettier */

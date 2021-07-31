@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 // Contains routing for entire application
 
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import ReduxPage from './pages/Redux';
@@ -16,7 +16,7 @@ interface Props {
   onFeatureChange?: () => void;
 }
 
-const AppRoutes = ({ onFeatureChange = () => {} }: Props) => (
+const AppRoutes = ({ onFeatureChange = () => {} }: Props): ReactElement => (
   <div>
     <Switch>
       <Route path={HOME_ROUTE} exact>

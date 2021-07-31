@@ -1,7 +1,7 @@
 // Reports back code coverage.
 // This is normally used as part of a pre-pr type of check like in a Jenkinsfile
 // It is not used by the React application
-
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-console */
 const path = require('path');
 const fs = require('fs');

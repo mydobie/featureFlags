@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { FeatureFlagsUI, isFeatureActive } from '../components';
 
 import { COLORS, DINOS } from '../FeatureFlagsConfig';
@@ -10,7 +10,7 @@ type LocalStoragePageProps = {
 // eslint-disable-next-line arrow-body-style
 const LocalStoragePage = ({
   onFeatureChange = () => {},
-}: LocalStoragePageProps) => (
+}: LocalStoragePageProps): ReactElement => (
   <div className='container'>
     <h1>Feature flags - local storage</h1>
     <FeatureFlagsUI onFeatureChange={onFeatureChange} />

@@ -20,48 +20,45 @@
     "react-dom": "17.0.0 - 17.999.999"
   },
   "devDependencies": {
+    "@reduxjs/toolkit": "^1.6.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
     "@testing-library/react-hooks": "^7.0.1",
-    "@babel/preset-react": "^7.12.10",
+    "@testing-library/user-event": "^12.8.3",
     "@types/jest-axe": "^3.5.1",
-    "@reduxjs/toolkit": "^1.6.0",
-    "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0",
-    "react-redux": "^7.2.4",
-    "redux": "^4.1.0",
-    "redux-persist": "^6.0.0",
-    "eslint-import-resolver-typescript": "^2.4.0",
-    "bootstrap": "^5.0.2",
-    "@typescript-eslint/eslint-plugin": "^4.20.0",
-    "@typescript-eslint/parser": "^4.20.0",
-    "@types/jest": "^26.0.24",
-    "@types/react": "^17.0.4",
-    "@types/react-dom": "^17.0.9",
     "@types/react-router-dom": "^5.1.8",
+    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@typescript-eslint/parser": "^4.28.5",
+    "bootstrap": "^5.0.2",
+    "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-watch": "^7.0.0",
     "husky": "^7.0.0",
     "jest-axe": "^5.0.1",
     "lint-staged": "^11.0.0",
     "onchange": "^7.1.0",
-    "prettier": "2.3.2",
+    "prettier": "^2.3.2",
+    "react-redux": "^7.2.4",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
+    "redux": "^4.1.0",
     "redux-mock-store": "^1.5.4",
-    "stylelint": "^13.13.1",
-    "stylelint-config-prettier": "^8.0.2",
+    "redux-persist": "^6.0.0",
     "typescript": "^4.3.5",
     "uglify-js": "^3.12.3"
   },
   "scripts": {
-    "d": "npm i && npm rebuild node-sass",
-    "installDependencies": "npm run d",
     "start": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts start",
-    "start:mock:REMOVE": "REACT_APP_USE_MOCKS=true npm run start",
+    "d": "npm i",
     "----------------------------------------------------------1": "",
     "buildts": "tsc --project tsconfig-build-files.json",
     "build": "npm run d && npm run test && npm run npmAudit && npm run build:ci",
@@ -70,66 +67,61 @@
     "test:watch": "react-scripts test ",
     "test:update": "npm run test -- -u",
     "----------------------------------------------------------2": "",
-    "lint": "npm run lint:js && npm run prettier:all ",
+    "lint": "npm run lint:js ",
     "lint:fix": "npm run prettier:fix:all && npm run lint:js:fix ",
     "lint:watch": "onchange 'src/**/*.*' -- npm run lint:fix",
     "----------------------------------------------------------3": "",
-    "lint:js": "esw --ext .jsx,.js,.tsx,.ts --color ",
+    "lint:js": "tsc --noEmit && esw --ext .js,.jsx,.ts,.tsx --color ",
     "lint:js:fix": "npm run lint:js -- --fix",
     "prettier": "prettier  --ignore-path ./.eslintignore --check",
-    "prettier:all": "npm run prettier '**/*.+(js|jsx|html|css|scss|json)'",
+    "prettier:all": "npm run prettier '**/*.+(js|jsx|ts|tsx|html|css|scss|json)'",
     "prettier:fix": "prettier  --ignore-path ./.eslintignore --write",
-    "prettier:fix:all": "npm run prettier:fix '**/*.+(js|jsx|tsx|html|css|scss|json)'",
-    "lint:scss:REMOVE": "stylelint --ignore-path ./.eslintignore ",
-    "lint:scss:all:REMOVE": "npm run lint:scss './**/*.+(css|scss)'",
-    "lint:scss:fix:all:REMOVE": "npm run lint:scss -- --fix './**/*.+(css|scss)'",
+    "prettier:fix:all": "npm run prettier:fix '**/*.+(js|jsx|ts|tsx|html|css|scss|json)'",
     "----------------------------------------------------------4": "",
-    "clean": "rm -rf node_modules && rm -f package-lock.json && npm run d",
+    "clean": "rm -rf node_modules && rm -f package-lock.json && npm i",
     "uglify": "uglifyjs ",
     "checkCoverage": "node ./utils/testCoverage.js",
     "npmAudit": "npm audit -audit-level high",
-    "createTar:REMOVVE": "node ./utils/createArchive.js",
-    "buildPackage:KEEP": "npm run d && npm run npmAudit && npm run test && bash  utils/buildPackage.sh",
-    "buildPackage": "bash  utils/buildPackage.sh",
+    "buildPackage": "npm run d && npm run npmAudit && npm run test && npm run buildPackage:ci",
+    "buildPackage:ci": "bash  utils/buildPackage.sh",
     "prepare": "husky install"
   },
   "eslintConfig": {
-    "settings": {
-      "import/resolver": {
-        "typescript": {}
-      }
-    },
-    "extends": [
-      "airbnb",
-      "airbnb/hooks",
-      "react-app",
-      "react-app/jest",
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "react",
+      "@typescript-eslint",
       "prettier"
     ],
-    "globals": {
-      "styles": true
-    },
+    "extends": [
+      "airbnb-typescript",
+      "airbnb/hooks",
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended",
+      "prettier",
+      "prettier/react",
+      "prettier/@typescript-eslint",
+      "plugin:prettier/recommended"
+    ],
     "env": {
       "browser": true,
-      "commonjs": true,
+      "jasmine": true,
       "jest": true,
-      "es6": true,
-      "jquery": true
+      "node": true
     },
-    "parser": "babel-eslint",
-    "plugins": [
-      "prettier",
-      "eslint-plugin-react"
-    ],
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
     "rules": {
-      "react/require-default-props": [
-        2,
-        {
-          "ignoreFunctionalComponents": true
-        }
-      ],
       "react/static-property-placement": "off",
+      "react/require-default-props": "off",
+      "react/prop-types": "off",
       "prettier/prettier": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "error"
+      ],
       "no-var": "error",
       "curly": "error",
       "one-var": "error",
@@ -138,27 +130,6 @@
       "arrow-body-style": [
         "error",
         "as-needed"
-      ],
-      "react/jsx-filename-extension": [
-        2,
-        {
-          "extensions": [
-            ".js",
-            ".jsx",
-            ".ts",
-            ".tsx"
-          ]
-        }
-      ],
-      "import/extensions": [
-        "error",
-        "ignorePackages",
-        {
-          "js": "never",
-          "jsx": "never",
-          "ts": "never",
-          "tsx": "never"
-        }
       ]
     }
   },
@@ -166,9 +137,6 @@
     "singleQuote": true,
     "jsxSingleQuote": true,
     "printWidth": 80
-  },
-  "stylelint": {
-    "extends": "stylelint-config-prettier"
   },
   "jest": {
     "collectCoverageFrom": [
