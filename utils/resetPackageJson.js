@@ -1,4 +1,5 @@
 // This file minimizes the package.json file before it is included in the package to be published.
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const fs = require('fs');
 
@@ -18,10 +19,11 @@ const newPackageJSON = {
   husky: {},
   jest: {},
   browserslist: {},
+  files: ['**/*'],
 };
 
 fs.writeFileSync(
-  path.join(__dirname, '../dist/package.json'),
+  path.join(__dirname, '../lib/package.json'),
   JSON.stringify(newPackageJSON)
 );
 

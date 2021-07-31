@@ -54,12 +54,12 @@ Replace `TOKEN` with your personal access token.
 
 ### Install package
 
-In the project that you would like to include the UofM web template components, add web components to your `package.json` file:
+In the project that you would like to include this component, add this to your `package.json` file:
 
 ```
 ...
 dependencies: {
-  "@mydobie/feature_flags": "1.0.0",
+  "@mydobie/feature-flags": "2.0.0",
   ...
 }
 ...

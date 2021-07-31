@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-const distFolder = './dist/';
+/* eslint-disable @typescript-eslint/no-var-requires */
+const distFolder = './lib/';
 const fs = require('fs');
 const { exec } = require('child_process');
 
@@ -12,7 +13,7 @@ fs.readdirSync(distFolder).forEach((file) => {
         if (!error && !stderr) {
           console.log('Minifying ', file);
         } else {
-          console.log('ERROR minifying ', file);
+          console.log('ERROR minifying ', file, stderr);
         }
       }
     );

@@ -3,11 +3,7 @@
 // Do not delete this file
 import React from 'react';
 
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-
-import { configure } from 'enzyme';
-configure({ adapter: new Adapter() });
 import { toHaveNoViolations } from 'jest-axe';
 expect.extend(toHaveNoViolations);
 
-React.useLayoutEffect = React.useEffect;
+import '@testing-library/jest-dom';

@@ -1,13 +1,12 @@
+// Reports back code coverage.
+// This is normally used as part of a pre-pr type of check like in a Jenkinsfile
+// It is not used by the React application
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-console */
-
-// This file puts the summary of the coverage report in the console.
-// Then checks to see if the minimum number of lines have been covered (see minimumLinesCoveredPercent)
-// Will fail (aka process.exitCode =1) if minimum lines haven't been covered or if the coverage summary couldn't be found
-
 const path = require('path');
 const fs = require('fs');
 
-const minimumLinesCoveredPercent = 75;
+const minimumLinesCoveredPercent = 85; // CHANGE ME to the minimum acceptable percentage of lines covered.
 
 try {
   const json = JSON.parse(

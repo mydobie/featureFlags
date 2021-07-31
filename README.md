@@ -1,8 +1,14 @@
-# Feature Flags
+# Feature flags
 
-## Description
+## Description:
 
-This allows you to add feature flags to a project. This includes methods to check to see if a feature should be enabled along with a UI to edit feature visibility. This module can support both local storage and redux based projects.
+This simple package allows you mark itesm as feature flags and then set the availablity of those items through configuration. In addition there is a UI to change feature flags.
+
+This package can be used in any React application.
+
+[See a feature flags in action](https://mydobie.github.io/featureFlags/)
+
+---
 
 ## Getting Started - Adding this component to your project
 
@@ -17,7 +23,7 @@ The above steps will create a `.tgz` file in the root of this project. Move this
 
 ```
 dependencies: {
-  "feature_flags": "file:/"path_to_tgz_file.tgz",
+  "@mydobie/feature-flags": "file:./path_to_tgz_file.tgz",
 }
 ```
 
@@ -31,7 +37,7 @@ Then run `npm install`.
 
 ```
 dependencies: {
-  "feature_flags": "file:/"path_to_tgz_file.tgz",
+  "@mydobie/feature-flags": "file:./path_to_tgz_file.tgz",
 }
 ```
 
@@ -43,205 +49,56 @@ Instead of creating or downloading the `.tgz` file, you can have NPM pull this m
 
 ---
 
-## Requirements
+## Notes
 
-In order to use these components, you need to ensure that the following are in your package.json file and installed.
+This package is not optimized to be used direclty in the browser. It must included in an application that has a build process like using [Webpack](https://webpack.js.org/) for example. Webpack and the build command is built into applications based on [create react app](https://reactjs.org/docs/create-a-new-react-app.html#create-react-app).
 
-- react
-- react-dom
-- prop-types
-
-### Optional Redux:
-
-- react-redux (IF your application uses redux) **NOTE:** This will cause an harmless `Module not found` warning during build if react-redux isn't included.
-
-### Optional UI
-
-If you are using the feature flags UI, then one of the following sets is required:
-
-#### React-Bootstrap (preferred)
-
-- bootstrap
-- react-bootstrap
-
-#### Instructure Design
-
-- @instructure/ui-checkbox
-- @instructure/ui-buttons
-
-#### Reactstrap
-
-- bootstrap
-- reactstrap
+This application can be used in Javascript and Typescript based applications.
 
 ---
 
-## Feature flags array
+## CSS
 
-The first step is to load the feature flag data. The feature flags should be in the format of:
+The UI component to change feature flags is configured to use the Bootstrap CSS for styling. The CSS is available at the [Bootstrap CDN](https://www.bootstrapcdn.com/) or by downloading the [Bootstrap SCSS.](https://getbootstrap.com/docs/5.0/getting-started/download/). Note that both Bootstrap 4 and 5 are supported.
+
+---
+
+## Feature Flag data
+
+The initial feature settings are loaded as a JSON object in this format:
 
 ```
-[
+const myFlagJSONArray = [
   {
-    id: 'FlagID',  // ID used to identify flags
-    active: false, // Is this feature active and available to end users
-    description: 'Fruit list', // Description of the feature
+    id: 'FRUITS',
+    active: false,
+    description: 'Fruit list',
   },
-  ...
-]
+  {
+    id: 'VEGGIES',
+    active: true,
+    description: 'Vegetable list',
+  },
+];
+```
+
+### Typescript
+
+There is a ` FlagType` type available.
+
+```
+import { FlagType } from '@mydobie/feature-flags';
+let myFlagJSONArray: FlagType[]
+
 ```
 
 ---
 
----
+## Using feature flags in your application
 
-## Use in a non-Redux app
+If you are using Redux, see [README-REDUX.md](README-REDUX.md) on how to use feature flags with Redux
 
-If redux isn't available, the state of each feature flag will be stored in local storage under the `featureFlags` key.
-
-### Populating local storage
-
-At the root of your project (usually App.js), you need to load features using the `loadFeatureFlags` method.
-
-Secondly you need function that will re-render the application (without a reload) to be called when a feature flag changes.
-
-```
-import {loadFeatureFlags} from 'feature-flags';
-
-// featureFlagArray ... see "Feature flags array" section above
-
-class App extends React.Component{
-  componentDidMount() {
-    loadFeatureFlags(featureFlagArray, false, this.reRenderApp());
-  }
-  reRenderApp() {
-    this.forceUpdate();
-  }
-
-... component code
-}
-
-```
-
-### Determining if a feature should be made available
-
-There is a `isFeatureActive` function available. Pass in the feature id and the function will return true if the feature should be made available and false if not. If the feature flag is unknown, the `isFeatureActive` will return undefined.
-
-Example:
-
-```
-import { isFeatureActive } from 'feature-flags';
-
-...
-
-{isFeatureActive('COLORS') ? <MyColorFeatureComponent /> : null}
-
-```
-
-### Calling the UI
-
-If you want to use the available UI, it is recommended that it is added at the root of the project (usuallyApp.js) as a route:
-
-```
-import { FeatureFlagsUI } from  'feature-flags';
-
-... router code
-<Route path='/local'>
-  <FeatureFlagsUI onFeatureChange={this.reRenderApp} readonly={true/false} />
-</Route>
-
-```
-
-NOTE: OnFeatureChange returns an updated list of featureFlags. The readonly flag sets the UI should be readonly or not.
-
----
-
----
-
-## Use in a Redux app
-
-If redux is available, the state of each feature flag will be stored in the redux store.
-
-### Adding the feature flag reducer
-
-The reducer for the feature flags is included as `reducerFeatureFlags` and should be included in your combined reducer.
-
-```
-import { combineReducers } from 'redux';
-import { reducerFeatureFlags } from 'feature-flags';
-
-export default combineReducers({ reducerFeatureFlags });
-
-```
-
-### Populating redux store
-
-At the root of your project (usually App.js), you need to load features using the `loadFeatureFlags` action.
-
-```
-import {loadFeatureFlags} from 'feature-flags';
-
-// featureFlagArray ... see "Feature flags array" section above
-
-class App extends React.Component{
-  componentDidMount() {
-    loadFeatureFlags(featureFlagArray);
-  }
-
-... component code
-
-const mapStateToProps = (state) => ({});
-
-const mapDispatchToProps = (dispatch) => ({
-  loadFeatureToRedux: (features) => dispatch(loadFeatureFlags(features, true)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
-}
-
-```
-
-### Getting a list of features from store
-
-You can get the array of feature flags from the redux store by using the `getFeatures` selector.
-
-```
-const mapStateToProps = (state) => ({
-  features: getFeatures(state),
-});
-
-```
-
-### Determining if a feature should be made available
-
-There is a `isFeatureActive` function available. Pass in the feature id along with the feature flag array (see above section) and the function will return true if the feature should be made available and false if not. If the feature flag is unknown, the `isFeatureActive` will return undefined.
-
-Example:
-
-```
-import { isFeatureActive } from 'feature-flags';
-
-...
-
-{isFeatureActive('COLORS', features) ? <MyColorFeatureComponent /> : null}
-
-```
-
-### Calling the UI
-
-If you want to use the available UI, it is recommended that it is added at the root of the project (usually App.js) as a route:
-
-```
-import { FeatureFlagsReduxUI } from  'feature-flags';
-
-... router code
-<Route path='/redux'>
-  <FeatureFlagsReduxUI readonly={true/false} />
-</Route>
-
-```
-
-NOTE: The readonly flag sets if the UI should be readonly or not.
+If you aren't using Redux, see [README-NON-REDUX.md](README-NON-REDUX.md) on how to use feature flags with local storage.
 
 ---
 
@@ -255,31 +112,40 @@ The following sections describe how perform development on this component(s).
 
 ## Get me started:
 
-If you are just getting started, perform the following tasks to ensure your environment is ready for development.
+At the root of the project run the following commands in a terminal to verify you can perform all the development tasks:
 
-1.  Verify node is installed => `node -v`. Ensure that it is the version listed in the `engines` section in the `package.json` file
-1.  Install dependencies => `npm run d`
-1.  Check for lint errors => `npm run lint`
-1.  Tun the tests => `npm run test`
-1.  Find security advisories => `npm run npmAudit`
-1.  Build production-ready package => `npm run buildPackage`
-1.  Start dev server to preview the components => `npm run start` then go to [http://localhost:3000](http://localhost:3000)
+1.  Verify node is installed => `node -v`. Ensure that it is version listed in the `engines` section of the `package.json` file.
+1.  Install dependencies => `npm run i`
+1.  Verify you can check for lint errors => `npm run lint`
+1.  Verify you can run the tests => `npm run test`
+1.  Verify you can check for security advisories => `npm run npmAudit`
+1.  Start dev server to view demo files => `npm run start` then go to [http://localhost:3000](http://localhost:3000)
+1.  Verify you can build the package => `npm run buildPackage`
+1.  Verify you can build the demo files => `npm run build`
+
+---
+
+## Project structure
+
+All of the files that will be bundled into the package are located in the `src/compnent` directory. All other files in the `src` directory are demo pages so you can see see the feature flags in a browser during development.
+
+---
 
 ## Node
 
 The only requirement is that development system has Node.js installed. You can verify you have node installed by running `node -v` in a terminal.
 
-NOTE: The development tools requires Node 12 or higher.
+NOTE: The development tools require a node version listed in the `engines` section of the `package.json` file.
 
-If have an old version of node running, first verify if you have NVM installed by running `nvm --version` in a terminal. If you do have NVM running, then see the [NVM website](https://github.com/nvm-sh/nvm) on how to install and use a new version of Node.
+If have an different version of node running, first verify if you have NVM installed by running `nvm --version` in a terminal. If you do have NVM running, then see the [NVM website](https://github.com/nvm-sh/nvm) on how to install and use a new version of Node.
 
 If you don't have Node nor NVM installed, see the [NodeJS website](https://nodejs.org/en/) on how to install Node.
 
-Alternatively you can choose to develop this application inside a Docker container instead of modifying the version of node or NVM on your machine. See the `DOCKER_DEV_ENV/README.md` file for more information. This is the recommended method for development.
+Alternatively you can choose to develop this application inside a Docker container instead of modifying the version of node or NVM on your machine. See the `DOCKER_DEV_ENV/README.md` file for more information.
 
 ## Install dependencies
 
-After checking out the project, run `npm run d` in a terminal at the root of the project to install dependencies.
+After checking out the project, run `npm i` in a terminal at the root of the project to install dependencies.
 
 After installing dependencies, you can check to see what dependencies are out of date by running `npm outdated` in a terminal at the root of the project.
 
@@ -291,27 +157,25 @@ This application uses [Husky](https://github.com/typicode/husky) to automaticall
 
 ## Start the development server
 
-To start the development server, run `npm run start` in a terminal at the root of the project. This will start the application in development node and open the application in a browser. Note the application will not build if there are any linting errors.
+To start the development server, run `npm run start` in a terminal at the root of the project.
+
+This will start the application in development mode and open the application in a browser. Note the application will not build if there are any linting errors.
 
 The application wil be available at [http://localhost:3000](http://localhost:3000) in a browser.
 
-If you need to change the port the application is running on, then change the `PORT` value in the `.env` file. This `PORT` value is only used for the development server and will not impact a production or production-like (like staging) environment.
+If you need to change the port the application is running on, then change the `PORT` value in the `.env` file.
 
-#### SASS warning
-
-If, while starting up the development server, you may get a `Node Sass could not find a binding for your current environment` error. This is caused that the SASS compiler wasn't downloaded for your node version and OS. Just run `npm run d` to ensure that the correct version of the compiler is downloaded.
-
-## Tests
+### Run tests
 
 To run the tests, run `npm run test` in a terminal the root of the project. This will run all of the tests in the `src/__tests__` directory.
 
-After running tests, you can check the coverage reports by opening `coverage/index.html` in a browser or by running `npm run checkCoverage` in a terminal.
+After running tests, you can check the coverage reports by opening `coverage/index.html` in a browser or by running `npm run checkCoverage` in a terminal for a summary.
 
 If you prefer, you can have the testing run in "watch" mode by running `npm run test:watch` in a terminal at the root of the project. The tests will be rerun as you make edits. Note coverage reports will not be updated while in watch mode.
 
-Test are run in [Jest](https://jestjs.io/docs/en/expect), use [Enzyme](https://enzymejs.github.io/enzyme/) to inspect Components, and [jest-axe](https://github.com/nickcolley/jest-axe) to check for accessibility.
+Test are run in [Jest](https://jestjs.io/docs/en/expect), use [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) to inspect components, and [jest-axe](https://github.com/nickcolley/jest-axe) to check for accessibility.
 
-## Linting
+### Linting
 
 You can check the linting status of your files by running `npm run lint` in a terminal at the root of the project.
 
@@ -323,20 +187,10 @@ More information on fixing linting errors is available at: [esLint](https://esli
 
 This application uses [Husky](https://github.com/typicode/husky) and [lint-staged](https://github.com/okonet/lint-staged) to automatically install Git Hooks that will check for linting errors on files at commit time. All linting errors must be fixed before changes can be committed to git.
 
-## Security Audit
+### Build package
 
-You can check for any high or critical known security vulnerabilities in the dependencies by typing `npm run npmAudit`. All known security vulnerabilities will be displayed, but the previous command will fail only if at least one of the issues are ranked "high" or higher.
+To build and create a tar file that can be imported in other projects, run `npm run buildPackage`. Note that GitHub actions will automatically run this command and upload the package to GitHub packages when a PR is merged into the main branch.
 
-## Structure of the project
+## Build demo files
 
-The project is structured like this:
-
-- `public/` => The public contains the shell html pages. There normally isn't a need to add or modify anything in this directory and it is only used for previewing the components while in development.
-- `src/`
-  - `__tests__/` => Jest test scripts. Add your test scripts here.
-  - `Components/` => Contains the component files. Place your new component files here.
-    - `index.jsx` => List of component(s) or functions to be made available. This file needs to be edited, see file for directions.
-  - `App.jsx` => References to components you want to preview while in development. This file needs to be edited, see file for directions.
-  - `index.jsx` => Loads App.jsx into the html page. There normally isn't a need to modify this file.
-  - `setupTests.jsx` => Add any scripts you wish to run before tests are started to this file.
-- `utils/` => Contains helper node functions that are only used as part of the development or build phases.
+This project contains demo files you can see the feature flags in action in order to assist with development. To build the demo files, run `npm run build` and the demo files will be located in the 'build' directory. Note that GitHub actions will automatically run this command and upload the contents to gh-pages branch when a PR is merged into the main branch.

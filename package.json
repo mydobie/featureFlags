@@ -1,124 +1,127 @@
 {
-  "name": "@mydobie/feature_flags",
-  "version": "1.2.0",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "name": "@mydobie/feature-flags",
+  "description": "",
+  "version": "2.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "license": "MIT",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
   "repository": "https://github.com/mydobie/featureFlags",
-  "babel": {
-    "presets": [
-      "react",
-      "env",
-      "stage-2"
-    ]
-  },
+  "files": [
+    "lib/**/*"
+  ],
   "engines": {
-    "node": "^12 || ^14"
+    "node": "14"
   },
   "dependencies": {
-    "bootstrap": "4.0.0 - 5.0.0",
-    "prop-types": "^15.7.2",
-    "react": "16.0.0 - 17.999.999",
-    "react-dom": "16.0.0 - 17.999.999"
+    "react": "17.0.0 - 17.999.999",
+    "react-dom": "17.0.0 - 17.999.999"
   },
   "devDependencies": {
-    "react-redux": "^7.2.3",
-    "reactstrap": "^8.9.0",
-    "@instructure/canvas-theme": "^7.5.0",
-    "@instructure/ui-checkbox": "^7.5.0",
-    "@instructure/ui-buttons": "^7.5.0",
-    "@babel/preset-react": "^7.12.13",
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "enzyme": "^3.11.0",
-    "enzyme-to-json": "^3.6.1",
+    "@reduxjs/toolkit": "^1.6.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/react-hooks": "^7.0.1",
+    "@testing-library/user-event": "^12.8.3",
+    "@types/jest-axe": "^3.5.1",
+    "@types/react-router-dom": "^5.1.8",
+    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@typescript-eslint/parser": "^4.28.5",
+    "bootstrap": "^5.0.2",
+    "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-watch": "^7.0.0",
-    "husky": "^5.2.0",
-    "jest-axe": "4.1.0",
-    "lint-staged": "^10.5.4",
-    "node-sass": "^5.0.0",
-    "prettier": "2.2.1",
-    "react-bootstrap": "^1.5.2",
+    "husky": "^7.0.0",
+    "jest-axe": "^5.0.1",
+    "lint-staged": "^11.0.0",
+    "onchange": "^7.1.0",
+    "prettier": "^2.3.2",
+    "react-redux": "^7.2.4",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
-    "redux": "^4.0.5",
-    "redux-devtools-extension": "^2.13.9",
+    "redux": "^4.1.0",
     "redux-mock-store": "^1.5.4",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0",
-    "stylelint": "^13.12.0",
-    "stylelint-config-prettier": "^8.0.2",
-    "uglify-js": "^3.13.2"
+    "typescript": "^4.3.5",
+    "uglify-js": "^3.12.3"
   },
   "scripts": {
-    "d": "npm i && npm rebuild node-sass",
-    "installDependencies": "npm run d",
     "start": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts start",
+    "d": "npm i",
     "----------------------------------------------------------1": "",
+    "buildts": "tsc --project tsconfig-build-files.json",
     "build": "npm run d && npm run test && npm run npmAudit && npm run build:ci",
     "build:ci": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts build",
-    "test": "react-scripts test --coverage --watchAll=false --passWithNoTests",
+    "test": "react-scripts test --coverage  --passWithNoTests --testPathIgnorePatterns /helpers --watchAll=false ",
     "test:watch": "react-scripts test ",
     "test:update": "npm run test -- -u",
     "----------------------------------------------------------2": "",
-    "lint": "npm run lint:js && npm run prettier:all && npm run lint:scss:all",
-    "lint:fix": "npm run prettier:fix:all && npm run lint:js:fix &&  npm run lint:scss:fix:all",
+    "lint": "npm run lint:js ",
+    "lint:fix": "npm run prettier:fix:all && npm run lint:js:fix ",
     "lint:watch": "onchange 'src/**/*.*' -- npm run lint:fix",
     "----------------------------------------------------------3": "",
-    "lint:js": "esw --ext .jsx,.js --color ",
+    "lint:js": "tsc --noEmit && esw --ext .js,.jsx,.ts,.tsx --color ",
     "lint:js:fix": "npm run lint:js -- --fix",
     "prettier": "prettier  --ignore-path ./.eslintignore --check",
-    "prettier:all": "npm run prettier '**/*.+(js|jsx|html|css|scss|json)'",
+    "prettier:all": "npm run prettier '**/*.+(js|jsx|ts|tsx|html|css|scss|json)'",
     "prettier:fix": "prettier  --ignore-path ./.eslintignore --write",
-    "prettier:fix:all": "npm run prettier:fix '**/*.+(js|jsx|html|css|scss|json)'",
-    "lint:scss": "stylelint --ignore-path ./.eslintignore ",
-    "lint:scss:all": "npm run lint:scss './**/*.+(css|scss)'",
-    "lint:scss:fix:all": "npm run lint:scss -- --fix './**/*.+(css|scss)'",
+    "prettier:fix:all": "npm run prettier:fix '**/*.+(js|jsx|ts|tsx|html|css|scss|json)'",
     "----------------------------------------------------------4": "",
-    "clean": "rm -rf node_modules && rm package-lock.json && npm run d",
+    "clean": "rm -rf node_modules && rm -f package-lock.json && npm i",
     "uglify": "uglifyjs ",
     "checkCoverage": "node ./utils/testCoverage.js",
-    "npmAudit": "npm audit --audit-level=high --registry=https://registry.npmjs.org",
-    "buildPackage": "npm run d && npm run npmAudit && npm run test && bash  utils/buildPackage.sh"
-  },
-  "prettier": {
-    "singleQuote": true,
-    "jsxSingleQuote": true,
-    "printWidth": 80
+    "npmAudit": "npm audit -audit-level high",
+    "buildPackage": "npm run d && npm run npmAudit && npm run test && npm run buildPackage:ci",
+    "buildPackage:ci": "bash  utils/buildPackage.sh",
+    "prepare": "husky install"
   },
   "eslintConfig": {
-    "extends": [
-      "airbnb",
-      "airbnb/hooks",
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "react",
+      "@typescript-eslint",
       "prettier"
     ],
-    "globals": {
-      "styles": true
-    },
+    "extends": [
+      "airbnb-typescript",
+      "airbnb/hooks",
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended",
+      "prettier",
+      "prettier/react",
+      "prettier/@typescript-eslint",
+      "plugin:prettier/recommended"
+    ],
     "env": {
       "browser": true,
-      "commonjs": true,
+      "jasmine": true,
       "jest": true,
-      "es6": true,
-      "jquery": true
+      "node": true
     },
-    "parser": "babel-eslint",
-    "plugins": [
-      "prettier",
-      "eslint-plugin-react"
-    ],
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
     "rules": {
+      "react/static-property-placement": "off",
+      "react/require-default-props": "off",
+      "react/prop-types": "off",
       "prettier/prettier": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "error"
+      ],
       "no-var": "error",
       "curly": "error",
       "one-var": "error",
@@ -127,36 +130,22 @@
       "arrow-body-style": [
         "error",
         "as-needed"
-      ],
-      "import/no-extraneous-dependencies": "off"
+      ]
     }
   },
-  "stylelint": {
-    "extends": "stylelint-config-prettier"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+  "prettier": {
+    "singleQuote": true,
+    "jsxSingleQuote": true,
+    "printWidth": 80
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!<rootDir>/node_modules/",
-      "!<rootDir>/src/index.jsx",
-      "!<rootDir>/src/setupTests.js",
-      "!<rootDir>/src/App.jsx",
-      "!<rootDir>/src/redux/**",
-      "!<rootDir>/src/testPages/**",
-      "!<rootDir>/src/FeatureFlagsConfig.js"
+      "src/components/**/*.{js,jsx,ts,tsx}"
     ],
     "coverageReporters": [
       "html",
       "json-summary",
       "text-summary"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
     ]
   },
   "browserslist": {
