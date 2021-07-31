@@ -2,23 +2,17 @@
 
 ## How to commit changes
 
-This application uses a modified version of GitHub flow. All code moved to a server must be contained in a release. All releases must be made from the master branch. The head of the master branch will contain the latest deployable code. Note that the head of master branch may contain code that is on a test/qa/staging and/or production environment. Master is not tied to an application instance. (test/qa/staging, production)
-
-1. When starting work toward a new release, branch off the master branch or a known release (aka tag) for retrofits.
+1. When starting work toward a new release, branch off the main branch or a known release (aka tag) for retrofits.
 1. If there will be multiple persons working or multiple features on the new release, then create branches of the new release branch.
-1. As the last commit on the release branch, change the version in the `package.json` file and run `npm i` to update the `package-lock.json` file. Note: do not tag or create a version yet.
-1. Submit for pull request into the master branch.
-   1. Reviewers should ensure that the version has been updated and does not match an existing release tag
-1. Once approved by at least 2 approvers, merge or squash merge the pull request
+1. Submit for pull request into the main branch. If the changes should result in a major or minor version incrase be sure to add `minor` or `major` to the pull request description.
+1. Once approved the approvers will squash merge the pull request
 1. Delete the release branch and all "child" branches
-1. Create a release tag in GitHub using the following templates described below.
-1. After Jenkins and/or GitHub Actions has finished, verify that a GitHub release has been created and there is a new corresponding artifact in Artifactory and/or GitHub packages. If not manually create the GitHub release off the master branch and upload the artifact.
+1. After GitHub Actions has finished, verify that a GitHub release has been created and there is a new corresponding GitHub package.
+1. Update the release description in GitHub
 
 ### Releases
 
-The GitHub releases are used by both developers and business owners, the release notes should be fairly detailed.
-
-The tag for the release should start with a `v` and then have the version number as specified in the `package.json` file. For example: `v1.1.0`
+It maybe neccessary to update the release description and notes in GitHub after GitHub actions have been run.
 
 Release title should contain the version and a short summary description. For example: `Version 1.1.0 - Accessibility fixes`
 
@@ -46,13 +40,13 @@ Changes:
 
 A test driven development (TDD) should be used when building react components. This means writing a test for a component before it is built. This will encourage wider code coverage and reduction on the dependance on snapshot tests.
 
-For every `.js `or `.jsx` file, there should be a corresponding test file in the directory in the `/src/__tests__` directory. This ensures that if a component is moved to another application, all the tests testing that component can also be easily moved.
+For every `.jsx`, and `.tsx` file, there should be a corresponding test file in the directory in the `/src/__tests__` directory. This ensures that if a component is moved to another application, all the tests testing that component can also be easily moved.
 
-If at all possible snapshot tests (where results are compared to a previous run's html) should be avoided. While they can be helpful early in development, they should be replaced with more detailed tests later on.
+If at all possible snapshot tests (where results are compared to a previous run's html) should be avoided.
 
-Text matching tests should be avoided.
+Text matching tests should be avoided, the use of [testIds](https://testing-library.com/docs/queries/bytestid/) is perferred.
 
-Because of the nature of the Node, Jest, React, Redux and Enzyme environment, a very high level of test coverage (at least 85% lines covered) is expected.
+Because of the nature of the Node, Jest, React, and Redux environment, a very high level of test coverage (at least 85% lines covered) is expected.
 
 ---
 
@@ -67,8 +61,8 @@ All files, class names, function/method, and variable names are camel case. Clas
 #### Exceptions to naming rules
 
 - GitHub recognized files like README.md, CONTRIBUTING.md, and LICENSE.md. These file names are all capitals.
-- "Magic" folders that are used during testing are named starting and ending with "\_\_"
-- Global static variables (commonly called enums in other languages) are all caps and snake case.
+- "Magic" folders that are used during testing are named starting and ending with `__`
+- Global static variables are all caps and snake case.
 
 ### If statements
 
@@ -127,9 +121,7 @@ YES:
 
 ### SCSS
 
-CSS for individual items should be saved inside the component itself. This can be done as inline CSS or use styled-components (recommended). If there is a lot of custom css needed for a component, then a separate scss file can be crated and imported.
-
-Only application-wide styles should be added to the `src/scss` files
+Custom CSS should not be used in this application. Instead, Boostrap classes should be used.
 
 ### Do not override linting
 
@@ -183,3 +175,7 @@ const myFunction = async () => {
 };
 
 ```
+
+### Functional components
+
+Class based components should not used. All react components should be functions and use hooks to maintain state.

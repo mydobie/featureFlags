@@ -101,8 +101,10 @@ describe('Feature Flags - local storage tests', () => {
   });
 
   test('Click on reset, rests each value to original', () => {
-    // KKD ... check to see if reset call back is called!
-    const { container } = render(<FeatureFlagsUI />);
+    const onFeatureChange = jest.fn(() => {});
+    const { container } = render(
+      <FeatureFlagsUI onFeatureChange={onFeatureChange} />
+    );
     const checkboxes = container.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach((checkbox) => fireEvent.click(checkbox));
     expect(
@@ -118,5 +120,10 @@ describe('Feature Flags - local storage tests', () => {
         // @ts-ignore
         expect(checkbox.checked).toEqual(featureList[index].active);
       });
+    expect(onFeatureChange.mock.calls.length).toBe(checkboxes.length + 1);
+    // @ts-ignore
+    expect(onFeatureChange.mock.calls[checkboxes.length][0]).toEqual(
+      featureList.map((feature) => ({ ...feature, original: feature.active }))
+    );
   });
 });

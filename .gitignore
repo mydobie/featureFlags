@@ -19,7 +19,7 @@ npm-debug.log*
 .eslintcache
 /dist
 /lib
-
+.npmrc
 
 
 TODO.md

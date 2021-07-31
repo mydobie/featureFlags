@@ -32,8 +32,9 @@ const FeatureFlagsUI = ({
           onFeatureChange(newFeatures);
         }}
         onFeatureReset={() => {
-          setFeatures(getResetFeatureFlags());
-          onFeatureChange(features);
+          const newFeatures = getResetFeatureFlags();
+          setFeatures(newFeatures);
+          onFeatureChange(newFeatures);
         }}
       />
     </>
