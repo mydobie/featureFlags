@@ -16,6 +16,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "utils"],
-  "exclude": ["lint-staged.config.js"]
+  "include": ["src", "utils"]
 }

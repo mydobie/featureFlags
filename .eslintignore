@@ -8,3 +8,4 @@ src/serviceWorker.js
 src/setupTests.js
 npm-cache/
 /lib/**
+lint-staged.config.js
