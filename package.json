@@ -1,7 +1,7 @@
 {
   "name": "@mydobie/feature-flags",
   "description": "",
-  "version": "2.0.1",
+  "version": "2.0.0",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
@@ -22,9 +22,9 @@
   "devDependencies": {
     "@reduxjs/toolkit": "^1.6.0",
     "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
+    "@testing-library/react": "^12.1.1",
     "@testing-library/react-hooks": "^7.0.1",
-    "@testing-library/user-event": "^12.8.3",
+    "@testing-library/user-event": "^13.2.1",
     "@types/jest-axe": "^3.5.1",
     "@types/react-router-dom": "^5.1.8",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
@@ -32,12 +32,12 @@
     "bootstrap": "^5.0.2",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-airbnb-typescript": "^12.3.1",
-    "eslint-config-prettier": "^7.2.0",
+    "eslint-config-airbnb-typescript": "^14.0.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-jest": "^24.4.3",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-watch": "^7.0.0",
@@ -90,6 +90,7 @@
     "root": true,
     "parser": "@typescript-eslint/parser",
     "plugins": [
+      "import",
       "react",
       "@typescript-eslint",
       "prettier"
@@ -99,10 +100,6 @@
       "airbnb/hooks",
       "eslint:recommended",
       "plugin:react/recommended",
-      "plugin:@typescript-eslint/recommended",
-      "prettier",
-      "prettier/react",
-      "prettier/@typescript-eslint",
       "plugin:prettier/recommended"
     ],
     "env": {
@@ -122,11 +119,7 @@
       "@typescript-eslint/no-unused-vars": [
         "error"
       ],
-      "no-var": "error",
-      "curly": "error",
-      "one-var": "error",
-      "no-console": "error",
-      "no-unused-vars": "error",
+      "one-var": "off",
       "arrow-body-style": [
         "error",
         "as-needed"
