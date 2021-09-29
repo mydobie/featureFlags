@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
 /* eslint-disable import/no-extraneous-dependencies */
 // Contains routing and any application wide items like headers, footers and navigation
 
@@ -20,7 +18,7 @@ import {
 loadFeatureFlags({
   features: featureFlagsLocalStorage,
   overrides: JSON.parse(process.env.REACT_APP_FEATURE_FLAGS ?? '[]'),
-  persist: process.env.REACT_APP_USE_LOCAL_STORAGE === 'true',
+  persist: process.env.REACT_APP_FEATURE_FLAGS_PERSIST === 'true',
 });
 
 const App = (): ReactElement => {
@@ -29,7 +27,9 @@ const App = (): ReactElement => {
     loadFeatureFlagsRedux({
       features: featureFlagsRedux || [],
       overrides: JSON.parse(process.env.REACT_APP_FEATURE_FLAGS ?? '[]'),
-      persist: process.env.REACT_APP_USE_LOCAL_STORAGE === 'true',
+      persist:
+        process.env.REACT_APP_USE_LOCAL_STORAGE === 'true' &&
+        process.env.REACT_APP_FEATURE_FLAGS_PERSIST === 'true',
     })
   );
   const basename = '';

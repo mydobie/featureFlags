@@ -50,7 +50,9 @@ const CoreUI = ({
         data-testid='persistAlert'
       >
         <strong>NOTE:</strong> Feature flag values are persisting on page
-        refresh. This is not recommended for a production environment.
+        refresh. This is not recommended for a production environment. Check the{' '}
+        <code>persist</code> setting when calling <code>loadFeatureFlags</code>{' '}
+        or <code>loadFeatureFlagsRedux</code>.
       </p>
     ) : null}
     <button
