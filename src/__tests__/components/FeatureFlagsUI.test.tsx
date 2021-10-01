@@ -77,7 +77,7 @@ describe('Feature Flags - local storage tests', () => {
     // ensure that warning icon is shown
     expect(screen.queryAllByTestId('flagNotInitialWarning')).toHaveLength(1);
 
-    // ensure that featurechagne callback was called
+    // ensure that featurechange callback was called
     const expected = featureList.map((flag) => ({
       ...flag,
       original: flag.active,
@@ -85,7 +85,9 @@ describe('Feature Flags - local storage tests', () => {
     expected[0].active = !expected[0].active;
     expect(onFeatureChange.mock.calls.length).toBe(1);
     // @ts-ignore
-    expect(onFeatureChange.mock.calls[0][0]).toEqual(expected);
+    expect(onFeatureChange.mock.calls[0][0]).toEqual(expected[0].id);
+    // @ts-ignore
+    expect(onFeatureChange.mock.calls[0][1]).toEqual(expected[0].active);
   });
 
   test('If persist is not set, warning is not shown', () => {
@@ -102,8 +104,12 @@ describe('Feature Flags - local storage tests', () => {
 
   test('Click on reset, rests each value to original', () => {
     const onFeatureChange = jest.fn(() => {});
+    const onFeatureReset = jest.fn(() => {});
     const { container } = render(
-      <FeatureFlagsUI onFeatureChange={onFeatureChange} />
+      <FeatureFlagsUI
+        onFeatureChange={onFeatureChange}
+        onFeatureReset={onFeatureReset}
+      />
     );
     const checkboxes = container.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach((checkbox) => fireEvent.click(checkbox));
@@ -120,10 +126,6 @@ describe('Feature Flags - local storage tests', () => {
         // @ts-ignore
         expect(checkbox.checked).toEqual(featureList[index].active);
       });
-    expect(onFeatureChange.mock.calls.length).toBe(checkboxes.length + 1);
-    // @ts-ignore
-    expect(onFeatureChange.mock.calls[checkboxes.length][0]).toEqual(
-      featureList.map((feature) => ({ ...feature, original: feature.active }))
-    );
+    expect(onFeatureReset.mock.calls.length).toBe(1);
   });
 });

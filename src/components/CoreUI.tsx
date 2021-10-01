@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { ReactElement } from 'react';
 import { FlagType } from './featureFlags';
 import ExclamationCircle from './ExclamationCircle';
@@ -8,6 +7,11 @@ type CoreUIType = {
   onFeatureClick: (id: string, checked: boolean) => void;
   onFeatureReset: () => void;
   persist?: boolean;
+};
+
+export type FeatureFlagsUIProps = {
+  onFeatureChange?: (flagId?: string, isActive?: boolean) => void;
+  onFeatureReset?: () => void;
 };
 
 const CoreUI = ({

@@ -13,7 +13,7 @@ import Home from './pages/Home';
 import FourOhFour from './pages/FourOhFour';
 
 interface Props {
-  onFeatureChange?: () => void;
+  onFeatureChange?: (flagId?: string, isActive?: boolean) => void;
 }
 
 const AppRoutes = ({ onFeatureChange = () => {} }: Props): ReactElement => (

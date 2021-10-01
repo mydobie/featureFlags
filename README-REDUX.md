@@ -54,7 +54,7 @@ Where:
 
 - features is an array of feature flag objects
 - overrides: (optional) array of feature flag objects that will override items in the features array.
-- persist: (optional defaults false) does redux store persists across page refreshes
+- persist: (optional defaults false) is the redux store set to persist across page refreshes and do you flag settings persist across page refreshes
 
 ---
 
@@ -83,7 +83,11 @@ If you want to allow users to modify the value of the feature flags, there are c
 
 Component: `FeatureFlagsReduxUI`
 
-Note: no props are available
+Props:
+
+- _onFeatureChange_ - Function that has two arguments, flagId (string) and isActive (boolean). This function is called when the status of a feature flag changes.
+
+- _onFeatureReset_ - Function that doesn't have arguments. This function is called when the user resets the feature flags back to their original status.
 
 Example:
 
@@ -92,6 +96,6 @@ import { FeatureFlagsReduxUI } from @mydobie/feature-flags
 
 ...
 
-return <FeatureFlagsReduxUI  />
+return <FeatureFlagsReduxUI  onFeatureChange={(flagId, isActive)=>{ /* other code */ }}  onFeatureReset={()=>{ /* other code */ }} />
 
 ```

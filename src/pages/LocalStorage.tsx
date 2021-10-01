@@ -4,7 +4,7 @@ import { FeatureFlagsUI, isFeatureActive } from '../components';
 import { COLORS, DINOS } from '../FeatureFlagsConfig';
 
 type LocalStoragePageProps = {
-  onFeatureChange: () => void;
+  onFeatureChange: (flagId?: string, isActive?: boolean) => void;
 };
 
 // eslint-disable-next-line arrow-body-style
@@ -13,7 +13,21 @@ const LocalStoragePage = ({
 }: LocalStoragePageProps): ReactElement => (
   <div className='container'>
     <h1>Feature flags - local storage</h1>
-    <FeatureFlagsUI onFeatureChange={onFeatureChange} />
+    <FeatureFlagsUI
+      onFeatureChange={(id, isActive) => {
+        onFeatureChange(); // this is passed to AppRoutes to force an app rerender
+        // NOTE: This is a good place to put an ajax call
+        // if there a need to track feature flag status changes
+        // eslint-disable-next-line no-console
+        console.log('Feature flag ', id, 'is active:', isActive);
+      }}
+      onFeatureReset={() => {
+        // NOTE: This is a good place to put an ajax call
+        // if there a need to track feature flag status changes
+        // eslint-disable-next-line no-console
+        console.log('Local storage based features have been reset');
+      }}
+    />
 
     {isFeatureActive(COLORS) ? (
       <div>
