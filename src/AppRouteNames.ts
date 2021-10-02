@@ -4,3 +4,4 @@ export const HOME_ROUTE = '/';
 
 export const LOCAL_STORAGE = '/local';
 export const REDUX = '/redux';
+export const READONLY = '/readonly';

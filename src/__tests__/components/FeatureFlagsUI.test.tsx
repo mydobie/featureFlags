@@ -128,4 +128,22 @@ describe('Feature Flags - local storage tests', () => {
       });
     expect(onFeatureReset.mock.calls.length).toBe(1);
   });
+
+  test('All switches are enabled when readonly prop is not set', () => {
+    const { container } = render(<FeatureFlagsUI />);
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    expect(checkboxes).toHaveLength(featureList.length);
+    checkboxes.forEach((checkbox) => {
+      expect(checkbox).not.toBeDisabled();
+    });
+  });
+
+  test('Readonly prop disables the switch and hides reset button', () => {
+    const { container } = render(<FeatureFlagsUI readonly />);
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    expect(checkboxes).toHaveLength(featureList.length);
+    checkboxes.forEach((checkbox) => {
+      expect(checkbox).toBeDisabled();
+    });
+  });
 });

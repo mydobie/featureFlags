@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { isFeatureActive } from './components';
 
-import { HOME_ROUTE, LOCAL_STORAGE, REDUX } from './AppRouteNames';
+import { HOME_ROUTE, LOCAL_STORAGE, REDUX, READONLY } from './AppRouteNames';
 import { COLORS, DINOS, FRUITS, VEGGIES } from './FeatureFlagsConfig';
 
 const AppNavBar = (): ReactElement => {
@@ -34,6 +34,11 @@ const AppNavBar = (): ReactElement => {
         <li className='nav-item'>
           <NavLink activeClassName='active' className='nav-link' to={REDUX}>
             Redux
+          </NavLink>
+        </li>
+        <li className='nav-item'>
+          <NavLink activeClassName='active' className='nav-link' to={READONLY}>
+            Read only
           </NavLink>
         </li>
         {isFeatureActive(COLORS) ? (

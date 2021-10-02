@@ -9,6 +9,7 @@ import { editFeature, resetFeatures } from './featureFlagsReducers';
 const FeatureFlagsReduxUI = ({
   onFeatureChange = () => {},
   onFeatureReset = () => {},
+  readonly = false,
 }: FeatureFlagsUIProps): ReactElement => {
   const dispatch = useDispatch();
   return (
@@ -24,6 +25,7 @@ const FeatureFlagsReduxUI = ({
           onFeatureReset();
         }}
         persist={useSelector(getPersistRedux)}
+        readonly={readonly}
       />
     </>
   );

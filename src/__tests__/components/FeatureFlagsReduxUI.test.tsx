@@ -149,6 +149,30 @@ describe('Feature Flags - local storage tests', () => {
         expect(checkbox.checked).toEqual(featureList[index].active);
       });
   });
-});
 
-// https://ogzhanolguncu.com/blog/testing-react-redux-toolkit-with-typescript
+  test('All switches are enabled when readonly prop is not set', () => {
+    const { container } = render(
+      <Provider store={store}>
+        <FeatureFlagsReduxUI />
+      </Provider>
+    );
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    expect(checkboxes).toHaveLength(featureList.length);
+    checkboxes.forEach((checkbox) => {
+      expect(checkbox).not.toBeDisabled();
+    });
+  });
+
+  test('Readonly prop disables the switch and hides reset button', () => {
+    const { container } = render(
+      <Provider store={store}>
+        <FeatureFlagsReduxUI readonly />
+      </Provider>
+    );
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    expect(checkboxes).toHaveLength(featureList.length);
+    checkboxes.forEach((checkbox) => {
+      expect(checkbox).toBeDisabled();
+    });
+  });
+});

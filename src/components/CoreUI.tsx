@@ -7,11 +7,13 @@ type CoreUIType = {
   onFeatureClick: (id: string, checked: boolean) => void;
   onFeatureReset: () => void;
   persist?: boolean;
+  readonly?: boolean;
 };
 
 export type FeatureFlagsUIProps = {
   onFeatureChange?: (flagId?: string, isActive?: boolean) => void;
   onFeatureReset?: () => void;
+  readonly?: boolean;
 };
 
 const CoreUI = ({
@@ -19,6 +21,7 @@ const CoreUI = ({
   onFeatureClick = () => {},
   onFeatureReset = () => {},
   persist = false,
+  readonly = false,
 }: CoreUIType): ReactElement => (
   <>
     <ul data-testid='coreFeatureFlagsUI'>
@@ -33,6 +36,7 @@ const CoreUI = ({
               onChange={(e) => {
                 onFeatureClick(feature.id, e.target.checked);
               }}
+              disabled={readonly}
             />{' '}
             <label
               className='form-check-label custom-control-label'
@@ -59,14 +63,16 @@ const CoreUI = ({
         or <code>loadFeatureFlagsRedux</code>.
       </p>
     ) : null}
-    <button
-      type='button'
-      className='btn btn-success'
-      data-testid='resetButton'
-      onClick={() => onFeatureReset()}
-    >
-      Reset flags to default
-    </button>
+    {!readonly ? (
+      <button
+        type='button'
+        className='btn btn-success'
+        data-testid='resetButton'
+        onClick={() => onFeatureReset()}
+      >
+        Reset flags to default
+      </button>
+    ) : null}
   </>
 );
 
