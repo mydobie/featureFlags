@@ -10,6 +10,9 @@ import { COLORS, DINOS, FRUITS, VEGGIES } from './FeatureFlagsConfig';
 const AppNavBar = (): ReactElement => {
   const isVeggies = useSelector((state) => isFeatureActive(VEGGIES, state));
   const isFruits = useSelector((state) => isFeatureActive(FRUITS, state));
+
+  const featureNavItemStyle = { backgroundColor: '#ccc', color: '#000' };
+
   return (
     <nav>
       <ul className='nav'>
@@ -42,16 +45,24 @@ const AppNavBar = (): ReactElement => {
           </NavLink>
         </li>
         {isFeatureActive(COLORS) ? (
-          <li className='nav-item nav-link'>Link to Colors</li>
+          <li className='nav-item nav-link' style={featureNavItemStyle}>
+            Link to Colors
+          </li>
         ) : null}
         {isFeatureActive(DINOS) ? (
-          <li className='nav-item nav-link'>Link to Dinos</li>
+          <li className='nav-item nav-link' style={featureNavItemStyle}>
+            Link to Dinos
+          </li>
         ) : null}
         {isFruits ? (
-          <li className='nav-item nav-link'>Link to Fruits</li>
+          <li className='nav-item nav-link' style={featureNavItemStyle}>
+            Link to Fruits
+          </li>
         ) : null}
         {isVeggies ? (
-          <li className='nav-item nav-link'>Link to Veggies</li>
+          <li className='nav-item nav-link' style={featureNavItemStyle}>
+            Link to Veggies
+          </li>
         ) : null}
       </ul>
     </nav>
