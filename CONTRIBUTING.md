@@ -2,19 +2,30 @@
 
 ## How to commit changes
 
-1. When starting work toward a new release, branch off the main branch or a known release (aka tag) for retrofits.
-1. If there will be multiple persons working or multiple features on the new release, then create branches of the new release branch.
-1. Submit for pull request into the main branch. If the changes should result in a major or minor version incrase be sure to add `minor` or `major` to the pull request description.
+1. When starting work toward a new release, branch off the `main` branch or a known release for retrofits.
+1. Submit for pull request any changes into the main branch.
 1. Once approved the approvers will squash merge the pull request
 1. Delete the release branch and all "child" branches
 1. After GitHub Actions has finished, verify that a GitHub release has been created and there is a new corresponding GitHub package.
 1. Update the release description in GitHub
 
+### Versioning
+
+The version in the `package.json` file updates automatically when merged into the `main` branch.
+
+The new version is determined by the pull request merge commit message:
+
+- If the string "BREAKING CHANGE" or "major" is found anywhere in any of the commit messages or descriptions the major version will be incremented.
+- If the string "feat" or "minor" is found anywhere in any of the commit messages or descriptions the minor version will be incremented.
+- All else, the patch version will be incremented.
+
+See [gh-action-bump-version](https://github.com/phips28/gh-action-bump-version) for more information.
+
 ### Releases
 
-It maybe neccessary to update the release description and notes in GitHub after GitHub actions have been run.
+It is necessary to update the release description and notes in GitHub after GitHub actions have been run.
 
-Release title should contain the version and a short summary description. For example: `Version 1.1.0 - Accessibility fixes`
+Release title should contain the version and a short summary description. For example: `Version 2.1.0 - Accessibility fixes`
 
 The release body contains a description along with lists of items added, removed and modified. For example:
 
@@ -40,15 +51,25 @@ Changes:
 
 A test driven development (TDD) should be used when building react components. This means writing a test for a component before it is built. This will encourage wider code coverage and reduction on the dependance on snapshot tests.
 
-For every `.jsx`, and `.tsx` file, there should be a corresponding test file in the directory in the `/src/__tests__` directory. This ensures that if a component is moved to another application, all the tests testing that component can also be easily moved.
+The goal of testing to test the component how the user would test it in the browser. This means that private methods or components that are only consumed by other components do not need test directly testing those items. See [React testing library](https://testing-library.com/docs/react-testing-library/intro/#the-problem.)
+
+Tests should be saved in the `/src/__tests__` directory.
 
 If at all possible snapshot tests (where results are compared to a previous run's html) should be avoided.
 
-Text matching tests should be avoided, the use of [testIds](https://testing-library.com/docs/queries/bytestid/) is perferred.
+Text matching tests should be avoided, the use of [testIds](https://testing-library.com/docs/queries/bytestid/) is preferred.
 
 Because of the nature of the Node, Jest, React, and Redux environment, a very high level of test coverage (at least 85% lines covered) is expected.
 
 ---
+
+## TypeScript
+
+TypeScript will be used inside of the `src` folder.
+
+### React functional components only
+
+Class based components should not used. All react components should be functions and use hooks to maintain state.
 
 ## Code formatting
 
@@ -121,11 +142,11 @@ YES:
 
 ### SCSS
 
-Custom CSS should not be used in this application. Instead, Boostrap classes should be used.
+Custom CSS should not be used in this application. Instead, Bootstrap classes should be used.
 
-### Do not override linting
+### Do not override linting or TypeScript rules
 
-Overriding linting rules should be kept to an absolute minimum. Under normal coding situations there isn't a need to make exceptions to the linting rules. If you find yourself doing this, please reconsider what you are doing. All linting overriding statements should be reviewed and approved by the team after careful review
+Overriding linting or TypeScript rules should be kept to an absolute minimum. Under normal coding situations there isn't a need to make exceptions to the rules. If you find yourself doing this, please reconsider what you are doing. All override statements will be reviewed as part of the pull request process.
 
 ### Use native Javascript array methods instead of loops
 
@@ -175,7 +196,3 @@ const myFunction = async () => {
 };
 
 ```
-
-### Functional components
-
-Class based components should not used. All react components should be functions and use hooks to maintain state.

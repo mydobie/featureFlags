@@ -2,7 +2,7 @@
 
 ## Description:
 
-This simple package allows you mark itesm as feature flags and then set the availablity of those items through configuration. In addition there is a UI to change feature flags.
+This simple package allows you mark items as feature flags and then set the availability of those items through configuration. In addition there is a UI to change feature flags.
 
 This package can be used in any React application.
 
@@ -12,7 +12,7 @@ This package can be used in any React application.
 
 ## Getting Started - Adding this component to your project
 
-There are three methods of including this into your project.
+There are four methods of including this into your project.
 
 ### Method 1 create and use tgz file
 
@@ -43,7 +43,22 @@ dependencies: {
 
 Then run `npm install`.
 
-### Method 3 use GitHubs npm repository
+### Method 3 point to GitHub repo
+
+There are some tags in the Feature Flag repository that contain the package code. In the `package.json` file you can point directly to one of these tags.
+
+1. Go to `https://github.com/mydobie/featureFlags/tags` and look for tags that start with `npmbuild` followed by a version number. For example `npmbuild 2.1.0`.
+1. In your `package.json` file, point to this repository and the tag. For example:
+
+```
+dependencies: {
+  "@mydobie/feature-flags": "mydobie/featureFlags#npmbuild2.1.0",
+}
+```
+
+Then run `npm install`
+
+### Method 4 use GitHubs npm repository
 
 Instead of creating or downloading the `.tgz` file, you can have NPM pull this module as if it were any other module. This process has been documented in the [README_GITHUB](README_GITHUB.md) file.
 
@@ -51,7 +66,7 @@ Instead of creating or downloading the `.tgz` file, you can have NPM pull this m
 
 ## Notes
 
-This package is not optimized to be used direclty in the browser. It must included in an application that has a build process like using [Webpack](https://webpack.js.org/) for example. Webpack and the build command is built into applications based on [create react app](https://reactjs.org/docs/create-a-new-react-app.html#create-react-app).
+This package is not optimized to be used directly in the browser. It must included in an application that has a build process like using [Webpack](https://webpack.js.org/) for example. Webpack and the build command is built into applications based on [create react app](https://reactjs.org/docs/create-a-new-react-app.html#create-react-app).
 
 This application can be used in Javascript and Typescript based applications.
 
@@ -127,7 +142,19 @@ At the root of the project run the following commands in a terminal to verify yo
 
 ## Project structure
 
-All of the files that will be bundled into the package are located in the `src/compnent` directory. All other files in the `src` directory are demo pages so you can see see the feature flags in a browser during development.
+All of the files that will be bundled into the package are located in the `src/component` directory. All other files in the `src` directory are demo pages so you can see the feature flags in a browser during development.
+
+## Versioning
+
+The version of the application is done automatically when merging a pull request into the main branch. Do not increment the version on the package.json file manually. See [Contributing.md](CONTRUBUTING.md) for more information.
+
+## Special branches
+
+There are special branches that should not be committed to directly.
+
+- `main` - Branch that contains the latest published code. All changes into main should go through a pull request.
+- `gh-pages` - Branch that contains the files for the demo site. Updates to this branch happen automatically when there is a pull request is merged into `main`.
+- `npmbuild` - Branch used to create npmbuild tags. Updates to this branch happen automatically when there is a pull request is merged into `main`.
 
 ---
 
@@ -153,15 +180,15 @@ After installing dependencies, you can check to see what dependencies are out of
 
 You can check if there is any high or critical security advisories for installed dependencies by running `npm run npmAudit`.
 
-This application uses [Husky](https://github.com/typicode/husky) to automatically install Git Hooks that will check for security advisories at commit time. Commits will fail if any dependency has a high or critical security advisory. See the `husky` section in the `package.json` file. This means that you cannot commit code until high or critical security advisories are resolved. This was done intentionally because resolving high or critical security advisories is always the highest priority.
+This project uses [Husky](https://github.com/typicode/husky) to automatically install Git Hooks that will check for security advisories at commit time. Commits will fail if any dependency has a high or critical security advisory. See the `.husky/pre-commit` file. This means that you cannot commit code until high or critical security advisories are resolved. This was done intentionally because resolving high or critical security advisories is always the highest priority.
 
 ## Start the development server
 
 To start the development server, run `npm run start` in a terminal at the root of the project.
 
-This will start the application in development mode and open the application in a browser. Note the application will not build if there are any linting errors.
+This will serve the demo files in development mode and open them in a browser. Note that the demo files will not build if there are any linting errors.
 
-The application wil be available at [http://localhost:3000](http://localhost:3000) in a browser.
+The demo files will be available at [http://localhost:3000](http://localhost:3000) in a browser.
 
 If you need to change the port the application is running on, then change the `PORT` value in the `.env` file.
 
@@ -179,18 +206,71 @@ Test are run in [Jest](https://jestjs.io/docs/en/expect), use [React Testing Lib
 
 You can check the linting status of your files by running `npm run lint` in a terminal at the root of the project.
 
-To fix known issue, you can run `npm run lint:fix`. NOTE: You may need to run this command multiple times until you get a successful run in order to fix all issues.
+To fix known issues, you can run `npm run lint:fix`. NOTE: You may need to run this command multiple times until you get a successful run in order to fix all issues.
 
 If you want linting issues fixed as you save files, run `npm run lint:watch` in a terminal at the root of the project.
 
-More information on fixing linting errors is available at: [esLint](https://eslint.org/docs/rules/) | [Prettier](https://prettier.io/docs/en/install.html) |[airbnb JS style guide](https://github.com/airbnb/javascript)
+More information on fixing linting errors is available at: [esLint](https://eslint.org/docs/rules/), [Prettier](https://prettier.io/docs/en/install.html), and [airbnb JS style guide](https://github.com/airbnb/javascript)
 
 This application uses [Husky](https://github.com/typicode/husky) and [lint-staged](https://github.com/okonet/lint-staged) to automatically install Git Hooks that will check for linting errors on files at commit time. All linting errors must be fixed before changes can be committed to git.
 
 ### Build package
 
-To build and create a tar file that can be imported in other projects, run `npm run buildPackage`. Note that GitHub actions will automatically run this command and upload the package to GitHub packages when a PR is merged into the main branch.
+To build and create a tar file that can be imported in other projects, run `npm run buildPackage`. A standard NPM package `.tgz` file will be created at the root of the project.
 
 ## Build demo files
 
 This project contains demo files you can see the feature flags in action in order to assist with development. To build the demo files, run `npm run build` and the demo files will be located in the 'build' directory. Note that GitHub actions will automatically run this command and upload the contents to gh-pages branch when a PR is merged into the main branch.
+
+---
+
+## GitHub actions
+
+This repository uses numerous GitHub actions to run tests, create packages, and create tags. Many of these actions will happen automatically, but some of them can be run manually.
+
+The status of any actions can be viewed on the [actions page](https://github.com/mydobie/featureFlags/actions). The action files are located in the `.github/workflows` directory.
+
+### Run tests
+
+All pull requests will have the following tests run:
+
+- Linting
+- Check for high or critical security advisories
+- Unit tests
+- Check for adequate test coverage (see `utils/testCoverage.js`)
+- Verify that the code can be built as a package
+
+If you want to run these tests against another branch, you can do the following at any time:
+
+1. Go to [the test code actions page](https://github.com/mydobie/featureFlags/actions/workflows/test_code.yml) and click "Run workflow" drop down.
+1. Choose the branch you want to run the tests against.
+
+If you get a "Workflow does not exist or does not have a workflow_dispatch trigger in this branch" warning, be sure that the `.github/workflows/test_and_build.yml` file exists on the branch.
+
+### Update version, publish package, update demo site
+
+When a pull request is merged into the `main` branch, the following is automatically run.
+
+- Linting
+- Check for high or critical security advisories
+- Unit tests
+- Check for adequate test coverage (see `utils/testCoverage.js`)
+- Updates version on package.json (see [CONTRIBUTING for more information](CONTRIBUTING.md))
+- Creates a [release](https://github.com/mydobie/featureFlags/releases)
+- Publishes package to GitHub
+- Updates the [demo site](https://mydobie.github.io/featureFlags) on the `gh-pages` branch.
+- Updates the `npmbuild` branch
+
+**Note** that these series of actions can take a while. Check the [actions page](https://github.com/mydobie/featureFlags/actions) to see if there are any actions still running.
+
+**Note** that you will need to manually update the [release](https://github.com/mydobie/featureFlags/releases) text. See [CONTRIBUTING](CONTRIBUTING.md) on what is required for the release text.
+
+### Create a npmbuild tag
+
+The `npmbuild` tags can be used as another way for consumers to import this package. Unfortunately this action needs to be kicked off manually.
+
+1.  Merge a pull request into `main` and verify that all the [actions](https://github.com/mydobie/featureFlags/actions) have completed.
+1.  Go to the [npmbuild branch](https://github.com/mydobie/featureFlags/tree/npmbuild) and verify that the correct code and version is on that branch.
+1.  Go to the [tag npmbuild action page](https://github.com/mydobie/featureFlags/actions/workflows/tag_npmbuild.yml)
+1.  Click on the "Run workflow" dropdown and choose "npmbuild"
+1.  After the action is done running, go to the [tag list](https://github.com/mydobie/featureFlags/tags) and verify that the tag exists - starting with "npmbuild" and with the expected version in the name.
