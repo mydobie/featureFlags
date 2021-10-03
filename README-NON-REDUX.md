@@ -55,7 +55,11 @@ Component: `FeatureFlagsUI`
 
 Props:
 
-- onFeatureChange. Function called when any feature changes.
+- _onFeatureChange_ - Function that has two arguments, flagId (string) and isActive (boolean). This function is called when the status of a feature flag changes.
+
+- _onFeatureReset_ - Function that doesn't have arguments. This function is called when the user resets the feature flags back to their original status.
+
+- _readonly_ - Boolean if set to true the feature flags will be readonly and all switches/checkboxes will be disabled.
 
 Example:
 
@@ -64,6 +68,6 @@ import { FeatureFlagsUI } from @mydobie/feature-flags
 
 ...
 
-return <FeatureFlagsUI onFeatureChange={(featureArray)=>{ /* callbacks */}} />
+return <FeatureFlagsUI onFeatureChange={(flagId, isActive)=>{ /* other code */ }}  onFeatureReset={()=>{ /* other code */ }} />
 
 ```

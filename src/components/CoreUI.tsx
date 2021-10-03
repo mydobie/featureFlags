@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { ReactElement } from 'react';
 import { FlagType } from './featureFlags';
 import ExclamationCircle from './ExclamationCircle';
@@ -8,6 +7,13 @@ type CoreUIType = {
   onFeatureClick: (id: string, checked: boolean) => void;
   onFeatureReset: () => void;
   persist?: boolean;
+  readonly?: boolean;
+};
+
+export type FeatureFlagsUIProps = {
+  onFeatureChange?: (flagId?: string, isActive?: boolean) => void;
+  onFeatureReset?: () => void;
+  readonly?: boolean;
 };
 
 const CoreUI = ({
@@ -15,6 +21,7 @@ const CoreUI = ({
   onFeatureClick = () => {},
   onFeatureReset = () => {},
   persist = false,
+  readonly = false,
 }: CoreUIType): ReactElement => (
   <>
     <ul data-testid='coreFeatureFlagsUI'>
@@ -29,6 +36,7 @@ const CoreUI = ({
               onChange={(e) => {
                 onFeatureClick(feature.id, e.target.checked);
               }}
+              disabled={readonly}
             />{' '}
             <label
               className='form-check-label custom-control-label'
@@ -50,17 +58,21 @@ const CoreUI = ({
         data-testid='persistAlert'
       >
         <strong>NOTE:</strong> Feature flag values are persisting on page
-        refresh. This is not recommended for a production environment.
+        refresh. This is not recommended for a production environment. Check the{' '}
+        <code>persist</code> setting when calling <code>loadFeatureFlags</code>{' '}
+        or <code>loadFeatureFlagsRedux</code>.
       </p>
     ) : null}
-    <button
-      type='button'
-      className='btn btn-success'
-      data-testid='resetButton'
-      onClick={() => onFeatureReset()}
-    >
-      Reset flags to default
-    </button>
+    {!readonly ? (
+      <button
+        type='button'
+        className='btn btn-success'
+        data-testid='resetButton'
+        onClick={() => onFeatureReset()}
+      >
+        Reset flags to default
+      </button>
+    ) : null}
   </>
 );
 

@@ -6,14 +6,15 @@ import { Route, Switch } from 'react-router-dom';
 
 import ReduxPage from './pages/Redux';
 import LocalStoragePage from './pages/LocalStorage';
+import ReadOnlyPage from './pages/ReadOnly';
 
-import { HOME_ROUTE, LOCAL_STORAGE, REDUX } from './AppRouteNames';
+import { HOME_ROUTE, LOCAL_STORAGE, REDUX, READONLY } from './AppRouteNames';
 
 import Home from './pages/Home';
 import FourOhFour from './pages/FourOhFour';
 
 interface Props {
-  onFeatureChange?: () => void;
+  onFeatureChange?: (flagId?: string, isActive?: boolean) => void;
 }
 
 const AppRoutes = ({ onFeatureChange = () => {} }: Props): ReactElement => (
@@ -29,6 +30,10 @@ const AppRoutes = ({ onFeatureChange = () => {} }: Props): ReactElement => (
 
       <Route path={REDUX}>
         <ReduxPage />
+      </Route>
+
+      <Route path={READONLY}>
+        <ReadOnlyPage />
       </Route>
 
       <Route path='/'>

@@ -6,7 +6,10 @@ const Home = (): ReactElement => (
     <div className='row'>
       <div className='col'>
         <h1>Feature Flags demo</h1>
-        <p>This demo .... </p>
+        <p>
+          This simple package allows you mark items as feature flags and then
+          set the availability of those items through configuration.
+        </p>
       </div>
     </div>
     <div className='row'>

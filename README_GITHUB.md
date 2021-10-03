@@ -1,6 +1,6 @@
 # Getting this module directly from GitHub
 
-Instead of downloading the .tgz file, you can just include this module package in your dependencies in the package.json file and have NPM download the package.
+Instead of downloading the .tgz file or pointing directly to the Github repo, you can include this module package in your dependencies in the package.json file and have NPM download the package.
 
 ### Use GitHub as the NPM registry
 

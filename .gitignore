@@ -21,5 +21,6 @@ npm-debug.log*
 /lib
 .npmrc
 
+.env.development
 
 TODO.md
