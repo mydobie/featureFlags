@@ -59,6 +59,8 @@ Props:
 
 - _onFeatureReset_ - Function that doesn't have arguments. This function is called when the user resets the feature flags back to their original status.
 
+- _readonly_ - Boolean if set to true the feature flags will be readonly and all switches/checkboxes will be disabled.
+
 Example:
 
 ```
