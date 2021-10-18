@@ -16,7 +16,7 @@ In order to use these components, you need to ensure that the following are in y
 The first step is to load the feature flags into the application. This function should be called as soon as the application is rendered (usually contained in App.jsx or App.tsx)
 
 ```
-import { loadFeatureFlags, } from '@mydobie/feature-flags';
+import { loadFeatureFlags, } from '@mydobie/feature-flags/react';
 
 loadFeatureFlags( {
       features: myFlagJSONArray,
@@ -39,7 +39,7 @@ Where:
 The `isFeatureActive` function can be called. The first parameter that is the feature flag id and returns a boolean.
 
 ```
-import { isFeatureActive } from '@mydobie/feature-flags';
+import { isFeatureActive } from '@mydobie/feature-flags/react';
 
 const isMyFeatureActive isFeatureActive(myFeatureId)
 
@@ -64,7 +64,7 @@ Props:
 Example:
 
 ```
-import { FeatureFlagsUI } from @mydobie/feature-flags
+import { FeatureFlagsUI } from @mydobie/feature-flags/react
 
 ...
 
