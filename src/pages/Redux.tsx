@@ -1,17 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { ReactElement } from 'react';
-import { useSelector } from 'react-redux';
-import {
-  FeatureFlagsReduxUI,
-  isFeatureActive,
-  useIsFeatureActive,
-} from '../components';
+
+import { FeatureFlagsReduxUI, useIsFeatureActive } from '../components';
 
 import { VEGGIES, FRUITS } from '../FeatureFlagsConfig';
 
 const ReduxPage = (): ReactElement => {
   const isVeggies = useIsFeatureActive(VEGGIES);
-  const isFruits = useSelector((state) => isFeatureActive(FRUITS, state));
+  const isFruits = useIsFeatureActive(FRUITS);
   return (
     <div className='container'>
       <h1>Feature flags - redux</h1>

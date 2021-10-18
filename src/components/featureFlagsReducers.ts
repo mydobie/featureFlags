@@ -71,6 +71,7 @@ export const { loadFeatureFlagsRedux, editFeature, resetFeatures } =
 
 export default featureFlagSlice.reducer;
 
+/* *************** Selector *************** */
 export const useIsFeatureActive = (flag: string, reduxKey = 'FeatureFlags') =>
   useSelector((state: any) => state[reduxKey].features).find(
     (feature: FlagType) => feature.id === flag
