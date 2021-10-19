@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable no-param-reassign */
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable prettier/prettier */
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
 import { FlagType, featuresWithOverrides } from './featureFlags';
 
 interface FeatureFlagState {
@@ -72,3 +70,9 @@ export const { loadFeatureFlagsRedux, editFeature, resetFeatures } =
   featureFlagSlice.actions;
 
 export default featureFlagSlice.reducer;
+
+/* *************** Selector *************** */
+export const useIsFeatureActive = (flag: string, reduxKey = 'FeatureFlags') =>
+  useSelector((state: any) => state[reduxKey].features).find(
+    (feature: FlagType) => feature.id === flag
+  )?.active || false;

@@ -19,7 +19,7 @@ The following example assumes you are using `combineReducers`
 
 ```
 import { combineReducers } from '@reduxjs/toolkit';
-import { featureFlagsReducers } from '@mydobie/feature-flags';
+import { featureFlagsReducers } from '@mydobie/feature-flags/redux';
 
 export default combineReducers({ FeatureFlags: featureFlagsReducers });
 
@@ -33,7 +33,7 @@ The first step is to load the feature flags into the application. This function 
 
 ```
 import { useDispatch } from 'react-redux';
-import { loadFeatureFlagsRedux } from '@mydobie/feature-flags';
+import { loadFeatureFlagsRedux } from '@mydobie/feature-flags/redux';
 
 ...
 const App = () => {
@@ -60,16 +60,14 @@ Where:
 
 ## Checking feature status
 
-The `isFeatureActive` function can be called.
+The `useIsFeatureActive` hook can be called.
 
-The first parameter that is the feature flag id and returns a boolean.
-The second parameter is the current state. The state is normally set by using `useSelector` from react-redux.
+The only parameter that is the feature flag id and returns a boolean.
 
 ```
-import { useSelector } from 'react-redux';
-import { isFeatureActive } from '@mydobie/feature-flags';
+import { useIsFeatureActive } from '@mydobie/feature-flags/redux';
 
-const isMyFeatureActive =  useSelector((state) => isFeatureActive(myFeatureId, state));
+const isMyFeatureActive =  useIsFeatureActive(myFeatureId);
 
 ```
 
@@ -94,7 +92,7 @@ Props:
 Example:
 
 ```
-import { FeatureFlagsReduxUI } from @mydobie/feature-flags
+import { FeatureFlagsReduxUI } from @mydobie/feature-flags/redux
 
 ...
 
