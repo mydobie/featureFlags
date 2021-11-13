@@ -22,6 +22,7 @@ const LocalStoragePage = ({
         console.log('Feature flag ', id, 'is active:', isActive);
       }}
       onFeatureReset={() => {
+        onFeatureChange(); // this is passed to AppRoutes to force an app rerender
         // NOTE: This is a good place to put an ajax call
         // if there a need to track feature flag status changes
         // eslint-disable-next-line no-console

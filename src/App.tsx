@@ -23,15 +23,21 @@ loadFeatureFlags({
 
 const App = (): ReactElement => {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
-  useDispatch()(
-    loadFeatureFlagsRedux({
-      features: featureFlagsRedux || [],
-      overrides: JSON.parse(process.env.REACT_APP_FEATURE_FLAGS ?? '[]'),
-      persist:
-        process.env.REACT_APP_USE_LOCAL_STORAGE === 'true' &&
-        process.env.REACT_APP_FEATURE_FLAGS_PERSIST === 'true',
-    })
-  );
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(
+      loadFeatureFlagsRedux({
+        features: featureFlagsRedux || [],
+        overrides: JSON.parse(process.env.REACT_APP_FEATURE_FLAGS ?? '[]'),
+        persist:
+          process.env.REACT_APP_USE_LOCAL_STORAGE === 'true' &&
+          process.env.REACT_APP_FEATURE_FLAGS_PERSIST === 'true',
+      })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const basename = '';
   return (
     <div>

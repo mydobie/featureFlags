@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { combineReducers } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
 
-import { featureFlagsReducers } from '../../components';
+import { featureFlagsReducers } from '../../components/redux';
 
 export default combineReducers({ FeatureFlags: featureFlagsReducers });

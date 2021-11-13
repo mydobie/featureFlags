@@ -7,7 +7,6 @@ In order to use these components, you need to ensure that the following are in y
 - react
 - react-dom
 - react-redux
-- @reduxjs/toolkit
 
 ---
 
@@ -18,7 +17,7 @@ The first step in a redux-based application is to connect the feature flag reduc
 The following example assumes you are using `combineReducers`
 
 ```
-import { combineReducers } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
 import { featureFlagsReducers } from '@mydobie/feature-flags/redux';
 
 export default combineReducers({ FeatureFlags: featureFlagsReducers });

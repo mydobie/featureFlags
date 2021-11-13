@@ -1,59 +1,27 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable import/no-extraneous-dependencies */
-import {
-  configureStore,
-  ThunkAction,
-  Action,
-  // combineReducers,
-} from '@reduxjs/toolkit';
+/*
+This file creates the redux store.
+There normally isn't a need to modify this file
+*/
 
-import {
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist';
-
+import { createStore } from 'redux';
+import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-// import FeatureFlags from '../components/featureFlagsReducers';
-
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+// import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './reducers/index';
 
 const persistConfig = {
   key: 'root',
-  version: 1,
   storage,
+  stateReconciler: autoMergeLevel2,
 };
-const usePersister = process.env.REACT_APP_USE_LOCAL_STORAGE === 'true';
+let exportReducer = rootReducer;
 
-// const rootReducer = combineReducers({ FeatureFlags });
-
-const persistedReducer = usePersister
-  ? persistReducer(persistConfig, rootReducer)
-  : rootReducer;
-
-export const store = configureStore({
+if (process.env.REACT_APP_USE_LOCAL_STORAGE === 'true') {
   // @ts-ignore
-  reducer: persistedReducer,
-  // @ts-ignore
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
-});
+  exportReducer = persistReducer(persistConfig, rootReducer);
+}
+const exportCreateStore = () => createStore(exportReducer);
 
-export type AppDispatch = typeof store.dispatch;
-export type RootState =
-  | ReturnType<typeof rootReducer>
-  | ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+export default exportCreateStore;
