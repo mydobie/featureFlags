@@ -5,6 +5,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
+  "homepage": "https://mydobie.github.io/featureFlags/",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
@@ -65,12 +66,13 @@
     "immer": "9.0.6"
   },
   "scripts": {
-    "start": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts start",
+    "start": "npm run buildVersionsPage && REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts start",
     "d": "npm i",
+    "buildVersionsPage": "node utils/getVersions",
     "----------------------------------------------------------1": "",
-    "buildts": "tsc --project tsconfig-build-files.json",
+    "buildts": "npm run buildVersionsPage && tsc --project tsconfig-build-files.json",
     "build": "npm run d && npm run test && npm run npmAudit && npm run build:ci",
-    "build:ci": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts build",
+    "build:ci": "npm run buildVersionsPage && REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts build",
     "test": "react-scripts test --coverage  --passWithNoTests --testPathIgnorePatterns /helpers --watchAll=false ",
     "test:watch": "react-scripts test ",
     "test:update": "npm run test -- -u",
