@@ -1,34 +1,13 @@
 /* eslint-disable no-console */
 import React, { ReactElement } from 'react';
+import { useGetVersions } from '../js/hooks';
 
 const Home = (): ReactElement => {
-  const [bootstrap, setBootstrap] = React.useState(null);
-  const [reactRedux, setReactRedux] = React.useState(null);
+  const [versions, loadVersions] = useGetVersions();
 
   React.useEffect(() => {
-    // KKD made this a helper function
-    const getVersions = async () => {
-      try {
-        fetch('/featureFlags/versions.json')
-          .then((res) => res.json())
-          .then((response) => {
-            const versions = response;
-
-            if (versions) {
-              setBootstrap(versions.bootstrap);
-              setReactRedux(versions['react-redux']);
-            } else {
-              throw Error('Uncaught Error');
-            }
-          })
-          .catch(() => {
-            console.error('Error finding versions file');
-          });
-      } catch (_error) {
-        console.error('Error finding versions file');
-      }
-    };
-    getVersions();
+    loadVersions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -71,11 +50,13 @@ const Home = (): ReactElement => {
             </li>
             <li>
               <strong>React Redux: </strong>
-              {reactRedux}
+              {/*  @ts-ignore */}
+              {versions['react-redux']}
             </li>
             <li>
               <strong>Bootstrap CSS Version: </strong>
-              {bootstrap}
+              {/*  @ts-ignore */}
+              {versions.bootstrap}
             </li>
           </ul>
         </div>
