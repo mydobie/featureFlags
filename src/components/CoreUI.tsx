@@ -51,7 +51,7 @@ const CoreUI = ({
         </li>
       ))}
     </ul>
-    {persist ? (
+    {persist && !readonly ? (
       <p
         className='alert alert-secondary'
         role='alert'

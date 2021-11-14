@@ -6,10 +6,13 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import App from './App';
-import { store } from './redux/store';
+import configureStore from './redux/store';
 
 const usePersister = process.env.REACT_APP_USE_LOCAL_STORAGE === 'true';
 
+const store = configureStore();
+
+// @ts-ignore
 const persistor = usePersister ? persistStore(store) : undefined;
 
 const PeristorApp = usePersister ? (

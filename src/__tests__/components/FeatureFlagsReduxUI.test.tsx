@@ -3,8 +3,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { axe } from 'jest-axe';
-
-import { store } from '../../redux/store';
+import configureStore from '../../redux/store';
 import { loadFeatureFlagsRedux } from '../../components/featureFlagsReducers';
 
 import FeatureFlagsReduxUI from '../../components/FeatureFlagsReduxUI';
@@ -12,6 +11,7 @@ import { FlagType } from '../../components';
 
 describe('Feature Flags - local storage tests', () => {
   let featureList: FlagType[] = [];
+  const store = configureStore();
   beforeEach(() => {
     featureList = [
       {

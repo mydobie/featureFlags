@@ -1,9 +1,37 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { FlagType, featuresWithOverrides } from './featureFlags';
 
+const FEATURE_FLAGS_ADD = 'featureFlagsAdd';
+const FEATURE_FLAG_EDIT = 'featureFlagsEdit';
+const FEATURE_FLAGS_RESET = 'featureFlagsReset';
+
+/** Actions  */
+
+export const loadFeatureFlagsRedux = ({
+  features,
+  overrides = [],
+  persist = false,
+  reset,
+}: {
+  features: FlagType[];
+  overrides?: FlagType[];
+  persist?: boolean;
+  reset?: boolean; // deprecate in future version
+}) => ({
+  type: FEATURE_FLAGS_ADD,
+  payload: { features, overrides, persist, reset },
+});
+
+export const editFeatureRedux = (payload: { id: string; active: boolean }) => ({
+  type: FEATURE_FLAG_EDIT,
+  payload,
+});
+
+export const resetFeaturesRedux = () => ({ type: FEATURE_FLAGS_RESET });
+
+/** Reducer */
 interface FeatureFlagState {
   features: FlagType[];
   persist: boolean;
@@ -14,19 +42,12 @@ const initialState: FeatureFlagState = {
   persist: false,
 };
 
-export const featureFlagSlice = createSlice({
-  name: 'featureflag',
-  initialState,
-  reducers: {
-    loadFeatureFlagsRedux: (
-      state,
-      action: PayloadAction<{
-        features: FlagType[];
-        overrides?: FlagType[];
-        persist: boolean;
-        reset?: boolean; // deprecate in future version
-      }>
-    ) => {
+export const reducerFeatureFlags = (
+  state = initialState,
+  action: { type: string; payload: any }
+) => {
+  switch (action.type) {
+    case FEATURE_FLAGS_ADD: {
       const { features, overrides, persist, reset } = action.payload;
       const newFeatures: FlagType[] =
         reset || !persist ? [] : [...state.features];
@@ -42,34 +63,31 @@ export const featureFlagSlice = createSlice({
           }
         }
       );
-      state.persist = persist;
-      state.features = newFeatures;
-    },
-    editFeature: (state, action: PayloadAction<FlagType>) => {
+      return { ...state, persist, features: newFeatures };
+    }
+    case FEATURE_FLAG_EDIT: {
       const newFeatures: FlagType[] = [...state.features];
       const featureIndex = newFeatures.findIndex(
         (flag) => flag.id === action.payload.id
       );
 
       newFeatures[featureIndex].active = action.payload.active;
-      state.features = newFeatures;
-    },
-    resetFeatures: (state) => {
+      return { ...state, features: newFeatures };
+    }
+    case FEATURE_FLAGS_RESET: {
       const features = [...state.features];
       const newFeatures = features.map((feature: FlagType) => ({
         ...feature,
         active: feature.original,
       }));
-      // @ts-ignore
-      state.features = newFeatures;
-    },
-  },
-});
-
-export const { loadFeatureFlagsRedux, editFeature, resetFeatures } =
-  featureFlagSlice.actions;
-
-export default featureFlagSlice.reducer;
+      return { ...state, features: newFeatures };
+    }
+    default: {
+      return state;
+    }
+  }
+};
+export default reducerFeatureFlags;
 
 /* *************** Selector *************** */
 export const useIsFeatureActive = (flag: string, reduxKey = 'FeatureFlags') =>

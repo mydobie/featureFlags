@@ -35,8 +35,8 @@ jobs:
       - name: Build
         run: npm run build:ci
 
-      - name: Fix paths in index.html
-        run: node utils/resetPathIndex.js
+      # - name: Fix paths in index.html
+      #   run: node utils/resetPathIndex.js
 
       - name: Deploy to GH pages
         uses: JamesIves/github-pages-deploy-action@3.7.1

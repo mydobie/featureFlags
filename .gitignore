@@ -20,6 +20,7 @@ npm-debug.log*
 /dist
 /lib
 .npmrc
+/public/versions.json
 
 .env.development
 

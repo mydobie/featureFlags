@@ -17,30 +17,22 @@ const AppNavBar = (): ReactElement => {
     <nav>
       <ul className='nav'>
         <li className='nav-item'>
-          <NavLink
-            activeClassName='active'
-            className='nav-link'
-            to={HOME_ROUTE}
-          >
+          <NavLink className='nav-link' to={HOME_ROUTE}>
             Home
           </NavLink>
         </li>
         <li className='nav-item'>
-          <NavLink
-            activeClassName='active'
-            className='nav-link'
-            to={LOCAL_STORAGE}
-          >
+          <NavLink className='nav-link' to={LOCAL_STORAGE}>
             Local storage
           </NavLink>
         </li>
         <li className='nav-item'>
-          <NavLink activeClassName='active' className='nav-link' to={REDUX}>
+          <NavLink className='nav-link' to={REDUX}>
             Redux
           </NavLink>
         </li>
         <li className='nav-item'>
-          <NavLink activeClassName='active' className='nav-link' to={READONLY}>
+          <NavLink className='nav-link' to={READONLY}>
             Read only
           </NavLink>
         </li>

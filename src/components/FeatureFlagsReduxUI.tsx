@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CoreUI, { FeatureFlagsUIProps } from './CoreUI';
 
 import { getFeatureFlagsRedux, getPersistRedux } from './featureFlags';
-import { editFeature, resetFeatures } from './featureFlagsReducers';
+import { editFeatureRedux, resetFeaturesRedux } from './featureFlagsReducers';
 
 const FeatureFlagsReduxUI = ({
   onFeatureChange = () => {},
@@ -17,11 +17,11 @@ const FeatureFlagsReduxUI = ({
       <CoreUI
         features={useSelector(getFeatureFlagsRedux)}
         onFeatureClick={(id, checked) => {
-          dispatch(editFeature({ id, active: checked }));
+          dispatch(editFeatureRedux({ id, active: checked }));
           onFeatureChange(id, checked);
         }}
         onFeatureReset={() => {
-          dispatch(resetFeatures());
+          dispatch(resetFeaturesRedux());
           onFeatureReset();
         }}
         persist={useSelector(getPersistRedux)}
