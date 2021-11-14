@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable import/no-extraneous-dependencies */
 // Contains routing for entire application
 
 import React, { ReactElement } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import ReduxPage from './pages/Redux';
 import LocalStoragePage from './pages/LocalStorage';
@@ -19,27 +21,20 @@ interface Props {
 
 const AppRoutes = ({ onFeatureChange = () => {} }: Props): ReactElement => (
   <div>
-    <Switch>
-      <Route path={HOME_ROUTE} exact>
-        <Home />
-      </Route>
+    <Routes>
+      <Route path={HOME_ROUTE} element={<Home />} />
 
-      <Route path={LOCAL_STORAGE}>
-        <LocalStoragePage onFeatureChange={onFeatureChange} />
-      </Route>
+      <Route
+        path={LOCAL_STORAGE}
+        element={<LocalStoragePage onFeatureChange={onFeatureChange} />}
+      />
 
-      <Route path={REDUX}>
-        <ReduxPage />
-      </Route>
+      <Route path={REDUX} element={<ReduxPage />} />
 
-      <Route path={READONLY}>
-        <ReadOnlyPage />
-      </Route>
+      <Route path={READONLY} element={<ReadOnlyPage />} />
 
-      <Route path='/'>
-        <FourOhFour />
-      </Route>
-    </Switch>
+      <Route path='*' element={<FourOhFour />} />
+    </Routes>
   </div>
 );
 
