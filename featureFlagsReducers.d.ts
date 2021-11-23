@@ -27,25 +27,9 @@ export declare const editFeatureRedux: (payload: {
 export declare const resetFeaturesRedux: () => {
     type: string;
 };
-/** Reducer */
-interface FeatureFlagState {
-    features: FlagType[];
-    persist: boolean;
-}
-export declare const reducerFeatureFlags: (state: FeatureFlagState | undefined, action: {
+export declare const reducerFeatureFlags: (base: any, action: {
     type: string;
     payload: any;
-}) => {
-    persist: any;
-    features: FlagType[];
-} | {
-    features: {
-        active: boolean | undefined;
-        id: string;
-        description?: string | undefined;
-        original?: boolean | undefined;
-    }[];
-    persist: boolean;
-};
+}) => any;
 export default reducerFeatureFlags;
 export declare const useIsFeatureActive: (flag: string, reduxKey?: string) => any;
