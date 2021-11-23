@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { useSelector } from 'react-redux';
+import produce from 'immer';
 import { FlagType, featuresWithOverrides } from './featureFlags';
 
 const FEATURE_FLAGS_ADD = 'featureFlagsAdd';
@@ -42,51 +44,57 @@ const initialState: FeatureFlagState = {
   persist: false,
 };
 
-export const reducerFeatureFlags = (
-  state = initialState,
-  action: { type: string; payload: any }
-) => {
-  switch (action.type) {
-    case FEATURE_FLAGS_ADD: {
-      const { features, overrides, persist, reset } = action.payload;
-      const newFeatures: FlagType[] =
-        reset || !persist ? [] : [...state.features];
-      featuresWithOverrides(features, overrides).forEach(
-        (feature: FlagType) => {
-          const featureIndex = newFeatures.findIndex(
-            (f) => f.id === feature.id
-          );
-          if (featureIndex === -1) {
-            newFeatures.push({ ...feature, original: feature.active });
-          } else {
-            newFeatures[featureIndex].original = feature.active;
+export const reducerFeatureFlags = produce(
+  (state, action: { type: string; payload: any }) => {
+    if (!state) {
+      return initialState;
+    }
+    switch (action.type) {
+      case FEATURE_FLAGS_ADD: {
+        const { features, overrides, persist, reset } = action.payload;
+        const newFeatures: FlagType[] =
+          reset || !persist ? [] : [...state.features];
+        featuresWithOverrides(features, overrides).forEach(
+          (feature: FlagType) => {
+            const featureIndex = newFeatures.findIndex(
+              (f) => f.id === feature.id
+            );
+            if (featureIndex === -1) {
+              newFeatures.push({ ...feature, original: feature.active });
+            } else {
+              newFeatures[featureIndex].original = feature.active;
+            }
           }
-        }
-      );
-      return { ...state, persist, features: newFeatures };
-    }
-    case FEATURE_FLAG_EDIT: {
-      const newFeatures: FlagType[] = [...state.features];
-      const featureIndex = newFeatures.findIndex(
-        (flag) => flag.id === action.payload.id
-      );
+        );
+        state.persist = action.payload.persist;
+        state.features = newFeatures;
+        break;
+      }
+      case FEATURE_FLAG_EDIT: {
+        const newFeatures: FlagType[] = [...state.features];
+        const featureIndex = newFeatures.findIndex(
+          (flag) => flag.id === action.payload.id
+        );
 
-      newFeatures[featureIndex].active = action.payload.active;
-      return { ...state, features: newFeatures };
-    }
-    case FEATURE_FLAGS_RESET: {
-      const features = [...state.features];
-      const newFeatures = features.map((feature: FlagType) => ({
-        ...feature,
-        active: feature.original,
-      }));
-      return { ...state, features: newFeatures };
-    }
-    default: {
-      return state;
+        newFeatures[featureIndex].active = action.payload.active;
+        state.features = newFeatures;
+        break;
+      }
+      case FEATURE_FLAGS_RESET: {
+        const features = [...state.features];
+        const newFeatures = features.map((feature: FlagType) => ({
+          ...feature,
+          active: feature.original,
+        }));
+        state.features = newFeatures;
+        break;
+      }
+      default: {
+        break;
+      }
     }
   }
-};
+);
 export default reducerFeatureFlags;
 
 /* *************** Selector *************** */

@@ -20,6 +20,7 @@ const newPackageJSON = {
   jest: {},
   browserslist: {},
   files: ['**/*'],
+  resolutions: {},
 };
 
 fs.writeFileSync(
