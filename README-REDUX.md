@@ -6,6 +6,7 @@ In order to use these components, you need to ensure that the following are in y
 
 - react
 - react-dom
+- immer
 - react-redux
 
 ---
