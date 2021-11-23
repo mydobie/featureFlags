@@ -48,11 +48,8 @@ const initialState: FeatureFlagState = {
 export const reducerFeatureFlags = produce(
   (state, action: { type: string; payload: any }) => {
     if (!state) {
-      console.log('Empty state - setting to default');
       return initialState;
     }
-
-    console.log('Dispatch registred - action:', action);
     switch (action.type) {
       case FEATURE_FLAGS_ADD: {
         const { features, overrides, persist, reset } = action.payload;
