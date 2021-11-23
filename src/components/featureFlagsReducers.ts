@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable import/no-extraneous-dependencies */
 
-// https://immerjs.github.io/immer/example-setstate#redux--immer
 import { useSelector } from 'react-redux';
 import produce from 'immer';
 import { FlagType, featuresWithOverrides } from './featureFlags';
@@ -67,7 +66,6 @@ export const reducerFeatureFlags = produce(
             }
           }
         );
-        // return { ...state, persist, features: newFeatures };
         state.persist = action.payload.persist;
         state.features = newFeatures;
         break;
@@ -79,7 +77,6 @@ export const reducerFeatureFlags = produce(
         );
 
         newFeatures[featureIndex].active = action.payload.active;
-        // return { ...state, features: newFeatures };
         state.features = newFeatures;
         break;
       }
@@ -89,12 +86,10 @@ export const reducerFeatureFlags = produce(
           ...feature,
           active: feature.original,
         }));
-        // return { ...state, features: newFeatures };
         state.features = newFeatures;
         break;
       }
       default: {
-        // return state;
         break;
       }
     }
