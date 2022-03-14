@@ -1,7 +1,7 @@
 {
   "name": "@mydobie/feature-flags",
   "description": "",
-  "version": "2.3.1",
+  "version": "3.0.0",
   "main": "index.js",
   "types": "index.d.ts",
   "license": "MIT",
