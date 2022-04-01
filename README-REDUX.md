@@ -60,9 +60,13 @@ Where:
 
 ## Checking feature status
 
-The `useIsFeatureActive` hook can be called.
+There are two ways to check if a feature is active.
 
-The only parameter that is the feature flag id and returns a boolean.
+### useIsFeatureActive hook
+
+The `useIsFeatureActive` hook will return a boolean if the feature is active.
+
+The only parameter that is the feature flag id.
 
 ```
 import { useIsFeatureActive } from '@mydobie/feature-flags/redux';
@@ -71,7 +75,17 @@ const isMyFeatureActive =  useIsFeatureActive(myFeatureId);
 
 ```
 
-Note that this application assumes that the reducer key in `combineReducers` is set to 'FeatureFlags'. If it was set to something else, they key can be passed as the third parameter.
+### useFeatureFlagged hook
+
+The `useFeatureFlagged` hook will return a provided item if the feature is active or a provided fallback item (if provided) if the feature is not active. If the feature is not active and no fallback item is provided, the hook will return null.
+
+```
+import { useFeatureFlagged } from '@mydobie/feature-flags/redux';
+
+const message =  useFeatureFlagged(myFeatureId, (<p>Hello world</p>));
+
+
+Note that this application assumes that the reducer key in `combineReducers` is set to 'FeatureFlags'. If it was set to something else, they key can be passed as the last parameter in either the `useIsFeatureActive` or `useFeatureFlagged` hooks.
 
 ---
 
@@ -92,10 +106,13 @@ Props:
 Example:
 
 ```
+
 import { FeatureFlagsReduxUI } from @mydobie/feature-flags/redux
 
 ...
 
-return <FeatureFlagsReduxUI  onFeatureChange={(flagId, isActive)=>{ /* other code */ }}  onFeatureReset={()=>{ /* other code */ }} />
+return <FeatureFlagsReduxUI onFeatureChange={(flagId, isActive)=>{ /_ other code _/ }} onFeatureReset={()=>{ /_ other code _/ }} />
+
+```
 
 ```

@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { FeatureFlagsUI, isFeatureActive } from '../components';
+import { FeatureFlagsUI, isFeatureActive, featureFlagged } from '../components';
 
 import { COLORS, DINOS } from '../FeatureFlagsConfig';
 
@@ -43,7 +43,8 @@ const LocalStoragePage = ({
         </p>
       </div>
     ) : null}
-    {isFeatureActive(DINOS) ? (
+    {featureFlagged(
+      DINOS,
       <div>
         <hr />
         <h2>Dinos content</h2>
@@ -56,7 +57,7 @@ const LocalStoragePage = ({
           Stenopelix Ornatotholus Cystosaurus Struthiosaurus Rileyasuchus.
         </p>
       </div>
-    ) : null}
+    )}
   </div>
 );
 

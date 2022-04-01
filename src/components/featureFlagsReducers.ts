@@ -102,3 +102,10 @@ export const useIsFeatureActive = (flag: string, reduxKey = 'FeatureFlags') =>
   useSelector((state: any) => state[reduxKey].features).find(
     (feature: FlagType) => feature.id === flag
   )?.active || false;
+
+export const useFeatureFlagged = (
+  flag: string,
+  activeItem: any,
+  fallback: any = null,
+  reduxKey: string | undefined = undefined
+) => (useIsFeatureActive(flag, reduxKey) ? activeItem : fallback);

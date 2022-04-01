@@ -68,7 +68,7 @@ Instead of creating or downloading the `.tgz` file, you can have NPM pull this m
 
 This package is not optimized to be used directly in the browser. It must included in an application that has a build process like using [Webpack](https://webpack.js.org/) for example. Webpack and the build command is built into applications based on [create react app](https://reactjs.org/docs/create-a-new-react-app.html#create-react-app).
 
-This application can be used in Javascript and Typescript based applications.
+This application can be used both Javascript (jsx) and Typescript (tsx) based applications.
 
 ---
 

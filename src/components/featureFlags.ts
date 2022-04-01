@@ -109,6 +109,14 @@ export const isFeatureActive = (
   );
 };
 
+export const featureFlagged = (
+  flag: string,
+  activeItem: any,
+  fallback: any = null,
+  reduxState: any = undefined,
+  reduxKey: string | undefined = undefined
+) => (isFeatureActive(flag, reduxState, reduxKey) ? activeItem : fallback);
+
 /* ****************************************** */
 export const useLocalStorage = (
   type: string,

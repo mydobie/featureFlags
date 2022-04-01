@@ -1,12 +1,30 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { ReactElement } from 'react';
 
-import { FeatureFlagsReduxUI, useIsFeatureActive } from '../components';
+import {
+  FeatureFlagsReduxUI,
+  useIsFeatureActive,
+  useFeatureFlagged,
+} from '../components';
 
 import { VEGGIES, FRUITS } from '../FeatureFlagsConfig';
 
 const ReduxPage = (): ReactElement => {
-  const isVeggies = useIsFeatureActive(VEGGIES);
+  const veggies = useFeatureFlagged(
+    VEGGIES,
+    <div>
+      <hr />
+      <h2>Veggie content</h2>
+      <p>
+        Fiery fruit hot Thai super chili red amazon pepper with Thai sun pepper
+        red lentil curry tabasco pepper summertime crumbled lentils blueberries
+        crunchy seaweed basil roasted peanuts tofu avocado dressing drizzle
+        orange naga viper cremini mushrooms alfalfa sprouts picnic salad green
+        pepper black bean wraps dark and stormy overflowing a delicious meal
+        leek lychee.
+      </p>
+    </div>
+  );
   const isFruits = useIsFeatureActive(FRUITS);
   return (
     <div className='container'>
@@ -41,20 +59,7 @@ const ReduxPage = (): ReactElement => {
         </div>
       ) : null}
 
-      {isVeggies ? (
-        <div>
-          <hr />
-          <h2>Veggie content</h2>
-          <p>
-            Fiery fruit hot Thai super chili red amazon pepper with Thai sun
-            pepper red lentil curry tabasco pepper summertime crumbled lentils
-            blueberries crunchy seaweed basil roasted peanuts tofu avocado
-            dressing drizzle orange naga viper cremini mushrooms alfalfa sprouts
-            picnic salad green pepper black bean wraps dark and stormy
-            overflowing a delicious meal leek lychee.
-          </p>
-        </div>
-      ) : null}
+      {veggies}
     </div>
   );
 };
