@@ -16,6 +16,7 @@ export declare const getFeatureFlagsRedux: (state: any) => FlagType[];
 export declare const getPersistRedux: (state: any) => boolean;
 export declare const editFeatureFlag: (id: string, active: boolean) => void;
 export declare const isFeatureActive: (flag: string, reduxState?: any, reduxKey?: string) => boolean;
+export declare const featureFlagged: (flag: string, activeItem: any, fallback?: any, reduxState?: any, reduxKey?: string | undefined) => any;
 export declare const useLocalStorage: (type: string, initialValue?: any) => [any, (value: any) => void];
 /** Loads feature flag settings from config file  */
 export declare const loadFeatureFlags: ({ features, persist, overrides, }: LoadFeatureFlagsType) => FlagType[];

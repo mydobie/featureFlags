@@ -33,3 +33,4 @@ export declare const reducerFeatureFlags: (base: any, action: {
 }) => any;
 export default reducerFeatureFlags;
 export declare const useIsFeatureActive: (flag: string, reduxKey?: string) => any;
+export declare const useFeatureFlagged: (flag: string, activeItem: any, fallback?: any, reduxKey?: string | undefined) => any;
