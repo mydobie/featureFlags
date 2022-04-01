@@ -13,9 +13,10 @@ import {
   getFeatureFlagsRedux,
   getPersistRedux,
   FlagType,
+  featureFlagged,
 } from '../../components';
 
-// /* ************** LOCALSTORAGE TESTS ******************* */
+// /* ************** LOCAL STORAGE TESTS ******************* */
 describe('Core feature flag functions - non REDUX', () => {
   let featureList: FlagType[] = [];
   beforeEach(() => {
@@ -282,5 +283,14 @@ describe('Core feature flag functions - REDUX', () => {
   test('Is feature active returns value from state', () => {
     expect(isFeatureActive('VEGGIES', initialState)).toBeTruthy();
     expect(isFeatureActive('FRUITS', initialState)).toBeFalsy();
+  });
+
+  test('FeatureFlagged returns sent item or fallback', () => {
+    expect(featureFlagged('VEGGIES', 'myVeggie', null, initialState)).toEqual(
+      'myVeggie'
+    );
+    expect(
+      featureFlagged('FRUITS', 'myFruits', 'noFruit', initialState)
+    ).toEqual('noFruit');
   });
 });

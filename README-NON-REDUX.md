@@ -34,9 +34,13 @@ Where:
 
 ---
 
-### Checking feature status
+## Checking feature status
 
-The `isFeatureActive` function can be called. The first parameter that is the feature flag id and returns a boolean.
+There are two ways to check if a feature is active.
+
+### isFeatureActive
+
+The `isFeatureActive` function will return a boolean. The first parameter that is the feature flag id.
 
 ```
 import { isFeatureActive } from '@mydobie/feature-flags/react';
@@ -44,6 +48,33 @@ import { isFeatureActive } from '@mydobie/feature-flags/react';
 const isMyFeatureActive isFeatureActive(myFeatureId)
 
 ```
+
+### featureFlagged
+
+The `featureFlagged` function will return a provided item if the feature is active or a provided fallback item (if provided) if the feature is not active. If the feature is not active and no fallback item is provided, the function will return null.
+
+```
+import { featureFlagged } from '@mydobie/feature-flags/react';
+
+const message =  featureFlagged(myFeatureId, (<p>Hello world</p>));
+
+```
+
+### Checking feature status by passing redux store
+
+Both method can be used with redux if you pass the entire store along with the main featureFlag key. This isn't recommended, but might be useful for older class-based functions that use the connect functionality.
+
+Example:
+
+```
+import { isFeatureActive, featureFlagged } from '@mydobie/feature-flags/react';
+
+const isMyFeatureActive isFeatureActive(myFeatureId, myStore, 'FeatureFlags');
+const message =  featureFlagged(myFeatureId, (<p>Hello world</p>),null, myStore, 'FeatureFlags');
+
+```
+
+NOTE: This method is not recommended and is only provided for backwards compatibility.
 
 ---
 
@@ -64,10 +95,11 @@ Props:
 Example:
 
 ```
+
 import { FeatureFlagsUI } from @mydobie/feature-flags/react
 
 ...
 
-return <FeatureFlagsUI onFeatureChange={(flagId, isActive)=>{ /* other code */ }}  onFeatureReset={()=>{ /* other code */ }} />
+return <FeatureFlagsUI onFeatureChange={(flagId, isActive)=>{ /_ other code _/ }} onFeatureReset={()=>{ /_ other code _/ }} />
 
 ```
