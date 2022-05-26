@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { FeatureFlagsUI, isFeatureActive, featureFlagged } from '../components';
+import ExclamationCircle from './images/ExclamationCircle';
 
 import { COLORS, DINOS } from '../FeatureFlagsConfig';
 
@@ -28,6 +29,7 @@ const LocalStoragePage = ({
         // eslint-disable-next-line no-console
         console.log('Local storage based features have been reset');
       }}
+      notDefaultIndicator={<ExclamationCircle />}
     />
 
     {isFeatureActive(COLORS) ? (

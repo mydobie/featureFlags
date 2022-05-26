@@ -113,7 +113,7 @@ describe('Feature Flags - local storage tests', () => {
     expect(screen.queryAllByTestId('flagNotInitialWarning')).toHaveLength(1);
   });
 
-  test.todo('Feature are overritten when override array');
+  test.todo('Feature are over written when override array');
 
   test('If persist is not set, warning is  not shown', () => {
     store.dispatch(
@@ -217,5 +217,44 @@ describe('Feature Flags - local storage tests', () => {
     expect(
       listItem?.querySelector('[data-label-description]')
     ).not.toBeInTheDocument();
+  });
+
+  it('Not default element is shown if a custom one is not passed', () => {
+    const { container } = render(
+      <Provider store={store}>
+        <FeatureFlagsReduxUI />
+      </Provider>
+    );
+
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    fireEvent.click(checkboxes[0]);
+
+    // ensure that warning icon is shown
+    expect(screen.queryAllByTestId('flagNotInitialWarning')).toHaveLength(1);
+    expect(screen.queryAllByTestId('notDefaultIndicatorDefault')).toHaveLength(
+      1
+    );
+  });
+
+  it('Custom not default element is shown', () => {
+    const { container } = render(
+      <Provider store={store}>
+        <FeatureFlagsReduxUI
+          notDefaultIndicator={
+            <div data-testid='customTestIndicator'>Hello</div>
+          }
+        />
+      </Provider>
+    );
+
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    fireEvent.click(checkboxes[0]);
+
+    // ensure that warning icon is shown
+    expect(screen.queryAllByTestId('flagNotInitialWarning')).toHaveLength(1);
+    expect(screen.queryAllByTestId('notDefaultIndicatorDefault')).toHaveLength(
+      0
+    );
+    expect(screen.queryAllByTestId('customTestIndicator')).toHaveLength(1);
   });
 });

@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import { FlagType } from './featureFlags';
-import ExclamationCircle from './ExclamationCircle';
 
 type CoreUIType = {
   features: FlagType[];
@@ -8,12 +7,14 @@ type CoreUIType = {
   onFeatureReset: () => void;
   persist?: boolean;
   readonly?: boolean;
+  notDefaultIndicator?: ReactElement;
 };
 
 export type FeatureFlagsUIProps = {
   onFeatureChange?: (flagId?: string, isActive?: boolean) => void;
   onFeatureReset?: () => void;
   readonly?: boolean;
+  notDefaultIndicator?: ReactElement;
 };
 
 const CoreUI = ({
@@ -22,6 +23,14 @@ const CoreUI = ({
   onFeatureReset = () => {},
   persist = false,
   readonly = false,
+  notDefaultIndicator = (
+    <span
+      className='badge badge-pill badge-info rounded-pill bg-info text-dark'
+      data-testid='notDefaultIndicatorDefault'
+    >
+      Changed
+    </span>
+  ),
 }: CoreUIType): ReactElement => (
   <>
     <ul data-testid='coreFeatureFlagsUI'>
@@ -42,9 +51,12 @@ const CoreUI = ({
               className='form-check-label custom-control-label font-weight-bold fw-bold'
               htmlFor={feature.id}
             >
-              {feature.title ?? feature.id}{' '}
+              {feature.title ?? feature.id}
               {feature.active !== feature.original ? (
-                <ExclamationCircle />
+                <span data-testid='flagNotInitialWarning'>
+                  {' '}
+                  {notDefaultIndicator}
+                </span>
               ) : null}
             </label>
             {feature.description ? (

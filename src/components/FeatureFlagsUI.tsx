@@ -12,6 +12,7 @@ const FeatureFlagsUI = ({
   onFeatureChange = () => {},
   onFeatureReset = () => {},
   readonly = false,
+  notDefaultIndicator,
 }: FeatureFlagsUIProps): ReactElement => {
   const [features, setFeatures] = useLocalStorage(FEATURE_FLAGS);
   const [persist] = useLocalStorage(FEATURE_FLAGS_PERSIST);
@@ -34,6 +35,7 @@ const FeatureFlagsUI = ({
           onFeatureReset();
         }}
         readonly={readonly}
+        notDefaultIndicator={notDefaultIndicator}
       />
     </>
   );

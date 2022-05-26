@@ -181,4 +181,35 @@ describe('Feature Flags - local storage tests', () => {
       listItem?.querySelector('[data-label-description]')
     ).not.toBeInTheDocument();
   });
+
+  it('Not default element is shown if a custom one is not passed', () => {
+    const { container } = render(<FeatureFlagsUI />);
+
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    fireEvent.click(checkboxes[0]);
+
+    // ensure that warning icon is shown
+    expect(screen.queryAllByTestId('flagNotInitialWarning')).toHaveLength(1);
+    expect(screen.queryAllByTestId('notDefaultIndicatorDefault')).toHaveLength(
+      1
+    );
+  });
+
+  it('Custom not default element is shown', () => {
+    const { container } = render(
+      <FeatureFlagsUI
+        notDefaultIndicator={<div data-testid='customTestIndicator'>Hello</div>}
+      />
+    );
+
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    fireEvent.click(checkboxes[0]);
+
+    // ensure that warning icon is shown
+    expect(screen.queryAllByTestId('flagNotInitialWarning')).toHaveLength(1);
+    expect(screen.queryAllByTestId('notDefaultIndicatorDefault')).toHaveLength(
+      0
+    );
+    expect(screen.queryAllByTestId('customTestIndicator')).toHaveLength(1);
+  });
 });
