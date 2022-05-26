@@ -87,15 +87,19 @@ const myFlagJSONArray = [
   {
     id: 'FRUITS',
     active: false,
-    description: 'Fruit list',
+    title: 'Fruit list',
+    description: 'Show fruit list',
   },
   {
     id: 'VEGGIES',
     active: true,
-    description: 'Vegetable list',
+    title: 'Vegetable list',
+    description: 'Show vegetable list',
   },
 ];
 ```
+
+**NOTE** that only id is required. The rest of the properties are optional.
 
 ### Typescript
 

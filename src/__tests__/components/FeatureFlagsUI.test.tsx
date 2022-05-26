@@ -13,12 +13,13 @@ describe('Feature Flags - local storage tests', () => {
       {
         id: 'FRUITS',
         active: false,
-        description: 'Fruit list',
+        title: 'Fruit list',
+        description: 'This is the fruit list.',
       },
       {
         id: 'VEGGIES',
         active: true,
-        description: 'Vegetable list',
+        title: 'Vegetable list',
       },
     ];
     loadFeatureFlags({ features: featureList, persist: false });
@@ -54,7 +55,20 @@ describe('Feature Flags - local storage tests', () => {
       expect(
         // @ts-ignore
         listItems.item(index).querySelector('label').innerHTML.trim()
-      ).toEqual(flag.description);
+      ).toEqual(flag.title);
+
+      if (flag.description) {
+        expect(
+          listItems
+            .item(index)
+            .querySelector('[data-label-description]')
+            ?.innerHTML.trim()
+        ).toEqual(flag.description);
+      } else {
+        expect(
+          listItems.item(index).querySelector('[data-label-description]')
+        ).not.toBeInTheDocument();
+      }
     });
   });
 
@@ -145,5 +159,26 @@ describe('Feature Flags - local storage tests', () => {
     checkboxes.forEach((checkbox) => {
       expect(checkbox).toBeDisabled();
     });
+  });
+
+  test('Feature flag displays without optional items', () => {
+    localStorage.clear();
+    featureList = [
+      {
+        id: 'FRUITS',
+      },
+    ];
+
+    loadFeatureFlags({ features: featureList, persist: false });
+    const { container } = render(<FeatureFlagsUI />);
+    const listItem = container.querySelector('li');
+
+    expect(listItem?.querySelector('input')?.checked).toBeFalsy();
+    expect(listItem?.querySelector('label')?.innerHTML.trim()).toEqual(
+      featureList[0].id
+    );
+    expect(
+      listItem?.querySelector('[data-label-description]')
+    ).not.toBeInTheDocument();
   });
 });

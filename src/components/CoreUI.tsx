@@ -39,14 +39,22 @@ const CoreUI = ({
               disabled={readonly}
             />{' '}
             <label
-              className='form-check-label custom-control-label'
+              className='form-check-label custom-control-label font-weight-bold fw-bold'
               htmlFor={feature.id}
             >
-              {feature.description ?? feature.id}{' '}
+              {feature.title ?? feature.id}{' '}
               {feature.active !== feature.original ? (
                 <ExclamationCircle />
               ) : null}
             </label>
+            {feature.description ? (
+              <div
+                className='text-muted font-italic fst-italic'
+                data-label-description
+              >
+                {feature.description}
+              </div>
+            ) : null}
           </div>
         </li>
       ))}

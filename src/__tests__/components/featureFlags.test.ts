@@ -24,12 +24,12 @@ describe('Core feature flag functions - non REDUX', () => {
       {
         id: 'FRUITS',
         active: false,
-        description: 'Fruit list',
+        title: 'Fruit list',
       },
       {
         id: 'VEGGIES',
         active: true,
-        description: 'Vegetable list',
+        title: 'Vegetable list',
       },
     ];
   });
@@ -42,20 +42,20 @@ describe('Core feature flag functions - non REDUX', () => {
     const overridesArray = [
       { id: 'FRUITS', active: false },
       { id: 'VEGGIES', active: false },
-      { id: 'CANDY', active: true, description: 'Candy!' },
+      { id: 'CANDY', active: true, title: 'Candy!' },
     ];
     const expected = [
       {
         id: 'FRUITS',
         active: false,
-        description: 'Fruit list',
+        title: 'Fruit list',
       },
       {
         id: 'VEGGIES',
         active: false,
-        description: 'Vegetable list',
+        title: 'Vegetable list',
       },
-      { id: 'CANDY', active: true, description: 'Candy!' },
+      { id: 'CANDY', active: true, title: 'Candy!' },
     ];
 
     const withOverrides = featuresWithOverrides(
@@ -89,9 +89,9 @@ describe('Core feature flag functions - non REDUX', () => {
       {
         id: 'VEGGIES',
         active: false,
-        description: 'Vegetable list',
+        title: 'Vegetable list',
       },
-      { id: 'CANDY', active: true, description: 'Candy!' },
+      { id: 'CANDY', active: true, title: 'Candy!' },
     ]);
     localStorage.setItem(FEATURE_FLAGS, existing);
     expect(localStorage.getItem(FEATURE_FLAGS)).not.toEqual(null);
@@ -113,10 +113,10 @@ describe('Core feature flag functions - non REDUX', () => {
       {
         id: 'VEGGIES',
         active: false,
-        description: 'Vegetable list',
+        title: 'Vegetable list',
         original: false,
       },
-      { id: 'CANDY', active: true, description: 'Candy!', original: true },
+      { id: 'CANDY', active: true, title: 'Candy!', original: true },
     ]);
     localStorage.setItem(FEATURE_FLAGS, existing);
     expect(localStorage.getItem(FEATURE_FLAGS)).not.toEqual(null);
@@ -126,14 +126,14 @@ describe('Core feature flag functions - non REDUX', () => {
       {
         id: 'VEGGIES',
         active: false,
-        description: 'Vegetable list',
+        title: 'Vegetable list',
         original: true,
       },
-      { id: 'CANDY', active: true, description: 'Candy!', original: true },
+      { id: 'CANDY', active: true, title: 'Candy!', original: true },
       {
         id: 'FRUITS',
         active: false,
-        description: 'Fruit list',
+        title: 'Fruit list',
         original: false,
       },
     ];
@@ -150,13 +150,13 @@ describe('Core feature flag functions - non REDUX', () => {
       {
         id: 'VEGGIES',
         active: false,
-        description: 'Vegetable list',
+        title: 'Vegetable list',
         original: true,
       },
       {
         id: 'FRUITS',
         active: false,
-        description: 'Fruit list',
+        title: 'Fruit list',
         original: false,
       },
     ];
@@ -168,13 +168,13 @@ describe('Core feature flag functions - non REDUX', () => {
       {
         id: 'VEGGIES',
         active: true,
-        description: 'Vegetable list',
+        title: 'Vegetable list',
         original: true,
       },
       {
         id: 'FRUITS',
         active: false,
-        description: 'Fruit list',
+        title: 'Fruit list',
         original: false,
       },
     ];
@@ -250,13 +250,13 @@ describe('Core feature flag functions - REDUX', () => {
         features: [
           {
             id: 'FRUITS',
-            description: 'Fruit list',
+            title: 'Fruit list',
             active: false,
             original: true,
           },
           {
             id: 'VEGGIES',
-            description: 'Vegetable list',
+            title: 'Vegetable list',
             active: true,
             original: true,
           },
