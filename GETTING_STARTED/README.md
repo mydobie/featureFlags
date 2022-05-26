@@ -29,10 +29,6 @@ In order to keep the project organized, the project has the following structure:
 
   - `/src/pages` => High level components that are called by the router
     - `/src/pages/SAMPLE.jsx` => Sample component that can be used as a template.
-  - `/src/scss` => Contains application-wide (aka theming ) scss.
-    - `/src/scss/_variables.scss` => Overrides of Bootstrap main variables
-    - `/src/scss/_custom.scss` => Custom css rules. Note this should be application-wide rules
-    - `/src/scss/index.scss` => List of Bootstrap includes. Disable any scss for Bootstrap features that are not in use
   - `/src/App.jsx` => Contains any items that should be on all "pages" including header and footers
   - `/src/AppNavBar.jsx` => Main navigation bar for the entire application
   - `/src/AppRouteNames.js` => Lists all the routes so they can imported into both the AppRoutes and AppNavBar files.

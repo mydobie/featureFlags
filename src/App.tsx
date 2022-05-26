@@ -7,7 +7,6 @@ import React, { ReactElement, useReducer } from 'react';
 import { HashRouter as Router } from 'react-router-dom'; // Use `HashRouter as Router` when you can't control the URL ... like GitHub pages
 import AppNavBar from './AppNavBar';
 import AppRoutes from './AppRoutes';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { loadFeatureFlags, loadFeatureFlagsRedux } from './components';
 
 import {
