@@ -14,24 +14,24 @@
     "lib/**/*"
   ],
   "engines": {
-    "node": "14"
+    "node": "14 || 16"
   },
   "dependencies": {
+    "immer": "^9.0.14",
     "react": "17.0.0 - 18.999.999",
-    "react-dom": "17.0.0 - 18.999.999",
-    "immer": "^9.0.12"
+    "react-dom": "17.0.0 - 18.999.999"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^13.0.0",
     "@testing-library/react-hooks": "^7.0.2",
     "@testing-library/user-event": "^14.0.3",
+    "@types/jest-axe": "^3.5.3",
     "@typescript-eslint/eslint-plugin": "^5.14.0",
     "@typescript-eslint/parser": "^5.14.0",
-    "@types/jest-axe": "^3.5.3",
     "bootstrap": "^5.1.3",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-typescript": "16.1.4",
+    "eslint-config-airbnb-typescript": "17.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jest": "^26.1.1",
@@ -40,29 +40,26 @@
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-watch": "^8.0.0",
-    "husky": "^7.0.4",
+    "husky": "^8.0.1",
     "jest-axe": "^6.0.0",
     "lint-staged": "^12.3.5",
     "onchange": "^7.1.0",
     "prettier": "^2.5.1",
-    "react-redux": "^7.2.6",
+    "react-redux": "^8.0.2",
     "react-router": "^6.2.2",
     "react-router-dom": "^6.2.2",
-    "react-scripts": "^5.0.0",
+    "react-scripts": "^5.0.1",
     "redux": "^4.1.2",
     "redux-mock-store": "^1.5.4",
     "redux-persist": "^6.0.0",
     "typescript": "^4.6.2",
-    "uglify-js": "^3.15.3"
+    "uglify-js": "^3.15.5"
   },
   "// resolutions": [
     "Pin a package to a particular version.",
     "Only use to resolve security advisories",
     "See https://www.npmjs.com/package/npm-force-resolutions"
   ],
-  "resolutions": {
-    "nth-check": ">=2.0.1"
-  },
   "scripts": {
     "start": "npm run buildVersionsPage && REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts start",
     "d": "npm i",
@@ -92,7 +89,6 @@
     "npmAudit": "npm audit -audit-level high --production",
     "buildPackage": "npm run d && npm run npmAudit && npm run test && npm run buildPackage:ci",
     "buildPackage:ci": "bash  utils/buildPackage.sh",
-    "preinstall": "npx npm-force-resolutions",
     "prepare": "husky install"
   },
   "eslintConfig": {
