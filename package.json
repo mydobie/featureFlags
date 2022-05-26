@@ -60,13 +60,12 @@
     "See https://www.npmjs.com/package/npm-force-resolutions"
   ],
   "scripts": {
-    "start": "npm run buildVersionsPage && REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts start",
+    "start": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts start",
     "d": "npm i",
-    "buildVersionsPage": "node utils/getVersions",
     "----------------------------------------------------------1": "",
-    "buildts": "npm run buildVersionsPage && tsc --project tsconfig-build-files.json",
+    "buildts": "tsc --project tsconfig-build-files.json",
     "build": "npm run d && npm run test && npm run npmAudit && npm run build:ci",
-    "build:ci": "npm run buildVersionsPage && REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts build",
+    "build:ci": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts build",
     "test": "react-scripts test --coverage  --passWithNoTests --testPathIgnorePatterns /helpers --watchAll=false ",
     "test:watch": "react-scripts test ",
     "test:update": "npm run test -- -u",
