@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { FlagType } from './featureFlags';
+import NoFlags from './NoFlags';
 
 type CoreUIType = {
   features: FlagType[];
@@ -31,69 +32,72 @@ const CoreUI = ({
       Changed
     </span>
   ),
-}: CoreUIType): ReactElement => (
-  <>
-    <ul data-testid='coreFeatureFlagsUI'>
-      {features.map((feature) => (
-        <li key={feature.id}>
-          <div className='form-check form-switch custom-control custom-switch'>
-            <input
-              className='form-check-input custom-control-input'
-              type='checkbox'
-              id={feature.id}
-              checked={feature.active}
-              onChange={(e) => {
-                onFeatureClick(feature.id, e.target.checked);
-              }}
-              disabled={readonly}
-            />{' '}
-            <label
-              className='form-check-label custom-control-label font-weight-bold fw-bold'
-              htmlFor={feature.id}
-            >
-              {feature.title ?? feature.id}
-              {feature.active !== feature.original ? (
-                <span data-testid='flagNotInitialWarning'>
-                  {' '}
-                  {notDefaultIndicator}
-                </span>
-              ) : null}
-            </label>
-            {feature.description ? (
-              <div
-                className='text-muted font-italic fst-italic'
-                data-label-description
+}: CoreUIType): ReactElement =>
+  features?.length === 0 ? (
+    <NoFlags />
+  ) : (
+    <>
+      <ul data-testid='coreFeatureFlagsUI'>
+        {features.map((feature) => (
+          <li key={feature.id}>
+            <div className='form-check form-switch custom-control custom-switch'>
+              <input
+                className='form-check-input custom-control-input'
+                type='checkbox'
+                id={feature.id}
+                checked={feature.active}
+                onChange={(e) => {
+                  onFeatureClick(feature.id, e.target.checked);
+                }}
+                disabled={readonly}
+              />{' '}
+              <label
+                className='form-check-label custom-control-label font-weight-bold fw-bold'
+                htmlFor={feature.id}
               >
-                {feature.description}
-              </div>
-            ) : null}
-          </div>
-        </li>
-      ))}
-    </ul>
-    {persist && !readonly ? (
-      <p
-        className='alert alert-secondary'
-        role='alert'
-        data-testid='persistAlert'
-      >
-        <strong>NOTE:</strong> Feature flag values are persisting on page
-        refresh. This is not recommended for a production environment. Check the{' '}
-        <code>persist</code> setting when calling <code>loadFeatureFlags</code>{' '}
-        or <code>loadFeatureFlagsRedux</code>.
-      </p>
-    ) : null}
-    {!readonly ? (
-      <button
-        type='button'
-        className='btn btn-success'
-        data-testid='resetButton'
-        onClick={() => onFeatureReset()}
-      >
-        Reset flags to default
-      </button>
-    ) : null}
-  </>
-);
+                {feature.title ?? feature.id}
+                {feature.active !== feature.original ? (
+                  <span data-testid='flagNotInitialWarning'>
+                    {' '}
+                    {notDefaultIndicator}
+                  </span>
+                ) : null}
+              </label>
+              {feature.description ? (
+                <div
+                  className='text-muted font-italic fst-italic'
+                  data-label-description
+                >
+                  {feature.description}
+                </div>
+              ) : null}
+            </div>
+          </li>
+        ))}
+      </ul>
+      {persist && !readonly ? (
+        <p
+          className='alert alert-secondary'
+          role='alert'
+          data-testid='persistAlert'
+        >
+          <strong>NOTE:</strong> Feature flag values are persisting on page
+          refresh. This is not recommended for a production environment. Check
+          the <code>persist</code> setting when calling{' '}
+          <code>loadFeatureFlags</code> or <code>loadFeatureFlagsRedux</code>.
+        </p>
+      ) : null}
+      {!readonly ? (
+        <button
+          type='button'
+          className='btn btn-success'
+          data-testid='resetButton'
+          onClick={() => onFeatureReset()}
+        >
+          Reset flags to default
+        </button>
+      ) : null}
+    </>
+  );
 
 export default CoreUI;

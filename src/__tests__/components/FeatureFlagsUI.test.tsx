@@ -212,4 +212,13 @@ describe('Feature Flags - local storage tests', () => {
     );
     expect(screen.queryAllByTestId('customTestIndicator')).toHaveLength(1);
   });
+
+  it('No feature flags are shown if no feature flags are available', () => {
+    localStorage.clear();
+
+    loadFeatureFlags({ features: [], persist: false });
+    render(<FeatureFlagsUI />);
+    expect(screen.queryByTestId('coreFeatureFlagsUI')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('noFeatureFlagsMessage')).toBeInTheDocument();
+  });
 });
