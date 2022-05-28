@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 
 export const FEATURE_FLAGS = 'featureFlags'; // key used in local storage
@@ -68,7 +67,8 @@ const addFeatureFlag = (
   id: string,
   active: boolean,
   title = '',
-  description: string | undefined = undefined
+  description: string | undefined = undefined,
+  original: boolean | undefined = undefined // this added mostly for testing
 ) => {
   const features: FlagType[] = JSON.parse(
     localStorage.getItem(FEATURE_FLAGS) ?? '[]'
@@ -81,7 +81,7 @@ const addFeatureFlag = (
       id,
       active,
       title: title || id,
-      original: active,
+      original: original === undefined ? active : original,
       description,
     });
   } else {
@@ -191,7 +191,8 @@ export const loadFeatureFlags = ({
       feature.id,
       feature.active || false,
       feature.title,
-      feature.description
+      feature.description,
+      feature.original
     );
   });
   return features;

@@ -176,19 +176,6 @@ describe('Feature Flags - local storage tests', () => {
     });
   });
 
-  test('Readonly prop disables the switch and hides reset button', () => {
-    const { container } = render(
-      <Provider store={store}>
-        <FeatureFlagsReduxUI readonly />
-      </Provider>
-    );
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    expect(checkboxes).toHaveLength(featureList.length);
-    checkboxes.forEach((checkbox) => {
-      expect(checkbox).toBeDisabled();
-    });
-  });
-
   test('Feature flag displays without optional items', () => {
     featureList = [
       {
@@ -205,7 +192,7 @@ describe('Feature Flags - local storage tests', () => {
 
     const { container } = render(
       <Provider store={store}>
-        <FeatureFlagsReduxUI readonly />
+        <FeatureFlagsReduxUI />
       </Provider>
     );
     const listItem = container.querySelector('li');

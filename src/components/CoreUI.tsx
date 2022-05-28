@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import { FlagType } from './featureFlags';
 import NoFlags from './NoFlags';
+import ReadOnly from './ReadOnly';
 
 type CoreUIType = {
   features: FlagType[];
@@ -32,9 +33,16 @@ const CoreUI = ({
       Changed
     </span>
   ),
-}: CoreUIType): ReactElement =>
-  features?.length === 0 ? (
-    <NoFlags />
+}: CoreUIType): ReactElement => {
+  if (!features || features.length === 0) {
+    return <NoFlags />;
+  }
+
+  return readonly ? (
+    <ReadOnly
+      features={features || []}
+      notDefaultIndicator={notDefaultIndicator}
+    />
   ) : (
     <>
       <ul data-testid='coreFeatureFlagsUI'>
@@ -99,5 +107,6 @@ const CoreUI = ({
       ) : null}
     </>
   );
+};
 
 export default CoreUI;
