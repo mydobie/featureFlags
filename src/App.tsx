@@ -21,6 +21,8 @@ loadFeatureFlags({
 });
 
 const App = (): ReactElement => {
+  // This forces the entire app to re-render which might be needed
+  // if the feature flags are modified
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
   const dispatch = useDispatch();
 
