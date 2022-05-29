@@ -14,7 +14,7 @@
       "type": "node-terminal",
       "request": "launch",
       "name": "Jest Single File",
-      "command": "npm run test src/__tests__/App.test.jsx"
+      "command": "npm run test src/__tests__/App.test.tsx"
     },
     {
       "type": "chrome",

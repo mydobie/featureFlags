@@ -3,7 +3,7 @@
 # See docker-container-dev-env.yml file and Readme for how this can be used
 # during development.
 
-FROM node:14.15-buster
+FROM node:16-buster
 
 
 # Where inside the container the files will appear
