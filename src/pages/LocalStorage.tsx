@@ -19,6 +19,9 @@ const LocalStoragePage = ({
         onFeatureChange(); // this is passed to AppRoutes to force an app rerender
         // NOTE: This is a good place to put an ajax call
         // if there a need to track feature flag status changes
+
+        // Make AJAX call to update feature flag status with backend
+
         // eslint-disable-next-line no-console
         console.log('Feature flag ', id, 'is active:', isActive);
       }}
@@ -26,6 +29,9 @@ const LocalStoragePage = ({
         onFeatureChange(); // this is passed to AppRoutes to force an app rerender
         // NOTE: This is a good place to put an ajax call
         // if there a need to track feature flag status changes
+
+        // Make AJAX call to update feature flag status with backend
+
         // eslint-disable-next-line no-console
         console.log('Local storage based features have been reset');
       }}

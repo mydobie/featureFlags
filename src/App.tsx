@@ -14,12 +14,6 @@ import {
   featureFlagsRedux,
 } from './FeatureFlagsConfig';
 
-loadFeatureFlags({
-  features: featureFlagsLocalStorage,
-  overrides: JSON.parse(process.env.REACT_APP_FEATURE_FLAGS ?? '[]'),
-  persist: process.env.REACT_APP_FEATURE_FLAGS_PERSIST === 'true',
-});
-
 const App = (): ReactElement => {
   // This forces the entire app to re-render which might be needed
   // if the feature flags are modified
@@ -27,6 +21,11 @@ const App = (): ReactElement => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
+    // Instead of getting the features flag from the config file,
+    // an ajax call could be made here instead and
+    // loadFeatureFlagsRedux or loadFeatureFlags could be called
+    // once the feature flags are loaded
+
     dispatch(
       loadFeatureFlagsRedux({
         features: featureFlagsRedux || [],
@@ -36,6 +35,12 @@ const App = (): ReactElement => {
           process.env.REACT_APP_FEATURE_FLAGS_PERSIST === 'true',
       })
     );
+
+    loadFeatureFlags({
+      features: featureFlagsLocalStorage,
+      overrides: JSON.parse(process.env.REACT_APP_FEATURE_FLAGS ?? '[]'),
+      persist: process.env.REACT_APP_FEATURE_FLAGS_PERSIST === 'true',
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
