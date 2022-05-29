@@ -6,11 +6,13 @@ declare type CoreUIType = {
     onFeatureReset: () => void;
     persist?: boolean;
     readonly?: boolean;
+    notDefaultIndicator?: ReactElement;
 };
 export declare type FeatureFlagsUIProps = {
     onFeatureChange?: (flagId?: string, isActive?: boolean) => void;
     onFeatureReset?: () => void;
     readonly?: boolean;
+    notDefaultIndicator?: ReactElement;
 };
-declare const CoreUI: ({ features, onFeatureClick, onFeatureReset, persist, readonly, }: CoreUIType) => ReactElement;
+declare const CoreUI: ({ features, onFeatureClick, onFeatureReset, persist, readonly, notDefaultIndicator, }: CoreUIType) => ReactElement;
 export default CoreUI;
