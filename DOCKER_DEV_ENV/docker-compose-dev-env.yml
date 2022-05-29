@@ -8,7 +8,7 @@ services:
     build:
       context: ../
       dockerfile: DOCKER_DEV_ENV/Dockerfile-dev-env
-    image: node-dev-env:14.15
+    image: node-dev-env:16
     ports:
       - 3000:3000 # port in the browser: port used by app (should stay 3000)
     volumes:

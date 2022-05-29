@@ -10,6 +10,7 @@ const FeatureFlagsReduxUI = ({
   onFeatureChange = () => {},
   onFeatureReset = () => {},
   readonly = false,
+  notDefaultIndicator,
 }: FeatureFlagsUIProps): ReactElement => {
   const dispatch = useDispatch();
   return (
@@ -26,6 +27,7 @@ const FeatureFlagsReduxUI = ({
         }}
         persist={useSelector(getPersistRedux)}
         readonly={readonly}
+        notDefaultIndicator={notDefaultIndicator}
       />
     </>
   );

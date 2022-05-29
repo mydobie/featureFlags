@@ -5,7 +5,7 @@ cd "$(dirname "$0")/.."
 containername=node-dev-env
 
 # imagename must match the value for image: in the docker-compose-dev-env.yml file
-imagename=node-dev-env:14.15
+imagename=node-dev-env:16
 
 
 

@@ -16,6 +16,18 @@ In order to use these components, you need to ensure that the following are in y
 The first step is to load the feature flags into the application. This function should be called as soon as the application is rendered (usually contained in App.jsx or App.tsx)
 
 ```
+loadFeatureFlags(
+  {
+    features: Array of feature flags - see "Feature Flag data" in main README
+    overrides: Array of feature flags - (optional) Array of feature flags that should overwrite any item in the features array
+    persist: Boolean - (optional) if true, the feature flags will be persisted across page loads (not recommended)
+  }
+)
+```
+
+**Example:**
+
+```
 import { loadFeatureFlags, } from '@mydobie/feature-flags/react';
 
 loadFeatureFlags( {
@@ -26,12 +38,6 @@ loadFeatureFlags( {
 
 ```
 
-Where:
-
-- features is an array of feature flag objects
-- overrides: (optional) array of feature flag objects that will override items in the features array.
-- persist: (optional defaults false) feature flag "action" settings persists across page refreshes.
-
 ---
 
 ## Checking feature status
@@ -41,6 +47,8 @@ There are two ways to check if a feature is active.
 ### isFeatureActive
 
 The `isFeatureActive` function will return a boolean. The first parameter that is the feature flag id.
+
+**Example:**
 
 ```
 import { isFeatureActive } from '@mydobie/feature-flags/react';
@@ -54,11 +62,24 @@ const isMyFeatureActive isFeatureActive(myFeatureId)
 The `featureFlagged` function will return a provided item if the feature is active or a provided fallback item (if provided) if the feature is not active. If the feature is not active and no fallback item is provided, the function will return null.
 
 ```
-import { featureFlagged } from '@mydobie/feature-flags/react';
-
-const message =  featureFlagged(myFeatureId, (<p>Hello world</p>));
+featureFlagged(
+  featureFlagId: string,
+  component: ReactComponent - component shown if feature flag is active
+  fallback: ReactComponent - (optional) component shown if feature flag is not active.  Will return null if not provided.
+)
 
 ```
+
+**Example:**
+
+````
+import { featureFlagged } from '@mydobie/feature-flags/react';
+
+const message =  featureFlagged(myFeatureId, (<p>Hello world</p>), myFallbackComponent)
+
+```);
+
+````
 
 ### Checking feature status by passing redux store
 

@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 
 export const FEATURE_FLAGS = 'featureFlags'; // key used in local storage
@@ -7,8 +6,9 @@ export const FEATURE_FLAGS_PERSIST = 'featuresFlagsPersist';
 
 export type FlagType = {
   id: string;
-  active: boolean;
-  description?: string;
+  active?: boolean;
+  title?: string;
+  description?: string | undefined;
   original?: boolean;
 };
 
@@ -27,6 +27,7 @@ export const featuresWithOverrides = (
       features.push({
         id: flag.id,
         active: flag.active,
+        title: flag.title,
         description: flag.description,
       });
     } else {
@@ -62,7 +63,13 @@ export const getPersistRedux = (state: any): boolean =>
 /* ******************************************** */
 
 // Private
-const addFeatureFlag = (id: string, active: boolean, description = '') => {
+const addFeatureFlag = (
+  id: string,
+  active: boolean,
+  title = '',
+  description: string | undefined = undefined,
+  original: boolean | undefined = undefined // this added mostly for testing
+) => {
   const features: FlagType[] = JSON.parse(
     localStorage.getItem(FEATURE_FLAGS) ?? '[]'
   );
@@ -70,7 +77,13 @@ const addFeatureFlag = (id: string, active: boolean, description = '') => {
   const featureIndex = features.findIndex((flag) => flag.id === id);
 
   if (featureIndex === -1) {
-    features.push({ id, active, description, original: active });
+    features.push({
+      id,
+      active,
+      title: title || id,
+      original: original === undefined ? active : original,
+      description,
+    });
   } else {
     features[featureIndex].original = active;
   }
@@ -167,14 +180,20 @@ export const loadFeatureFlags = ({
   features,
   persist,
   overrides,
-}: LoadFeatureFlagsType): FlagType[] => {
+}: LoadFeatureFlagsType): FlagType[] | [] => {
   if (!persist) {
     localStorage.setItem(FEATURE_FLAGS, JSON.stringify([]));
   }
   localStorage.setItem(FEATURE_FLAGS_PERSIST, persist ? 'true' : 'false');
 
   featuresWithOverrides(features || [], overrides || []).forEach((feature) => {
-    addFeatureFlag(feature.id, feature.active, feature.description);
+    addFeatureFlag(
+      feature.id,
+      feature.active || false,
+      feature.title,
+      feature.description,
+      feature.original
+    );
   });
   return features;
 };

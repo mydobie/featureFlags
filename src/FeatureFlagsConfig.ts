@@ -2,29 +2,34 @@ export const COLORS = 'COLORS';
 export const DINOS = 'DINOS';
 export const FRUITS = 'FRUITS';
 export const VEGGIES = 'VEGGIES';
+export const OTHER = 'OTHER';
 
 export const featureFlagsRedux = [
   {
     id: FRUITS,
     active: false,
-    description: 'Fruit list',
+    title: 'Fruit list',
+    description: 'Show a list of lovely fruits.',
   },
   {
     id: VEGGIES,
     active: true,
-    description: 'Vegetable list',
+    title: 'Vegetable list',
   },
+  { id: OTHER },
 ];
 
 export const featureFlagsLocalStorage = [
   {
     id: COLORS,
     active: false,
-    description: 'Color list',
+    title: 'Color list',
+    description: 'Show a list of bright colors.',
   },
   {
     id: DINOS,
     active: false,
-    description: 'Dino list',
+    title: 'Dino list',
   },
+  { id: OTHER },
 ];

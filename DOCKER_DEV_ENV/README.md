@@ -69,7 +69,7 @@ In the container, you are asked to enter your username and password when running
 To change this:
 
 - Open the .git config file for this project (.git/config)
-- Change the `url` entry to something like this: `url = git@github.umn.edu:myorg/myrepo.git`
+- Change the `url` entry to something like this: `url = git@github.com:myorg/myrepo.git`
 
 ## Helpful Docker commands
 

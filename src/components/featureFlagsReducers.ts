@@ -60,9 +60,16 @@ export const reducerFeatureFlags = produce(
               (f) => f.id === feature.id
             );
             if (featureIndex === -1) {
-              newFeatures.push({ ...feature, original: feature.active });
+              newFeatures.push({
+                ...feature,
+                active: feature.active || false,
+                original:
+                  feature.original !== undefined
+                    ? feature.original
+                    : feature.active || false,
+              });
             } else {
-              newFeatures[featureIndex].original = feature.active;
+              newFeatures[featureIndex].original = feature.active || false;
             }
           }
         );

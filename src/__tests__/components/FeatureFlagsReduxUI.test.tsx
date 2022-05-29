@@ -17,12 +17,13 @@ describe('Feature Flags - local storage tests', () => {
       {
         id: 'FRUITS',
         active: false,
-        description: 'Fruit list',
+        title: 'Fruit list',
+        description: 'This is the fruit list.',
       },
       {
         id: 'VEGGIES',
         active: true,
-        description: 'Vegetable list',
+        title: 'Vegetable list',
       },
     ];
     store.dispatch(
@@ -74,7 +75,19 @@ describe('Feature Flags - local storage tests', () => {
       expect(
         // @ts-ignore
         listItems.item(index).querySelector('label').innerHTML.trim()
-      ).toEqual(flag.description);
+      ).toEqual(flag.title);
+      if (flag.description) {
+        expect(
+          listItems
+            .item(index)
+            .querySelector('[data-label-description]')
+            ?.innerHTML.trim()
+        ).toEqual(flag.description);
+      } else {
+        expect(
+          listItems.item(index).querySelector('[data-label-description]')
+        ).not.toBeInTheDocument();
+      }
     });
   });
 
@@ -100,7 +113,7 @@ describe('Feature Flags - local storage tests', () => {
     expect(screen.queryAllByTestId('flagNotInitialWarning')).toHaveLength(1);
   });
 
-  test.todo('Feature are overritten when override array');
+  test.todo('Feature are over written when override array');
 
   test('If persist is not set, warning is  not shown', () => {
     store.dispatch(
@@ -163,16 +176,90 @@ describe('Feature Flags - local storage tests', () => {
     });
   });
 
-  test('Readonly prop disables the switch and hides reset button', () => {
+  test('Feature flag displays without optional items', () => {
+    featureList = [
+      {
+        id: 'FRUITS',
+      },
+    ];
+    store.dispatch(
+      loadFeatureFlagsRedux({
+        features: featureList,
+        persist: false,
+        reset: true,
+      })
+    );
+
     const { container } = render(
       <Provider store={store}>
-        <FeatureFlagsReduxUI readonly />
+        <FeatureFlagsReduxUI />
       </Provider>
     );
+    const listItem = container.querySelector('li');
+
+    expect(listItem?.querySelector('input')?.checked).toBeFalsy();
+    expect(listItem?.querySelector('label')?.innerHTML.trim()).toEqual(
+      featureList[0].id
+    );
+    expect(
+      listItem?.querySelector('[data-label-description]')
+    ).not.toBeInTheDocument();
+  });
+
+  it('Not default element is shown if a custom one is not passed', () => {
+    const { container } = render(
+      <Provider store={store}>
+        <FeatureFlagsReduxUI />
+      </Provider>
+    );
+
     const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    expect(checkboxes).toHaveLength(featureList.length);
-    checkboxes.forEach((checkbox) => {
-      expect(checkbox).toBeDisabled();
-    });
+    fireEvent.click(checkboxes[0]);
+
+    // ensure that warning icon is shown
+    expect(screen.queryAllByTestId('flagNotInitialWarning')).toHaveLength(1);
+    expect(screen.queryAllByTestId('notDefaultIndicatorDefault')).toHaveLength(
+      1
+    );
+  });
+
+  it('Custom not default element is shown', () => {
+    const { container } = render(
+      <Provider store={store}>
+        <FeatureFlagsReduxUI
+          notDefaultIndicator={
+            <div data-testid='customTestIndicator'>Hello</div>
+          }
+        />
+      </Provider>
+    );
+
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    fireEvent.click(checkboxes[0]);
+
+    // ensure that warning icon is shown
+    expect(screen.queryAllByTestId('flagNotInitialWarning')).toHaveLength(1);
+    expect(screen.queryAllByTestId('notDefaultIndicatorDefault')).toHaveLength(
+      0
+    );
+    expect(screen.queryAllByTestId('customTestIndicator')).toHaveLength(1);
+  });
+
+  it('No feature flags are shown if no feature flags are available', () => {
+    store.dispatch(
+      loadFeatureFlagsRedux({
+        features: [],
+        persist: false,
+        reset: true,
+      })
+    );
+
+    render(
+      <Provider store={store}>
+        <FeatureFlagsReduxUI />
+      </Provider>
+    );
+    expect(screen.queryByTestId('coreFeatureFlagsUI')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('noFeatureFlagsMessage')).toBeInTheDocument();
   });
 });
