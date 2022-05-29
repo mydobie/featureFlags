@@ -32,6 +32,18 @@ export default combineReducers({ FeatureFlags: featureFlagsReducers });
 The first step is to load the feature flags into the application. This function should be dispatched as soon as the application is rendered (usually contained in App.jsx or App.tsx)
 
 ```
+loadFeatureFlagsRedux(
+  {
+    features: Array of feature flags - see "Feature Flag data" in main README
+    overrides: Array of feature flags - (optional) Array of feature flags that should overwrite any item in the features array
+    persist: Boolean - (optional) if true, the feature flags will be persisted across page loads (not recommended)
+  }
+)
+```
+
+**Example:**
+
+```
 import { useDispatch } from 'react-redux';
 import { loadFeatureFlagsRedux } from '@mydobie/feature-flags/redux';
 
@@ -50,12 +62,6 @@ useDispatch()(
 
 ```
 
-Where:
-
-- features is an array of feature flag objects
-- overrides: (optional) array of feature flag objects that will override items in the features array.
-- persist: (optional defaults false) is the redux store set to persist across page refreshes and do you flag settings persist across page refreshes
-
 ---
 
 ## Checking feature status
@@ -67,6 +73,8 @@ There are two ways to check if a feature is active.
 The `useIsFeatureActive` hook will return a boolean if the feature is active.
 
 The only parameter that is the feature flag id.
+
+**Example:**
 
 ```
 import { useIsFeatureActive } from '@mydobie/feature-flags/redux';
@@ -80,10 +88,16 @@ const isMyFeatureActive =  useIsFeatureActive(myFeatureId);
 The `useFeatureFlagged` hook will return a provided item if the feature is active or a provided fallback item (if provided) if the feature is not active. If the feature is not active and no fallback item is provided, the hook will return null.
 
 ```
+useFeatureFlagged(
+  featureFlagId: string,
+  component: ReactComponent - component shown if feature flag is active
+  fallback: ReactComponent - (optional) component shown if feature flag is not active.  Will return null if not provided.
+)
+```
+
 import { useFeatureFlagged } from '@mydobie/feature-flags/redux';
 
-const message =  useFeatureFlagged(myFeatureId, (<p>Hello world</p>));
-
+const message = useFeatureFlagged(myFeatureId, (<p>Hello world</p>));
 
 Note that this application assumes that the reducer key in `combineReducers` is set to 'FeatureFlags'. If it was set to something else, they key can be passed as the last parameter in either the `useIsFeatureActive` or `useFeatureFlagged` hooks.
 
@@ -112,6 +126,8 @@ import { FeatureFlagsReduxUI } from @mydobie/feature-flags/redux
 ...
 
 return <FeatureFlagsReduxUI onFeatureChange={(flagId, isActive)=>{ /_ other code _/ }} onFeatureReset={()=>{ /_ other code _/ }} />
+
+```
 
 ```
 
