@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React, { ReactElement } from 'react';
+import GitHubImage from '../images/github.svg';
 
 const Home = (): ReactElement => (
   <div className='container'>
@@ -9,6 +10,11 @@ const Home = (): ReactElement => (
         <p>
           This simple package allows you mark items as feature flags and then
           set the availability of those items through configuration.
+        </p>
+        <p>
+          <a href='https://github.com/mydobie/featureFlags'>
+            <img src={GitHubImage} alt='' /> View on GitHub
+          </a>
         </p>
       </div>
     </div>
