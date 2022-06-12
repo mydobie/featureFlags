@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { renderHook, act } from '@testing-library/react-hooks';
+// import { renderHook, act } from '@testing-library/react-hooks';
 
 import {
   featuresWithOverrides,
@@ -9,7 +9,7 @@ import {
   getResetFeatureFlags,
   editFeatureFlag,
   isFeatureActive,
-  useLocalStorage,
+  // useLocalStorage,
   getFeatureFlagsRedux,
   getPersistRedux,
   FlagType,
@@ -224,21 +224,21 @@ describe('Core feature flag functions - non REDUX', () => {
     expect(isFeatureActive('VEGGIES')).toBeTruthy();
   });
 
-  // NOTE: Testing the useLocalStorage hook directly isn't really neccessary
-  // because it is only used by componts within the package
+  // NOTE: Testing the useLocalStorage hook directly isn't really necessary
+  // because it is only used by components within the package
   // keeping it here as an example of how to test hooks
-  test('Local storage hook, set value', () => {
-    expect(localStorage.getItem(FEATURE_FLAGS)).toBeNull();
-    const { result } = renderHook(() => useLocalStorage(FEATURE_FLAGS));
-    act(() => {
-      result.current[1](featureList);
-    });
+  //   test('Local storage hook, set value', () => {
+  //     expect(localStorage.getItem(FEATURE_FLAGS)).toBeNull();
+  //     const { result } = renderHook(() => useLocalStorage(FEATURE_FLAGS));
+  //     act(() => {
+  //       result.current[1](featureList);
+  //     });
 
-    const expected = JSON.stringify(featureList);
-    expect(localStorage.getItem(FEATURE_FLAGS)).not.toBeNull();
-    expect(localStorage.getItem(FEATURE_FLAGS)).toEqual(expected);
-    expect(result.current[0]).toEqual(featureList);
-  });
+  //     const expected = JSON.stringify(featureList);
+  //     expect(localStorage.getItem(FEATURE_FLAGS)).not.toBeNull();
+  //     expect(localStorage.getItem(FEATURE_FLAGS)).toEqual(expected);
+  //     expect(result.current[0]).toEqual(featureList);
+  //   });
 });
 
 // /* ************** REDUX GET TESTS ******************* */
