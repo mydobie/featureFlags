@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-console */
 import React, { ReactElement } from 'react';
 import CoreUI, { FeatureFlagsUIProps } from './CoreUI';

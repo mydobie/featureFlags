@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 // Contains routing and any application wide items like headers, footers and navigation
 
 import React, { ReactElement } from 'react';

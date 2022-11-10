@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-console */
 import React from 'react';
+import { FlagType } from '../components';
 
-export const useGetVersions = (): [{}, () => void] => {
-  const [versions, setVersions] = React.useState([{}, () => {}]);
+export const useGetVersions = (): [FlagType[], () => void] => {
+  const [versions, setVersions] = React.useState([]);
 
   const loadVersions = () => {
     fetch('/featureFlags/versions.json')

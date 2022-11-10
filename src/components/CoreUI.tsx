@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React, { ReactElement } from 'react';
 import { FlagType } from './index';
 import NoFlags from './NoFlags';
