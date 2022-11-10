@@ -1,32 +1,35 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable react/react-in-jsx-scope */
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { axe } from 'jest-axe';
-import { FlagType, loadFeatureFlags } from '../../components/featureFlags';
-import FeatureFlagsUI from '../../components/FeatureFlagsUI';
+
+import {
+  FeatureFlagsUI,
+  FlagType,
+  FeatureFlagProvider,
+} from '../../components';
+
+const featureList: FlagType[] = [
+  {
+    id: 'INACTIVE',
+    active: false,
+    title: 'Inactive features',
+  },
+  {
+    id: 'ACTIVE',
+    active: true,
+    title: 'Active features',
+  },
+];
 
 describe('Feature Flags - local storage tests', () => {
-  let featureList: FlagType[] = [];
-  beforeEach(() => {
-    localStorage.clear();
-    featureList = [
-      {
-        id: 'FRUITS',
-        active: false,
-        title: 'Fruit list',
-        description: 'This is the fruit list.',
-      },
-      {
-        id: 'VEGGIES',
-        active: true,
-        title: 'Vegetable list',
-      },
-    ];
-    loadFeatureFlags({ features: featureList, persist: false });
-  });
-
   test('Expect feature flag list to be accessible', async () => {
-    const { container } = render(<FeatureFlagsUI />);
+    const { container } = render(
+      <FeatureFlagProvider features={[...featureList]}>
+        <FeatureFlagsUI />
+      </FeatureFlagProvider>
+    );
 
     const results = await axe(container);
     expect(results).toHaveNoViolations();
@@ -35,7 +38,11 @@ describe('Feature Flags - local storage tests', () => {
   });
 
   test('Features flags are shown', () => {
-    render(<FeatureFlagsUI />);
+    render(
+      <FeatureFlagProvider features={[...featureList]}>
+        <FeatureFlagsUI />
+      </FeatureFlagProvider>
+    );
     const listItems = screen.queryAllByRole('listitem');
 
     expect(listItems).toHaveLength(featureList.length);
@@ -43,7 +50,11 @@ describe('Feature Flags - local storage tests', () => {
   });
 
   test('Feature is set to correct value', () => {
-    const { container } = render(<FeatureFlagsUI />);
+    const { container } = render(
+      <FeatureFlagProvider features={[...featureList]}>
+        <FeatureFlagsUI />
+      </FeatureFlagProvider>
+    );
 
     const listItems = container.querySelectorAll('li');
 
@@ -55,7 +66,7 @@ describe('Feature Flags - local storage tests', () => {
       expect(
         // @ts-ignore
         listItems.item(index).querySelector('label').innerHTML.trim()
-      ).toEqual(flag.title);
+      ).toEqual(flag.title || flag.id);
 
       if (flag.description) {
         expect(
@@ -72,143 +83,142 @@ describe('Feature Flags - local storage tests', () => {
     });
   });
 
-  test('Clicking on a feature changes the value', () => {
+  test('Clicking on a feature changes the value', async () => {
     const onFeatureChange = jest.fn(() => {});
-    const { container } = render(
-      <FeatureFlagsUI onFeatureChange={onFeatureChange} />
+
+    render(
+      <FeatureFlagProvider features={[...featureList]}>
+        <FeatureFlagsUI onFeatureChange={onFeatureChange} />
+      </FeatureFlagProvider>
     );
 
     expect(screen.queryAllByTestId('flagNotInitialWarning')).toHaveLength(0);
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    // @ts-ignore
-    expect(checkboxes[0].checked).toEqual(featureList[0].active);
-    fireEvent.click(checkboxes[0]);
-    expect(
-      // @ts-ignore
-      container.querySelectorAll('input[type="checkbox"]')[0].checked
-    ).toEqual(!featureList[0].active);
+    expect(screen.getAllByRole('checkbox')[0]).not.toBeChecked();
+
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
+
+    expect(screen.getAllByRole('checkbox')[0]).toBeChecked();
 
     // ensure that warning icon is shown
     expect(screen.queryAllByTestId('flagNotInitialWarning')).toHaveLength(1);
 
-    // ensure that featurechange callback was called
-    const expected = featureList.map((flag) => ({
-      ...flag,
-      original: flag.active,
-    }));
-    expected[0].active = !expected[0].active;
-    expect(onFeatureChange.mock.calls.length).toBe(1);
+    await waitFor(() => expect(onFeatureChange.mock.calls.length).toBe(1));
     // @ts-ignore
-    expect(onFeatureChange.mock.calls[0][0]).toEqual(expected[0].id);
+    expect(onFeatureChange.mock.calls[0][0]).toEqual(featureList[0].id);
     // @ts-ignore
-    expect(onFeatureChange.mock.calls[0][1]).toEqual(expected[0].active);
+    expect(onFeatureChange.mock.calls[0][1]).toEqual(true);
   });
 
-  test('If persist is not set, warning is not shown', () => {
-    loadFeatureFlags({ features: featureList, persist: false });
-    render(<FeatureFlagsUI />);
-    expect(screen.queryByTestId('persistAlert')).not.toBeInTheDocument();
-  });
-
-  test('If persist is set, warning is shown', () => {
-    loadFeatureFlags({ features: featureList, persist: true });
-    render(<FeatureFlagsUI />);
-    expect(screen.queryByTestId('persistAlert')).toBeInTheDocument();
-  });
-
-  test('Click on reset, rests each value to original', () => {
+  test('Click on reset, resets each value to original', () => {
     const onFeatureChange = jest.fn(() => {});
     const onFeatureReset = jest.fn(() => {});
-    const { container } = render(
-      <FeatureFlagsUI
-        onFeatureChange={onFeatureChange}
-        onFeatureReset={onFeatureReset}
-      />
+
+    render(
+      <FeatureFlagProvider features={[...featureList]}>
+        <FeatureFlagsUI
+          onFeatureChange={onFeatureChange}
+          onFeatureReset={onFeatureReset}
+        />
+      </FeatureFlagProvider>
     );
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach((checkbox) => fireEvent.click(checkbox));
-    expect(
-      // @ts-ignore
-      container.querySelector('input[type="checkbox"]').checked
-    ).not.toEqual(featureList[0].active);
+
+    screen.getAllByRole('checkbox').forEach(async (feature, index) => {
+      fireEvent.click(feature);
+
+      await waitFor(() =>
+        expect((feature as HTMLInputElement).checked).not.toEqual(
+          featureList[index]?.original
+        )
+      );
+    });
 
     fireEvent.click(screen.getByTestId('resetButton'));
 
-    container
-      .querySelectorAll('input[type="checkbox"]')
-      .forEach((checkbox, index) => {
-        // @ts-ignore
-        expect(checkbox.checked).toEqual(featureList[index].active);
-      });
+    screen.getAllByRole('checkbox').forEach((feature, index) => {
+      expect((feature as HTMLInputElement).checked).toEqual(
+        featureList[index].original
+      );
+    });
+
     expect(onFeatureReset.mock.calls.length).toBe(1);
   });
 
   test('All switches are enabled when readonly prop is not set', () => {
-    const { container } = render(<FeatureFlagsUI />);
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    expect(checkboxes).toHaveLength(featureList.length);
-    checkboxes.forEach((checkbox) => {
-      expect(checkbox).not.toBeDisabled();
+    render(
+      <FeatureFlagProvider features={[...featureList]}>
+        <FeatureFlagsUI />
+      </FeatureFlagProvider>
+    );
+
+    expect(screen.getAllByRole('checkbox')).toHaveLength(featureList.length);
+
+    screen.getAllByRole('checkbox').forEach((feature) => {
+      expect(feature).not.toBeDisabled();
     });
   });
 
   test('Feature flag displays without optional items', () => {
-    localStorage.clear();
-    featureList = [
-      {
-        id: 'FRUITS',
-      },
-    ];
-
-    loadFeatureFlags({ features: featureList, persist: false });
-    const { container } = render(<FeatureFlagsUI />);
-    const listItem = container.querySelector('li');
-
-    expect(listItem?.querySelector('input')?.checked).toBeFalsy();
-    expect(listItem?.querySelector('label')?.innerHTML.trim()).toEqual(
-      featureList[0].id
+    render(
+      <FeatureFlagProvider features={[{ id: 'PLAIN' }]}>
+        <FeatureFlagsUI />
+      </FeatureFlagProvider>
     );
-    expect(
-      listItem?.querySelector('[data-label-description]')
-    ).not.toBeInTheDocument();
+
+    expect(screen.getByRole('checkbox')).not.toBeChecked();
+    expect(screen.queryByTestId('feature_description')).not.toBeInTheDocument();
   });
 
   it('Not default element is shown if a custom one is not passed', () => {
-    const { container } = render(<FeatureFlagsUI />);
+    render(
+      <FeatureFlagProvider features={[...featureList]}>
+        <FeatureFlagsUI />
+      </FeatureFlagProvider>
+    );
+    // There is bleed from another test - this ensures back to given stt4e
+    fireEvent.click(screen.getByTestId('resetButton'));
 
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    fireEvent.click(checkboxes[0]);
+    expect(
+      screen.queryByTestId('flagNotInitialWarning')
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
 
     // ensure that warning icon is shown
-    expect(screen.queryAllByTestId('flagNotInitialWarning')).toHaveLength(1);
-    expect(screen.queryAllByTestId('notDefaultIndicatorDefault')).toHaveLength(
-      1
-    );
+    expect(screen.queryByTestId('flagNotInitialWarning')).toBeInTheDocument();
+    expect(
+      screen.queryByTestId('notDefaultIndicatorDefault')
+    ).toBeInTheDocument();
   });
 
   it('Custom not default element is shown', () => {
-    const { container } = render(
-      <FeatureFlagsUI
-        notDefaultIndicator={<div data-testid='customTestIndicator'>Hello</div>}
-      />
+    render(
+      <FeatureFlagProvider features={[...featureList]}>
+        <FeatureFlagsUI
+          notDefaultIndicator={
+            <div data-testid='customTestIndicator'>Hello</div>
+          }
+        />
+      </FeatureFlagProvider>
     );
+    fireEvent.click(screen.getByTestId('resetButton'));
 
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    fireEvent.click(checkboxes[0]);
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
 
     // ensure that warning icon is shown
-    expect(screen.queryAllByTestId('flagNotInitialWarning')).toHaveLength(1);
-    expect(screen.queryAllByTestId('notDefaultIndicatorDefault')).toHaveLength(
-      0
-    );
-    expect(screen.queryAllByTestId('customTestIndicator')).toHaveLength(1);
+    expect(screen.queryByTestId('flagNotInitialWarning')).toBeInTheDocument();
+    expect(
+      screen.queryByTestId('notDefaultIndicatorDefault')
+    ).not.toBeInTheDocument();
+    expect(screen.queryByTestId('customTestIndicator')).toBeInTheDocument();
   });
 
   it('No feature flags are shown if no feature flags are available', () => {
-    localStorage.clear();
+    render(
+      <FeatureFlagProvider>
+        <FeatureFlagsUI />
+      </FeatureFlagProvider>
+    );
 
-    loadFeatureFlags({ features: [], persist: false });
-    render(<FeatureFlagsUI />);
     expect(screen.queryByTestId('coreFeatureFlagsUI')).not.toBeInTheDocument();
     expect(screen.queryByTestId('noFeatureFlagsMessage')).toBeInTheDocument();
   });

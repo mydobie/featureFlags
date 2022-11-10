@@ -75,7 +75,7 @@ const CoreUI = ({
               {feature.description ? (
                 <div
                   className='text-muted font-italic fst-italic'
-                  data-label-description
+                  data-testid='feature_description'
                 >
                   {feature.description}
                 </div>

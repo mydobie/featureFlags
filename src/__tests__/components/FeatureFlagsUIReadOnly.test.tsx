@@ -2,31 +2,33 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { render, screen } from '@testing-library/react';
 import { axe } from 'jest-axe';
-import { FlagType, loadFeatureFlags } from '../../components/featureFlags';
-import FeatureFlagsUI from '../../components/FeatureFlagsUI';
 
-describe('Feature Flags - local storage tests', () => {
-  let featureList: FlagType[] = [];
-  beforeEach(() => {
-    localStorage.clear();
-    featureList = [
-      {
-        id: 'FRUITS',
-        active: false,
-        title: 'Fruit list',
-        description: 'This is the fruit list.',
-      },
-      {
-        id: 'VEGGIES',
-        active: true,
-        title: 'Vegetable list',
-      },
-    ];
-    loadFeatureFlags({ features: featureList, persist: false });
-  });
+import {
+  FeatureFlagsUI,
+  FlagType,
+  FeatureFlagProvider,
+} from '../../components';
 
+const featureList: FlagType[] = [
+  {
+    id: 'INACTIVE',
+    active: false,
+    title: 'Inactive features',
+  },
+  {
+    id: 'ACTIVE',
+    active: true,
+    title: 'Active features',
+  },
+];
+
+describe('Feature Flags - ReadOnly UI', () => {
   test('Expect feature flag list to be accessible', async () => {
-    const { container } = render(<FeatureFlagsUI readonly />);
+    const { container } = render(
+      <FeatureFlagProvider features={[...featureList]}>
+        <FeatureFlagsUI readonly />
+      </FeatureFlagProvider>
+    );
 
     const results = await axe(container);
     expect(results).toHaveNoViolations();
@@ -34,59 +36,65 @@ describe('Feature Flags - local storage tests', () => {
     expect(container.innerHTML).not.toBeNull();
   });
 
-  test('Features flags are shown', () => {
-    render(<FeatureFlagsUI readonly />);
-    const listItems = screen.queryAllByRole('listitem');
+  test('Correct number of features flags are shown', () => {
+    render(
+      <FeatureFlagProvider features={[...featureList]}>
+        <FeatureFlagsUI readonly />
+      </FeatureFlagProvider>
+    );
 
-    expect(listItems).toHaveLength(featureList.length);
+    expect(screen.getAllByRole('listitem')).toHaveLength(featureList.length);
+
     expect(
       screen.getByTestId('coreFeatureFlagsUIReadonly')
     ).toBeInTheDocument();
   });
 
-  test('Feature is set to correct value', () => {
-    const { container } = render(<FeatureFlagsUI readonly />);
+  test('Features are set to correct value', () => {
+    render(
+      <FeatureFlagProvider features={[...featureList]}>
+        <FeatureFlagsUI readonly />
+      </FeatureFlagProvider>
+    );
 
-    const listItems = container.querySelectorAll('li');
+    const listItems = screen.getAllByRole('listitem');
 
     featureList.forEach((flag, index) => {
       expect(
-        listItems.item(index).querySelector('[data-feature-is-active]')
+        listItems[index].querySelector('[data-feature-is-active]')
       ).toHaveAttribute('data-feature-is-active', flag.active?.toString());
 
       expect(
-        listItems
-          .item(index)
-          .querySelector('[data-label-title]')
-          ?.innerHTML.trim()
+        listItems[index].querySelector('[data-label-title]')?.innerHTML.trim()
       ).toEqual(flag.title);
 
       if (flag.description) {
         expect(
-          listItems
-            .item(index)
+          listItems[index]
             .querySelector('[data-label-description]')
             ?.innerHTML.trim()
         ).toEqual(flag.description);
       } else {
         expect(
-          listItems.item(index).querySelector('[data-label-description]')
+          listItems[index].querySelector('[data-label-description]')
         ).not.toBeInTheDocument();
       }
     });
   });
 
   test('Feature flag displays without optional items', () => {
-    localStorage.clear();
-    featureList = [
-      {
-        id: 'FRUITS',
-      },
-    ];
-
-    loadFeatureFlags({ features: featureList, persist: false });
-    const { container } = render(<FeatureFlagsUI readonly />);
-    const listItem = container.querySelector('li');
+    render(
+      <FeatureFlagProvider
+        features={[
+          {
+            id: 'FRUITS',
+          },
+        ]}
+      >
+        <FeatureFlagsUI readonly />
+      </FeatureFlagProvider>
+    );
+    const listItem = screen.getByRole('listitem');
 
     expect(listItem?.querySelector('[data-feature-is-active]')).toHaveAttribute(
       'data-feature-is-active',
@@ -95,7 +103,7 @@ describe('Feature Flags - local storage tests', () => {
 
     expect(
       listItem?.querySelector('[data-label-title]')?.innerHTML.trim()
-    ).toEqual(featureList[0].id);
+    ).toEqual('FRUITS');
 
     expect(
       listItem?.querySelector('[data-label-description]')
@@ -103,17 +111,19 @@ describe('Feature Flags - local storage tests', () => {
   });
 
   it('Not default element is shown if a custom one is not passed', () => {
-    localStorage.clear();
-    featureList = [
-      {
-        id: 'FRUITS',
-        active: true,
-        original: false,
-      },
-    ];
-
-    loadFeatureFlags({ features: featureList, persist: false });
-    render(<FeatureFlagsUI readonly />);
+    render(
+      <FeatureFlagProvider
+        features={[
+          {
+            id: 'FRUITS',
+            active: true,
+            original: false,
+          },
+        ]}
+      >
+        <FeatureFlagsUI readonly />
+      </FeatureFlagProvider>
+    );
 
     expect(screen.queryByTestId('flagNotInitialWarning')).toBeInTheDocument();
     expect(
@@ -122,21 +132,23 @@ describe('Feature Flags - local storage tests', () => {
   });
 
   it('Custom not default element is shown', () => {
-    localStorage.clear();
-    featureList = [
-      {
-        id: 'FRUITS',
-        active: true,
-        original: false,
-      },
-    ];
-
-    loadFeatureFlags({ features: featureList, persist: false });
     render(
-      <FeatureFlagsUI
-        readonly
-        notDefaultIndicator={<div data-testid='customTestIndicator'>Hello</div>}
-      />
+      <FeatureFlagProvider
+        features={[
+          {
+            id: 'FRUITS',
+            active: true,
+            original: false,
+          },
+        ]}
+      >
+        <FeatureFlagsUI
+          readonly
+          notDefaultIndicator={
+            <div data-testid='customTestIndicator'>Hello</div>
+          }
+        />
+      </FeatureFlagProvider>
     );
 
     // ensure that warning icon is shown
@@ -149,10 +161,11 @@ describe('Feature Flags - local storage tests', () => {
   });
 
   it('No feature flags are shown if no feature flags are available', () => {
-    localStorage.clear();
-
-    loadFeatureFlags({ features: [], persist: false });
-    render(<FeatureFlagsUI readonly />);
+    render(
+      <FeatureFlagProvider>
+        <FeatureFlagsUI readonly />
+      </FeatureFlagProvider>
+    );
     expect(
       screen.queryByTestId('coreFeatureFlagsUIReadonly')
     ).not.toBeInTheDocument();

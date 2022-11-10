@@ -26,13 +26,10 @@ const FeatureFlagsUI = ({
         persist={persist}
         features={features}
         onFeatureClick={(id, checked) => {
-          console.log('Clicked, ', id, checked);
           editFeature(id, checked);
           onFeatureChange(id, checked);
         }}
         onFeatureReset={() => {
-          //   const newFeatures = getResetFeatureFlags();
-          //   setFeatures(newFeatures);
           resetFlags();
           onFeatureReset();
         }}
