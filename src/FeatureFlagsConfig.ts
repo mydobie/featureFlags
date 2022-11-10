@@ -28,7 +28,7 @@ export const featureFlagsLocalStorage = [
   },
   {
     id: DINOS,
-    active: false,
+    active: true,
     title: 'Dino list',
   },
   { id: OTHER },

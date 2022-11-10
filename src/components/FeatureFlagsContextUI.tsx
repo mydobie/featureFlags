@@ -1,7 +1,12 @@
 /* eslint-disable no-console */
 import React, { ReactElement } from 'react';
 import CoreUI, { FeatureFlagsUIProps } from './CoreUI';
-import { useGetFeatures } from './FeatureFlagContext';
+
+import {
+  useEditFeatureFlag,
+  useGetFeatures,
+  useResetFeatureFlags,
+} from './FeatureFlagContext';
 
 const FeatureFlagsUI = ({
   onFeatureChange = () => {},
@@ -10,21 +15,24 @@ const FeatureFlagsUI = ({
   notDefaultIndicator,
 }: FeatureFlagsUIProps): ReactElement => {
   const features = useGetFeatures();
+  const editFeature = useEditFeatureFlag();
+  const resetFlags = useResetFeatureFlags();
+  const persist = false; // KKD - change me
 
   return (
     <>
       <CoreUI
+        persist={persist}
         features={features}
-        onFeatureClick={async (id, checked) => {
-          // const newFeatures = [...features].map((feature) =>
-          //   feature.id === id ? { ...feature, active: checked } : feature
-          // );
-          // setFeatures(newFeatures);
+        onFeatureClick={(id, checked) => {
+          console.log('Clicked, ', id, checked);
+          editFeature(id, checked);
           onFeatureChange(id, checked);
         }}
         onFeatureReset={() => {
-          // const newFeatures = getResetFeatureFlags();
-          // setFeatures(newFeatures);
+          //   const newFeatures = getResetFeatureFlags();
+          //   setFeatures(newFeatures);
+          resetFlags();
           onFeatureReset();
         }}
         readonly={readonly}

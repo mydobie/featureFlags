@@ -10,10 +10,11 @@ import ReduxPage from './pages/Redux';
 import LocalStoragePage from './pages/LocalStorage';
 import ReadOnlyPage from './pages/ReadOnly';
 
-import { HOME_ROUTE, LOCAL_STORAGE, REDUX, READONLY } from './AppRouteNames';
+import { HOME_ROUTE, READONLY, CONTEXT } from './AppRouteNames';
 
 import Home from './pages/Home';
 import FourOhFour from './pages/FourOhFour';
+import ContextPage from './pages/Context';
 
 interface Props {
   onFeatureChange?: (flagId?: string, isActive?: boolean) => void;
@@ -24,14 +25,7 @@ const AppRoutes = ({ onFeatureChange = () => {} }: Props): ReactElement => (
     <Routes>
       <Route path={HOME_ROUTE} element={<Home />} />
 
-      <Route
-        path={LOCAL_STORAGE}
-        element={<LocalStoragePage onFeatureChange={onFeatureChange} />}
-      />
-
-      <Route path={REDUX} element={<ReduxPage />} />
-
-      <Route path={READONLY} element={<ReadOnlyPage />} />
+      <Route path={CONTEXT} element={<ContextPage />} />
 
       <Route path='*' element={<FourOhFour />} />
     </Routes>

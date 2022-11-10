@@ -1,15 +1,15 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { ReactElement } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+//import { useSelector } from 'react-redux';
 import { isFeatureActive } from './components';
 
-import { HOME_ROUTE, LOCAL_STORAGE, REDUX, READONLY } from './AppRouteNames';
-import { COLORS, DINOS, FRUITS, VEGGIES } from './FeatureFlagsConfig';
+import { HOME_ROUTE, READONLY, CONTEXT } from './AppRouteNames';
+import { COLORS, DINOS } from './FeatureFlagsConfig';
 
 const AppNavBar = (): ReactElement => {
-  const isVeggies = useSelector((state) => isFeatureActive(VEGGIES, state));
-  const isFruits = useSelector((state) => isFeatureActive(FRUITS, state));
+  // const isVeggies = useSelector((state) => isFeatureActive(VEGGIES, state));
+  // const isFruits = useSelector((state) => isFeatureActive(FRUITS, state));
 
   const featureNavItemStyle = { backgroundColor: '#ccc', color: '#000' };
 
@@ -22,15 +22,11 @@ const AppNavBar = (): ReactElement => {
           </NavLink>
         </li>
         <li className='nav-item'>
-          <NavLink className='nav-link' to={LOCAL_STORAGE}>
-            Local storage
+          <NavLink className='nav-link' to={CONTEXT}>
+            Context
           </NavLink>
         </li>
-        <li className='nav-item'>
-          <NavLink className='nav-link' to={REDUX}>
-            Redux
-          </NavLink>
-        </li>
+
         <li className='nav-item'>
           <NavLink className='nav-link' to={READONLY}>
             Read only
@@ -46,7 +42,7 @@ const AppNavBar = (): ReactElement => {
             Link to Dinos
           </li>
         ) : null}
-        {isFruits ? (
+        {/* {isFruits ? (
           <li className='nav-item nav-link' style={featureNavItemStyle}>
             Link to Fruits
           </li>
@@ -55,7 +51,7 @@ const AppNavBar = (): ReactElement => {
           <li className='nav-item nav-link' style={featureNavItemStyle}>
             Link to Veggies
           </li>
-        ) : null}
+        ) : null} */}
       </ul>
     </nav>
   );
