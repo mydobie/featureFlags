@@ -8,7 +8,7 @@ import AppRoutes from './AppRoutes';
 
 import { featureFlagsLocalStorage } from './FeatureFlagsConfig';
 
-import { useSetFeatureFlags } from './components/FeatureFlagContext';
+import { useSetFeatureFlags } from './components';
 
 const App = (): ReactElement => {
   const setFeatureFlags = useSetFeatureFlags();

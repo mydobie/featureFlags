@@ -2,15 +2,14 @@
 import React, { ReactElement } from 'react';
 import { NavLink } from 'react-router-dom';
 //import { useSelector } from 'react-redux';
-import { isFeatureActive } from './components';
+
+import { useIsFeatureActive, FeatureFlagged } from './components';
 
 import { HOME_ROUTE, READONLY, CONTEXT } from './AppRouteNames';
 import { COLORS, DINOS } from './FeatureFlagsConfig';
 
 const AppNavBar = (): ReactElement => {
-  // const isVeggies = useSelector((state) => isFeatureActive(VEGGIES, state));
-  // const isFruits = useSelector((state) => isFeatureActive(FRUITS, state));
-
+  const isColors = useIsFeatureActive(COLORS);
   const featureNavItemStyle = { backgroundColor: '#ccc', color: '#000' };
 
   return (
@@ -32,26 +31,17 @@ const AppNavBar = (): ReactElement => {
             Read only
           </NavLink>
         </li>
-        {isFeatureActive(COLORS) ? (
+
+        {isColors ? (
           <li className='nav-item nav-link' style={featureNavItemStyle}>
             Link to Colors
           </li>
         ) : null}
-        {isFeatureActive(DINOS) ? (
+        <FeatureFlagged feature={DINOS}>
           <li className='nav-item nav-link' style={featureNavItemStyle}>
             Link to Dinos
           </li>
-        ) : null}
-        {/* {isFruits ? (
-          <li className='nav-item nav-link' style={featureNavItemStyle}>
-            Link to Fruits
-          </li>
-        ) : null}
-        {isVeggies ? (
-          <li className='nav-item nav-link' style={featureNavItemStyle}>
-            Link to Veggies
-          </li>
-        ) : null} */}
+        </FeatureFlagged>
       </ul>
     </nav>
   );

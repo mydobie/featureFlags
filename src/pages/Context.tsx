@@ -1,10 +1,7 @@
 import React, { ReactElement } from 'react';
-import FeatureFlagsUI from '../components/FeatureFlagsContextUI';
+import FeatureFlagsUI from '../components/FeatureFlagsUI';
 import ExclamationCircle from './images/ExclamationCircle';
-import {
-  useIsFeatureActive,
-  FeatureFlagged,
-} from '../components/FeatureFlagContext';
+import { useIsFeatureActive, FeatureFlagged } from '../components/';
 
 import { COLORS, DINOS } from '../FeatureFlagsConfig';
 
@@ -21,12 +18,7 @@ const ContextPage = (): ReactElement => {
           // Make AJAX call to update feature flag status with backend
 
           // eslint-disable-next-line no-console
-          console.log(
-            'Context page: Feature flag clicked',
-            id,
-            'is active:',
-            isActive
-          );
+          console.log(`Feature flag ${id} |  is active ${isActive}`);
         }}
         onFeatureReset={() => {
           // NOTE: This is a good place to put an ajax call
@@ -53,7 +45,7 @@ const ContextPage = (): ReactElement => {
           </p>
         </div>
       ) : null}
-      <FeatureFlagged flag={DINOS}>
+      <FeatureFlagged feature={DINOS}>
         <div>
           <hr />
           <h2>Dinos content</h2>

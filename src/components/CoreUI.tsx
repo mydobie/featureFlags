@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { FlagType } from './featureFlags';
+import { FlagType } from './index';
 import NoFlags from './NoFlags';
 import ReadOnly from './ReadOnly';
 

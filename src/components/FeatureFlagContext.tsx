@@ -19,12 +19,12 @@ export const FFContext = React.createContext<FeatureFlagContextType>({
   setFeatureFlags: () => {},
 });
 
-const FeatureFlagContext: React.FC<
-  PropsWithChildren<{ flags?: FlagType[] }>
-> = ({ flags = [], children }) => {
+export const FeatureFlagProvider: React.FC<
+  PropsWithChildren<{ features?: FlagType[] }>
+> = ({ features = [], children }) => {
   const [incomingFeatures, setIncomingFeatures] =
-    React.useState<FlagType[]>(flags);
-  const [features, setFeatures] = React.useState<FlagType[]>([]);
+    React.useState<FlagType[]>(features);
+  const [featuresState, setFeaturesState] = React.useState<FlagType[]>([]);
 
   React.useEffect(() => {
     const newFeatures = [...incomingFeatures].map((feature) => {
@@ -39,19 +39,22 @@ const FeatureFlagContext: React.FC<
       }
       return feature;
     });
-    setFeatures(newFeatures);
+    setFeaturesState(newFeatures);
   }, [incomingFeatures]);
 
   return (
     <FFContext.Provider
-      value={{ featureFlags: features, setFeatureFlags: setIncomingFeatures }}
+      value={{
+        featureFlags: featuresState,
+        setFeatureFlags: setIncomingFeatures,
+      }}
     >
       {children}
     </FFContext.Provider>
   );
 };
 
-export default FeatureFlagContext;
+export default FeatureFlagProvider;
 
 export const useGetFeatures = () => {
   const { featureFlags } = React.useContext(FFContext);
@@ -60,19 +63,21 @@ export const useGetFeatures = () => {
   return featureFlags || [];
 };
 
-export const useIsFeatureActive = (flagId: string) => {
+export const useIsFeatureActive = (featureId: string) => {
   const featureFlags = useGetFeatures();
-  return featureFlags.find((feature) => feature.id === flagId)?.active || false;
+  return (
+    featureFlags.find((feature) => feature.id === featureId)?.active || false
+  );
 };
 
 export const useEditFeatureFlag = () => {
   const { featureFlags, setFeatureFlags } = React.useContext(FFContext);
 
-  const editFeature = (flagId: string, active: boolean) => {
+  const editFeature = (featureId: string, isActive: boolean) => {
     const newFeatures = featureFlags ? [...featureFlags] : [];
-    const featureIndex = newFeatures.findIndex((flag) => flag.id === flagId);
+    const featureIndex = newFeatures.findIndex((flag) => flag.id === featureId);
     if (featureIndex !== undefined) {
-      newFeatures[featureIndex].active = active;
+      newFeatures[featureIndex].active = isActive;
       setFeatureFlags(newFeatures);
     }
   };
@@ -82,30 +87,30 @@ export const useEditFeatureFlag = () => {
 // KKD - This needs a lot of work
 // It will be available as a helper
 // but will no longer be used directly
-export const featuresWithOverrides = (
-  featuresArray: FlagType[] = [],
-  overRidesArray: FlagType[] = []
-): FlagType[] => {
-  const features = Array.from(featuresArray);
+// export const featuresWithOverrides = (
+//   featuresArray: FlagType[] = [],
+//   overRidesArray: FlagType[] = []
+// ): FlagType[] => {
+//   const features = Array.from(featuresArray);
 
-  overRidesArray.forEach((flag) => {
-    const featureIndex = features.findIndex(
-      (feature) => feature.id === flag.id
-    );
+//   overRidesArray.forEach((flag) => {
+//     const featureIndex = features.findIndex(
+//       (feature) => feature.id === flag.id
+//     );
 
-    if (featureIndex === -1) {
-      features.push({
-        id: flag.id,
-        active: flag.active,
-        title: flag.title,
-        description: flag.description,
-      });
-    } else {
-      features[featureIndex].active = flag.active;
-    }
-  });
-  return features;
-};
+//     if (featureIndex === -1) {
+//       features.push({
+//         id: flag.id,
+//         active: flag.active,
+//         title: flag.title,
+//         description: flag.description,
+//       });
+//     } else {
+//       features[featureIndex].active = flag.active;
+//     }
+//   });
+//   return features;
+// };
 
 export const useSetFeatureFlags = () => {
   const { setFeatureFlags } = React.useContext(FFContext);
@@ -118,9 +123,9 @@ export const useSetFeatureFlags = () => {
 export const useResetFeatureFlags = () => {
   const { featureFlags, setFeatureFlags } = React.useContext(FFContext);
   const reset = () => {
-    const resetFlags = featureFlags.map((flag) => ({
-      ...flag,
-      active: flag.original,
+    const resetFlags = featureFlags.map((feature) => ({
+      ...feature,
+      active: feature.original,
     }));
     setFeatureFlags(resetFlags);
   };
@@ -128,9 +133,9 @@ export const useResetFeatureFlags = () => {
 };
 
 export const FeatureFlagged: React.FC<{
-  flag: string;
+  feature: string;
   children?: ReactElement | string;
-}> = ({ flag, children }) => {
-  const isActive = useIsFeatureActive(flag);
+}> = ({ feature, children }) => {
+  const isActive = useIsFeatureActive(feature);
   return <>{isActive ? children : null}</>;
 };
