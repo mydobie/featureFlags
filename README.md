@@ -8,6 +8,8 @@ This package can be used in any React application.
 
 [See a feature flags in action](https://mydobie.github.io/featureFlags/)
 
+What to see the code? Check out [README-Use.md](README-Use.md)
+
 ---
 
 ## Getting Started - Adding this component to your project
@@ -115,11 +117,7 @@ let myFlagJSONArray: FlagType[]
 
 ## Using feature flags in your application
 
-If you are using Redux, see [README-REDUX.md](README-REDUX.md) on how to use feature flags with Redux
-
-If you aren't using Redux, see [README-NON-REDUX.md](README-NON-REDUX.md) on how to use feature flags with local storage.
-
----
+## See [README-Use.md](README-Use.md)
 
 ---
 

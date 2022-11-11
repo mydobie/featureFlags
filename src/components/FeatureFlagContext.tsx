@@ -84,39 +84,37 @@ export const useEditFeatureFlag = () => {
   return editFeature;
 };
 
-// KKD - This needs a lot of work
-// It will be available as a helper
-// but will no longer be used directly
-// export const featuresWithOverrides = (
-//   featuresArray: FlagType[] = [],
-//   overRidesArray: FlagType[] = []
-// ): FlagType[] => {
-//   const features = Array.from(featuresArray);
+export const featuresWithOverrides = (
+  featuresArray: FlagType[] = [],
+  overRidesArray: FlagType[] = []
+): FlagType[] => {
+  const features = [...featuresArray];
 
-//   overRidesArray.forEach((flag) => {
-//     const featureIndex = features.findIndex(
-//       (feature) => feature.id === flag.id
-//     );
+  overRidesArray.forEach((overRide) => {
+    const featureIndex = features.findIndex(
+      (feature) => feature.id === overRide.id
+    );
 
-//     if (featureIndex === -1) {
-//       features.push({
-//         id: flag.id,
-//         active: flag.active,
-//         title: flag.title,
-//         description: flag.description,
-//       });
-//     } else {
-//       features[featureIndex].active = flag.active;
-//     }
-//   });
-//   return features;
-// };
+    if (featureIndex !== -1) {
+      if (features[featureIndex].original === undefined) {
+        features[featureIndex].original = features[featureIndex].active;
+      }
+      if (overRide.active) {
+        features[featureIndex].active = overRide.active;
+      }
+      if (overRide.description) {
+        features[featureIndex].description = overRide.description;
+      }
+      if (overRide.title) {
+        features[featureIndex].title = overRide.title;
+      }
+    }
+  });
+  return features;
+};
 
 export const useSetFeatureFlags = () => {
   const { setFeatureFlags } = React.useContext(FFContext);
-  // If needed we can return a function that
-  // can take in an override
-  // See useEditFeatureFlag
   return setFeatureFlags;
 };
 
@@ -135,7 +133,14 @@ export const useResetFeatureFlags = () => {
 export const FeatureFlagged: React.FC<{
   feature: string;
   children?: ReactElement | string;
-}> = ({ feature, children }) => {
+  isNotActive?: boolean;
+}> = ({ feature, children, isNotActive }) => {
   const isActive = useIsFeatureActive(feature);
-  return <>{isActive ? children : null}</>;
+  return (
+    <>
+      {(isActive && !isNotActive) || (!isActive && isNotActive)
+        ? children
+        : null}
+    </>
+  );
 };

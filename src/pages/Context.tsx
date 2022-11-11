@@ -57,6 +57,12 @@ const ContextPage = (): ReactElement => {
           </p>
         </div>
       </FeatureFlagged>
+      <FeatureFlagged feature={DINOS} isNotActive>
+        <div>
+          <hr />
+          <h2>Dinos are sleeping</h2>
+        </div>
+      </FeatureFlagged>
     </div>
   );
 };
