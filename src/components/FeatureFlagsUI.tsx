@@ -16,13 +16,6 @@ type CoreUIType = {
   notDefaultIndicator?: ReactElement;
 };
 
-// type FeatureFlagsUIProps = {
-//   onFeatureChange?: (flagId?: string, isActive?: boolean) => void;
-//   onFeatureReset?: () => void;
-//   readonly?: boolean;
-//   notDefaultIndicator?: ReactElement;
-// };
-
 const CoreUI = ({
   onFeatureChange = () => {},
   onFeatureReset = () => {},

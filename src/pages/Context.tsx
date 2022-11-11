@@ -13,21 +13,19 @@ const ContextPage = (): ReactElement => {
       <FeatureFlagsUI
         onFeatureChange={(id, isActive) => {
           // NOTE: This is a good place to put an ajax call
-          // if there a need to track feature flag status changes
-
-          // Make AJAX call to update feature flag status with backend
+          // if there a need to sent feature flag status to a backend
 
           // eslint-disable-next-line no-console
-          console.log(`Feature flag ${id} |  is active ${isActive}`);
+          console.log(
+            `Feature flag ${id} is now ${isActive ? '' : 'NOT'} active `
+          );
         }}
         onFeatureReset={() => {
           // NOTE: This is a good place to put an ajax call
-          // if there a need to track feature flag status changes
-
-          // Make AJAX call to update feature flag status with backend
+          // if there a need to sent feature flag status to a backend
 
           // eslint-disable-next-line no-console
-          console.log('Features have been reset');
+          console.log('All features have been reset to their original value');
         }}
         notDefaultIndicator={<ExclamationCircle />}
       />
