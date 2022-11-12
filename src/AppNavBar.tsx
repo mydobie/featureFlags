@@ -5,10 +5,10 @@ import { NavLink } from 'react-router-dom';
 import { useIsFeatureActive, FeatureFlagged } from './components';
 
 import { HOME_ROUTE, READONLY, CONTEXT } from './AppRouteNames';
-import { COLORS, DINOS } from './FeatureFlagsConfig';
+import { SWEETS, DINOS } from './FeatureFlagsConfig';
 
 const AppNavBar = (): ReactElement => {
-  const isColors = useIsFeatureActive(COLORS);
+  const isSweets = useIsFeatureActive(SWEETS);
   const featureNavItemStyle = { backgroundColor: '#ccc', color: '#000' };
 
   return (
@@ -21,7 +21,7 @@ const AppNavBar = (): ReactElement => {
         </li>
         <li className='nav-item'>
           <NavLink className='nav-link' to={CONTEXT}>
-            Context
+            Features
           </NavLink>
         </li>
 
@@ -31,14 +31,14 @@ const AppNavBar = (): ReactElement => {
           </NavLink>
         </li>
 
-        {isColors ? (
+        {isSweets ? (
           <li className='nav-item nav-link' style={featureNavItemStyle}>
-            Link to Colors
+            Sample link to sweets
           </li>
         ) : null}
         <FeatureFlagged feature={DINOS}>
           <li className='nav-item nav-link' style={featureNavItemStyle}>
-            Link to Dinos
+            Sample link to Dinos
           </li>
         </FeatureFlagged>
       </ul>

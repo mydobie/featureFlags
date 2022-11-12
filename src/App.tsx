@@ -5,7 +5,7 @@ import { HashRouter as Router } from 'react-router-dom'; // Use `HashRouter as R
 import AppNavBar from './AppNavBar';
 import AppRoutes from './AppRoutes';
 
-import { featureFlagsLocalStorage } from './FeatureFlagsConfig';
+import featureFlags from './FeatureFlagsConfig';
 
 import { useSetFeatureFlags } from './components';
 
@@ -14,8 +14,8 @@ const App = (): ReactElement => {
   const basename = '';
   React.useEffect(() => {
     setTimeout(() => {
-      setFeatureFlags(featureFlagsLocalStorage);
-    }, 3000);
+      setFeatureFlags(featureFlags);
+    }, 2000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

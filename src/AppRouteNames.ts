@@ -3,4 +3,4 @@ export const HOME_ROUTE = '/';
 // export const FEATURE_FLAGS_ROUTE = '/featureflags';
 
 export const READONLY = '/readonly';
-export const CONTEXT = '/context';
+export const CONTEXT = '/features';

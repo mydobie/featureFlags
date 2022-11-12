@@ -10,7 +10,7 @@ const root = createRoot(container!);
 
 root.render(
   <React.StrictMode>
-    <FeatureFlagProvider features={[{ id: 'hello' }]}>
+    <FeatureFlagProvider features={[{ id: 'now loading' }]}>
       <App />
     </FeatureFlagProvider>
   </React.StrictMode>
