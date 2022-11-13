@@ -174,7 +174,7 @@ Alternatively you can choose to develop this application inside a Docker contain
 
 ## Install dependencies
 
-After checking out the project, run `npm i` in a terminal at the root of the project to install dependencies.
+After checking out the project, run `npm run d` in a terminal at the root of the project to install dependencies.
 
 After installing dependencies, you can check to see what dependencies are out of date by running `npm outdated` in a terminal at the root of the project.
 

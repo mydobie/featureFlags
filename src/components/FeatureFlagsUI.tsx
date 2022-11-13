@@ -4,6 +4,7 @@ import {
   useEditFeatureFlag,
   useGetFeatures,
   useResetFeatureFlags,
+  FFContext,
 } from './index';
 import NoFlags from './NoFlags';
 import ReadOnly from './ReadOnly';
@@ -11,7 +12,6 @@ import ReadOnly from './ReadOnly';
 type CoreUIType = {
   onFeatureChange?: (id: string, checked: boolean) => void;
   onFeatureReset?: () => void;
-  persist?: boolean;
   readonly?: boolean;
   notDefaultIndicator?: ReactElement;
 };
@@ -19,7 +19,6 @@ type CoreUIType = {
 const CoreUI = ({
   onFeatureChange = () => {},
   onFeatureReset = () => {},
-  persist = false,
   readonly = false,
   notDefaultIndicator = (
     <span
@@ -33,6 +32,7 @@ const CoreUI = ({
   const features = useGetFeatures();
   const editFeature = useEditFeatureFlag();
   const resetFlags = useResetFeatureFlags();
+  const { persist } = React.useContext(FFContext);
   if (!features || features.length === 0) {
     return <NoFlags />;
   }
@@ -92,7 +92,7 @@ const CoreUI = ({
           <strong>NOTE:</strong> Feature flag values are persisting on page
           refresh. This is not recommended for a production environment. Check
           the <code>persist</code> setting when calling{' '}
-          <code>loadFeatureFlags</code> or <code>loadFeatureFlagsRedux</code>.
+          <code>FeatureFlagProvider</code>.
         </p>
       ) : null}
       {!readonly ? (

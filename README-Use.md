@@ -11,11 +11,12 @@ In order to use these components, you need to ensure that the following are in y
 
 This application uses React context to ensure feature data is available to child components. At the highest most parent of the components you want to use feature flags, add the `FeatureFlagProvider` component.
 
-**Component**: `FeatureFlagsUI`
+**Component**: `FeatureFlagProvider`
 
 **Props**:
 
 - _features_: (optional) An array of feature flags.
+- _persist_: (optional) Changes to feature flags is remembered (via local storage) after page fresh. Use with caution. Not recommended in a production environment
 
 **Example:**
 
@@ -39,7 +40,7 @@ If you know the feature flag data, you can pass it to the `FeatureFlagProvider` 
 
 ## Setting dynamic feature data
 
-If you are fetching the feature flag data dynamically by an API call, you can set the data in any child component of the FeatureFlagProvider by using the `useSetFeatureFlags` hook.
+If you are fetching the feature flag data dynamically by an API call, you can set the data in any child component of the FeatureFlagProvider by using the `useSetFeatureFlags` hook. This is for the initial load of the feature flags. If you ar editing the active status of a single flag, then use the `useEditFeatureFlag` hook (see below)
 
 **Hook**: useSetFeatureFlags
 

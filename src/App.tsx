@@ -14,6 +14,7 @@ const App = (): ReactElement => {
   const basename = '';
   React.useEffect(() => {
     setTimeout(() => {
+      //console.log('about to set feature flags');
       setFeatureFlags(featureFlags);
     }, 2000);
     // eslint-disable-next-line react-hooks/exhaustive-deps

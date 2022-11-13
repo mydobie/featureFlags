@@ -1,4 +1,8 @@
+/* eslint-disable no-console */
 import React, { ReactElement, PropsWithChildren } from 'react';
+import useLocalStorage from './useLocalStorage';
+
+export const LOCAL_STORAGE_KEY = 'FEATURE_FLAGS';
 
 export type FlagType = {
   id: string;
@@ -10,43 +14,81 @@ export type FlagType = {
 
 type FeatureFlagContextType = {
   featureFlags: FlagType[];
-  setFeatureFlags: (featureFlags: FlagType[]) => void;
+  setFeatureFlags: (featureFlags: FlagType[], isEdit?: boolean) => void;
+  persist?: boolean;
 };
 
 export const FFContext = React.createContext<FeatureFlagContextType>({
   featureFlags: [],
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setFeatureFlags: () => {},
+  persist: false,
 });
 
+const formatFeatures = (features: FlagType[]) =>
+  [...features].map((feature) => {
+    if (feature.original !== undefined && feature.active !== undefined) {
+      return feature;
+    }
+    if (feature.active === undefined) {
+      feature.active = false;
+    }
+    if (feature.original === undefined) {
+      feature.original = feature.active;
+    }
+    return feature;
+  });
+
+const setFlagsForLocalStorage = (features: FlagType[]) =>
+  [...features].map((feature) => ({ id: feature.id, active: feature.active }));
+
 export const FeatureFlagProvider: React.FC<
-  PropsWithChildren<{ features?: FlagType[] }>
-> = ({ features = [], children }) => {
-  const [incomingFeatures, setIncomingFeatures] =
-    React.useState<FlagType[]>(features);
-  const [featuresState, setFeaturesState] = React.useState<FlagType[]>([]);
+  PropsWithChildren<{
+    features?: FlagType[];
+    persist?: boolean;
+    hideWarnings?: boolean;
+  }>
+> = ({ features = [], children, persist, hideWarnings }) => {
+  const [localStorage, setLocalStorage] = useLocalStorage(LOCAL_STORAGE_KEY);
+  const [featuresState, setFeaturesState] = React.useState<FlagType[]>(
+    formatFeatures(features)
+  );
 
   React.useEffect(() => {
-    const newFeatures = [...incomingFeatures].map((feature) => {
-      if (feature.original !== undefined && feature.active !== undefined) {
-        return feature;
+    if (persist && !hideWarnings) {
+      console.warn(
+        'Feature flags are set to persist on page refresh.  This is not recommended in production environments.'
+      );
+    }
+  }, [hideWarnings, persist]);
+
+  const updateFeatures = (incomingFeatures: FlagType[], isEdit?: boolean) => {
+    let updatedIncomingFeatures = [...incomingFeatures];
+    if (persist) {
+      if (!isEdit) {
+        updatedIncomingFeatures = featuresWithOverrides(
+          incomingFeatures,
+          localStorage as FlagType[]
+        );
       }
-      if (feature.active === undefined) {
-        feature.active = false;
-      }
-      if (feature.original === undefined) {
-        feature.original = feature.active;
-      }
-      return feature;
-    });
-    setFeaturesState(newFeatures);
-  }, [incomingFeatures]);
+
+      setLocalStorage(setFlagsForLocalStorage(updatedIncomingFeatures));
+    }
+    setFeaturesState(updatedIncomingFeatures);
+  };
+  React.useEffect(() => {
+    if (persist) {
+      updateFeatures(formatFeatures(features));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <FFContext.Provider
       value={{
         featureFlags: featuresState,
-        setFeatureFlags: setIncomingFeatures,
+        setFeatureFlags: updateFeatures,
+        persist: persist,
       }}
     >
       {children}
@@ -58,8 +100,6 @@ export default FeatureFlagProvider;
 
 export const useGetFeatures = () => {
   const { featureFlags } = React.useContext(FFContext);
-  // console.log('Return object:', React.useContext(FFContext));
-  // console.log('Get features called:', featureFlags);
   return featureFlags || [];
 };
 
@@ -78,7 +118,9 @@ export const useEditFeatureFlag = () => {
     const featureIndex = newFeatures.findIndex((flag) => flag.id === featureId);
     if (featureIndex !== undefined) {
       newFeatures[featureIndex].active = isActive;
-      setFeatureFlags(newFeatures);
+      setFeatureFlags(newFeatures, true);
+    } else {
+      console.error('Attempting to set unknown feature flag ', featureId);
     }
   };
   return editFeature;
@@ -94,12 +136,12 @@ export const featuresWithOverrides = (
     const featureIndex = features.findIndex(
       (feature) => feature.id === overRide.id
     );
-
     if (featureIndex !== -1) {
       if (features[featureIndex].original === undefined) {
+        // This really shouldn't be needed - but adding just in case
         features[featureIndex].original = features[featureIndex].active;
       }
-      if (overRide.active) {
+      if (overRide.active !== undefined) {
         features[featureIndex].active = overRide.active;
       }
       if (overRide.description) {
@@ -113,9 +155,12 @@ export const featuresWithOverrides = (
   return features;
 };
 
-export const useSetFeatureFlags = () => {
+export const useSetFeatureFlags = (isEdit?: boolean) => {
   const { setFeatureFlags } = React.useContext(FFContext);
-  return setFeatureFlags;
+  const setFormattedFeatures = (features: FlagType[]) => {
+    setFeatureFlags(formatFeatures(features), isEdit);
+  };
+  return setFormattedFeatures;
 };
 
 export const useResetFeatureFlags = () => {
@@ -125,7 +170,7 @@ export const useResetFeatureFlags = () => {
       ...feature,
       active: feature.original,
     }));
-    setFeatureFlags(resetFlags);
+    setFeatureFlags(resetFlags, true);
   };
   return reset;
 };

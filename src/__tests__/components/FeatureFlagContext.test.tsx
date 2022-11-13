@@ -142,16 +142,6 @@ describe('Feature Flag context', () => {
   });
 
   describe('featuresWithOverrides', () => {
-    // const features: FlagType[] = [
-    //   { id: 'Feature1', active: false, original: true },
-    //   {
-    //     id: 'Feature2',
-    //     active: true,
-    //     original: true,
-    //     title: 'my title feature 2',
-    //     description: 'my description, feature 3',
-    //   },
-    // ];
     it('Overrides active', () => {
       const features = [
         { id: 'Feature1', active: false, original: true },

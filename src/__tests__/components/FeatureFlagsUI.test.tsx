@@ -8,9 +8,10 @@ import {
   FeatureFlagsUI,
   FlagType,
   FeatureFlagProvider,
+  LOCAL_STORAGE_KEY,
 } from '../../components';
 
-const featureList: FlagType[] = [
+let featureList: FlagType[] = [
   {
     id: 'INACTIVE',
     active: false,
@@ -24,6 +25,20 @@ const featureList: FlagType[] = [
 ];
 
 describe('Feature Flags - local storage tests', () => {
+  beforeEach(() => {
+    featureList = [
+      {
+        id: 'INACTIVE',
+        active: false,
+        title: 'Inactive features',
+      },
+      {
+        id: 'ACTIVE',
+        active: true,
+        title: 'Active features',
+      },
+    ];
+  });
   test('Expect feature flag list to be accessible', async () => {
     const { container } = render(
       <FeatureFlagProvider features={[...featureList]}>
@@ -221,5 +236,142 @@ describe('Feature Flags - local storage tests', () => {
 
     expect(screen.queryByTestId('coreFeatureFlagsUI')).not.toBeInTheDocument();
     expect(screen.queryByTestId('noFeatureFlagsMessage')).toBeInTheDocument();
+  });
+
+  describe('Persist', () => {
+    afterEach(() => {
+      localStorage.clear();
+    });
+
+    it('If persist is set, a warning is shown', () => {
+      render(
+        <FeatureFlagProvider features={[...featureList]} persist hideWarnings>
+          <FeatureFlagsUI />
+        </FeatureFlagProvider>
+      );
+
+      expect(screen.getByTestId('persistAlert')).toBeInTheDocument();
+    });
+
+    it('If persist and readonly are set, a warning is not shown', () => {
+      render(
+        <FeatureFlagProvider features={[...featureList]} persist hideWarnings>
+          <FeatureFlagsUI readonly />
+        </FeatureFlagProvider>
+      );
+
+      expect(screen.queryByTestId('persistAlert')).not.toBeInTheDocument();
+    });
+
+    it('If persist is not set, a warning is not shown', () => {
+      render(
+        <FeatureFlagProvider features={[...featureList]}>
+          <FeatureFlagsUI />
+        </FeatureFlagProvider>
+      );
+
+      expect(screen.queryByTestId('persistAlert')).not.toBeInTheDocument();
+    });
+
+    it('Local storage is set on page load', () => {
+      render(
+        <FeatureFlagProvider features={[...featureList]} persist hideWarnings>
+          <FeatureFlagsUI />
+        </FeatureFlagProvider>
+      );
+
+      const expected = JSON.stringify([
+        { id: 'INACTIVE', active: false },
+        { id: 'ACTIVE', active: true },
+      ]);
+      expect(localStorage.getItem(LOCAL_STORAGE_KEY)).toEqual(expected);
+    });
+
+    it('Expect context values to take  local storage values on creation', () => {
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY,
+        JSON.stringify([
+          { id: 'INACTIVE', active: true },
+          { id: 'ACTIVE', active: false },
+        ])
+      );
+
+      render(
+        <FeatureFlagProvider features={[...featureList]} persist hideWarnings>
+          <FeatureFlagsUI />
+        </FeatureFlagProvider>
+      );
+
+      const expected = JSON.stringify([
+        { id: 'INACTIVE', active: true },
+        { id: 'ACTIVE', active: false },
+      ]);
+
+      expect(localStorage.getItem(LOCAL_STORAGE_KEY)).toEqual(expected);
+    });
+
+    it('Expect local storage is changed when flag is changed', async () => {
+      render(
+        <FeatureFlagProvider features={[...featureList]} persist hideWarnings>
+          <FeatureFlagsUI />
+        </FeatureFlagProvider>
+      );
+
+      const expected = JSON.stringify([
+        { id: 'INACTIVE', active: false },
+        { id: 'ACTIVE', active: true },
+      ]);
+      expect(localStorage.getItem(LOCAL_STORAGE_KEY)).toEqual(expected);
+
+      expect(screen.getAllByRole('checkbox')[0]).not.toBeChecked();
+
+      fireEvent.click(screen.getAllByRole('checkbox')[0]);
+
+      const expectedAfterClick = JSON.stringify([
+        { id: 'INACTIVE', active: true },
+        { id: 'ACTIVE', active: true },
+      ]);
+
+      await waitFor(() =>
+        expect(localStorage.getItem(LOCAL_STORAGE_KEY)).toEqual(
+          expectedAfterClick
+        )
+      );
+    });
+
+    it('Reset also changes local storage', async () => {
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY,
+        JSON.stringify([
+          { id: 'INACTIVE', active: true },
+          { id: 'ACTIVE', active: false },
+        ])
+      );
+
+      render(
+        <FeatureFlagProvider features={[...featureList]} persist hideWarnings>
+          <FeatureFlagsUI />
+        </FeatureFlagProvider>
+      );
+
+      const expected = JSON.stringify([
+        { id: 'INACTIVE', active: true },
+        { id: 'ACTIVE', active: false },
+      ]);
+
+      expect(localStorage.getItem(LOCAL_STORAGE_KEY)).toEqual(expected);
+
+      fireEvent.click(screen.getByTestId('resetButton'));
+
+      const expectedAfterReset = JSON.stringify([
+        { id: 'INACTIVE', active: false },
+        { id: 'ACTIVE', active: true },
+      ]);
+      await waitFor(() =>
+        expect(localStorage.getItem(LOCAL_STORAGE_KEY)).toEqual(
+          expectedAfterReset
+        )
+      );
+    });
   });
 });
