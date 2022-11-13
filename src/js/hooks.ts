@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-console */
 import React from 'react';
 
-export const useGetVersions = (): [{}, () => void] => {
-  const [versions, setVersions] = React.useState([{}, () => {}]);
+export const useGetVersions = (): [{ [key: string]: string }, () => void] => {
+  const [versions, setVersions] = React.useState({});
 
   const loadVersions = () => {
     fetch('/featureFlags/versions.json')

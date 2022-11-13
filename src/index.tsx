@@ -1,32 +1,17 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
-import { persistStore } from 'redux-persist';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
+import { createRoot } from 'react-dom/client';
 import App from './App';
-import configureStore from './redux/store';
+import 'bootstrap/dist/css/bootstrap.css';
+import { FeatureFlagProvider } from './components';
 
-const usePersister = process.env.REACT_APP_USE_LOCAL_STORAGE === 'true';
+const container = document.getElementById('root');
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const root = createRoot(container!);
 
-const store = configureStore();
-
-// @ts-ignore
-const persistor = usePersister ? persistStore(store) : undefined;
-
-const PeristorApp = usePersister ? (
-  // @ts-ignore - this is a known issue
-  <PersistGate loading={null} persistor={persistor}>
-    <App />
-  </PersistGate>
-) : (
-  <App />
-);
-
-ReactDOM.render(
+root.render(
   <React.StrictMode>
-    <Provider store={store}>{PeristorApp}</Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <FeatureFlagProvider persist features={[{ id: 'HELLO' }]}>
+      <App />
+    </FeatureFlagProvider>
+  </React.StrictMode>
 );

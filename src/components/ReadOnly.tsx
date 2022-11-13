@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { FlagType } from './featureFlags';
+import { FlagType } from './index';
 
 type ReadOnlyType = {
   features: FlagType[];
@@ -50,7 +50,7 @@ const ReadOnly = ({ features, notDefaultIndicator }: ReadOnlyType) => (
           {feature.description ? (
             <div
               className='text-muted font-italic fst-italic'
-              data-label-description
+              data-testid='feature_description'
             >
               {feature.description}
             </div>

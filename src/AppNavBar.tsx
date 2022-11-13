@@ -1,16 +1,14 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import React, { ReactElement } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { isFeatureActive } from './components';
+//import { useSelector } from 'react-redux';
 
-import { HOME_ROUTE, LOCAL_STORAGE, REDUX, READONLY } from './AppRouteNames';
-import { COLORS, DINOS, FRUITS, VEGGIES } from './FeatureFlagsConfig';
+import { useIsFeatureActive, FeatureFlagged } from './components';
+
+import { HOME_ROUTE, READONLY, CONTEXT } from './AppRouteNames';
+import { SWEETS, DINOS } from './FeatureFlagsConfig';
 
 const AppNavBar = (): ReactElement => {
-  const isVeggies = useSelector((state) => isFeatureActive(VEGGIES, state));
-  const isFruits = useSelector((state) => isFeatureActive(FRUITS, state));
-
+  const isSweets = useIsFeatureActive(SWEETS);
   const featureNavItemStyle = { backgroundColor: '#ccc', color: '#000' };
 
   return (
@@ -22,40 +20,27 @@ const AppNavBar = (): ReactElement => {
           </NavLink>
         </li>
         <li className='nav-item'>
-          <NavLink className='nav-link' to={LOCAL_STORAGE}>
-            Local storage
+          <NavLink className='nav-link' to={CONTEXT}>
+            Features
           </NavLink>
         </li>
-        <li className='nav-item'>
-          <NavLink className='nav-link' to={REDUX}>
-            Redux
-          </NavLink>
-        </li>
+
         <li className='nav-item'>
           <NavLink className='nav-link' to={READONLY}>
             Read only
           </NavLink>
         </li>
-        {isFeatureActive(COLORS) ? (
+
+        {isSweets ? (
           <li className='nav-item nav-link' style={featureNavItemStyle}>
-            Link to Colors
+            Sample link to sweets
           </li>
         ) : null}
-        {isFeatureActive(DINOS) ? (
+        <FeatureFlagged feature={DINOS}>
           <li className='nav-item nav-link' style={featureNavItemStyle}>
-            Link to Dinos
+            Sample link to Dinos
           </li>
-        ) : null}
-        {isFruits ? (
-          <li className='nav-item nav-link' style={featureNavItemStyle}>
-            Link to Fruits
-          </li>
-        ) : null}
-        {isVeggies ? (
-          <li className='nav-item nav-link' style={featureNavItemStyle}>
-            Link to Veggies
-          </li>
-        ) : null}
+        </FeatureFlagged>
       </ul>
     </nav>
   );
