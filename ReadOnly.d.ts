@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { FlagType } from './featureFlags';
+import { FlagType } from './index';
 declare type ReadOnlyType = {
     features: FlagType[];
     notDefaultIndicator?: ReactElement;

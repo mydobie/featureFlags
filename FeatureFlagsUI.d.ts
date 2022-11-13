@@ -1,4 +1,9 @@
 import { ReactElement } from 'react';
-import { FeatureFlagsUIProps } from './CoreUI';
-declare const FeatureFlagsUI: ({ onFeatureChange, onFeatureReset, readonly, notDefaultIndicator, }: FeatureFlagsUIProps) => ReactElement;
-export default FeatureFlagsUI;
+declare type CoreUIType = {
+    onFeatureChange?: (id: string, checked: boolean) => void;
+    onFeatureReset?: () => void;
+    readonly?: boolean;
+    notDefaultIndicator?: ReactElement;
+};
+declare const CoreUI: ({ onFeatureChange, onFeatureReset, readonly, notDefaultIndicator, }: CoreUIType) => ReactElement;
+export default CoreUI;
